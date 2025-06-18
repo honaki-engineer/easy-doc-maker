@@ -3,4 +3,3 @@
 </svg> --}}
 
 <img src="{{ asset('storage/images/easyDocMaker.png') }}" alt="easyDocMakerロゴ" class="w-32 h-auto mx-auto" />
-{{-- /Applications/MAMP/htdocs/Laravel/easy_doc_maker/storage/app/public/ images/easyDocMaker.png --}}

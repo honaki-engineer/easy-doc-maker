@@ -2,6 +2,9 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    {{-- タイトル --}}
+    <h1 class="text-base font-semibold title-font text-gray-800 mb-4 text-center">ログイン</h1>
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 

@@ -1,4 +1,7 @@
 <x-guest-layout>
+    {{-- タイトル --}}
+    <h1 class="text-base font-semibold title-font text-gray-800 mb-4 text-center">パスワード変更</h1>
+
     <form method="POST" action="{{ route('password.store') }}">
         @csrf
 
