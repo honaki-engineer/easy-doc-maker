@@ -1,8 +1,8 @@
 <?php
 
 return [
-    // // /views/profile/edit.blade.php
-    // 'profile' => 'プロフィール',
+    // /views/profile/edit.blade.php
+    'profile' => 'プロフィール',
 
     // // /views/profile/partials/update-profile-information-form.blade.php
     // 'profile_information' => 'プロフィール情報',
