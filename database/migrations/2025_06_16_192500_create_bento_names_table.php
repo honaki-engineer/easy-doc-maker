@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('bento_names', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('bento_brand_id')->constrained()->onDelete('cascade');
             $table->string('name', 255);
             $table->timestamps();

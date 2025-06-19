@@ -58,4 +58,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Receipt::class);
     }
+    public function bentoBrands()
+    {
+        return $this->hasMany(BentoBrand::class);
+    }
+    public function bentoNames()
+    {
+        return $this->hasMany(BentoName::class);
+    }
 }

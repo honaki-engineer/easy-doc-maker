@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BentoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReceiptSettingController;
 use Illuminate\Support\Facades\Route;
@@ -15,11 +16,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// 自社情報
 Route::middleware('auth')->group(function () {
     Route::get('/receipt_settings', [ReceiptSettingController::class, 'show'])->name('receipt_settings.show');
     Route::get('/receipt_settings/edit', [ReceiptSettingController::class, 'edit'])->name('receipt_settings.edit');
     Route::put('/receipt_settings', [ReceiptSettingController::class, 'update'])->name('receipt_settings.update');
 });
+
+// お弁当関連
+Route::resource('bentos', BentoController::class);
 
 Route::get('/', function () {
     return view('welcome');
