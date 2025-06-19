@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class BentoBrand extends Model
 {
     use HasFactory;
+
+    // リレーション
+    public function bentoNames()
+    {
+        return $this->hasMany(BentoName::class);
+    }
 }

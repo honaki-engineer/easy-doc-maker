@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class ReceiptSetting extends Model
 {
     use HasFactory;
+
+    // リレーション
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

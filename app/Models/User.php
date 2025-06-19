@@ -48,4 +48,14 @@ class User extends Authenticatable
     {
         $this->notify(new CustomResetPassword($token));
     }
+
+    // リレーション
+    public function receiptSettings()
+    {
+        return $this->hasOne(ReceiptSetting::class);
+    }
+    public function receipts()
+    {
+        return $this->hasMany(Receipt::class);
+    }
 }
