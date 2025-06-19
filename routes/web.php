@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::get('/receipt_settings', [ReceiptSettingController::class, 'show'])->name('receipt_settings.show');
     Route::get('/receipt_settings/edit', [ReceiptSettingController::class, 'edit'])->name('receipt_settings.edit');
-    // Route::put('/receipt_settings', [ReceiptSettingController::class, 'update'])->name('receipt_settings.update');
+    Route::put('/receipt_settings', [ReceiptSettingController::class, 'update'])->name('receipt_settings.update');
 });
 
 Route::get('/', function () {
