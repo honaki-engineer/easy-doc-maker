@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateReceiptSettingRequest;
 use App\Services\ReceiptSettingService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ReceiptSettingController extends Controller
@@ -22,7 +22,7 @@ class ReceiptSettingController extends Controller
         return view('receipt_settings.edit', compact('receipt_setting'));
     }
 
-    public function update(Request $request)
+    public function update(UpdateReceiptSettingRequest $request)
     {
         $receipt_setting = Auth::user()->receiptSettings;
 

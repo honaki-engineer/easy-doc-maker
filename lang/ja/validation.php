@@ -163,5 +163,15 @@ return [
         // プロフィール画面
         'name' => '名前',
         'email' => 'メールアドレス',
+        
+        // 自社情報
+        'postal_code' => '郵便番号',
+        'address_line1' => 'メールアドレス',
+        'address_line2' => 'メールアドレス',
+        'issuer_name' => 'メールアドレス',
+        'issuer_number' => 'メールアドレス',
+        'tel_fixed' => 'メールアドレス',
+        'tel_mobile' => 'メールアドレス',
+        'responsible_name' => 'メールアドレス',
     ],
 ];
