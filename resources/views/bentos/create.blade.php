@@ -116,84 +116,79 @@
 
     {{-- ⭐️ -------------------- JS -------------------- --}}
     <script>
-        $(document).ready(function () { // ページのDOM（HTML）が完全に読み込まれたあとに処理を実行するお約束の書き方
-            // ✅ セレクトボックスに Select2 を適用する関数
+        $(document).ready(function () {
+            // ✅ Select2 を適用する関数
             function applySelect2() {
                 $('.bento_brand').select2({
-                    tags: true, // 新しいブランド名も入力（タグ）として許可
+                    tags: true,
                     placeholder: 'ブランドを選択または入力',
                     allowClear: false,
                     width: '100%'
-                }).each(function () { // each(function () { ... }) = 複数ある .bento_brand の <select> 要素を1つずつ順番に処理
-                    // .bento_brandクラスの <select> に、select2() を適用して、そのあと「全てのセレクトボックスの選択状態を初期化（空に）」しています。
-                    $(this).val(null).trigger('change'); // val(null) = <select> の「選択されている値」をnullにする | .trigger('change') = select2は .val(null) だけでは見た目が更新されないことがあるため、.trigger('change') を呼び出してUIもリセットさせる
                 });
             }
-        
-            // ✅ フォームの最後にだけ「＋追加／✕削除」を付け直す関数
+
+            // ✅ 「フォームの最後のブロックにだけ “＋追加” ボタンと、2個目以降の場合は “✕削除” ボタンを表示する」関数
             function updateFormButtons() {
-                $('.form-buttons').remove(); // 既存のボタン削除
+                $('.form-buttons').remove();
 
                 const $lastForm = $('.form-group').last();
                 const index = $('.form-group').length;
 
-                // 追加ボタンだけは常に表示
                 let buttons = `
                     <div class="form-buttons mt-6 text-center">
                         <button type="button" class="add-form text-indigo-600 hover:underline">＋ 追加</button>`;
 
-                // 2個目以降のみ「削除」ボタンを追加
                 if(index > 1) {
                     buttons += `
                         <br class="sm:hidden">
                         <button type="button" class="remove-form text-red-600 hover:underline ml-4">✕ 削除</button>`;
                 }
 
-                // ボタンラッパー閉じタグを追加
-                buttons += `
-                    </div>`;
-
-                // 追加
+                buttons += `</div>`;
                 $lastForm.append(buttons);
             }
-        
-            applySelect2(); // セレクトボックスに Select2 を適用する関数
-            updateFormButtons(); // フォームの最後にだけ「＋追加／✕削除」を付け直す関数
-        
-            // ✅ 追加処理
+
+            applySelect2();
+            updateFormButtons();
+
+            // ✅ フォーム追加処理
             $(document).on('click', '.add-form', function () {
-                // 1個目の .form-group 要素（1つ分の入力フォーム）を コピー。これを新しい入力エリアとして使う。
-                const $newForm = $('.form-group').first().clone();
-        
-                // コピー内容をリセット
-                $newForm.find('select').val('');
+                const $firstForm = $('.form-group').first();
+                const $newForm = $firstForm.clone();
+
+                // コピー先のみ値をリセット
                 $newForm.find('input').val('');
-                $newForm.find('.select2-container').remove();
-                $newForm.find('select').removeClass('select2-hidden-accessible').removeAttr('data-select2-id').show();
-        
-                // 現在のフォーム数に1を足して、「〇個目」表示の番号を決定。
+                $newForm.find('select').val('');
+
+                // clone に付いた select2 UI を除去（元フォームには触れない）
+                $newForm.find('.select2').remove();
+                $newForm.find('select')
+                    .removeAttr('data-select2-id')
+                    .removeClass('select2-hidden-accessible')
+                    .removeAttr('aria-hidden')
+                    .show();
+
+                // 番号振り直し
                 const currentCount = $('.form-group').length + 1;
                 $newForm.find('.form-count').text(`【${currentCount}個目】`);
                 $newForm.addClass('mt-10');
-        
-                // 追加されたフォームを #button-group（ボタンが配置されている領域）の直前に挿入する。これにより、フォームとボタンの位置が常に正しくなる。
+
                 $('#button-group').before($newForm);
-                applySelect2();
+                applySelect2(); // 新しい select に再適用
                 updateFormButtons();
             });
-        
+
             // ✅ 削除処理
             $(document).on('click', '.remove-form', function () {
                 $(this).closest('.form-group').remove();
-        
-                // 番号更新
+
                 $('.form-group').each(function (index) {
-                    // 残ったすべての .form-group に対して、その順番に応じて 「【1個目】」「【2個目】」... という番号を振り直す。
                     $(this).find('.form-count').text(`【${index + 1}個目】`);
                 });
-        
+
                 updateFormButtons();
             });
         });
+
     </script>
 </x-app-layout>
