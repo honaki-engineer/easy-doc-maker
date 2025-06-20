@@ -17,6 +17,12 @@
                                 {{ session('success') }}
                             </div>
                         @endif
+
+                        {{-- ボタンエリア --}}
+                        <div class="w-full mt-8">
+                            <a href="{{ route('bentos.create') }}" class="inline-block text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-lg mb-4">お弁当登録</a>
+                        </div>
+                        
                         <table class="whitespace-nowrap table-auto w-full text-left whitespace-no-wrap">
                             <thead>
                                 <tr>
