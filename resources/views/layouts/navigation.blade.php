@@ -12,6 +12,9 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('bentos.index')" :active="request()->routeIs('bentos.index')">
+                        {{ __('弁当一覧') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('receipt_settings.show')" :active="request()->routeIs('receipt_settings.show')">
                         {{ __('自社情報') }}
                     </x-nav-link>
@@ -67,6 +70,9 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('bentos.index')" :active="request()->routeIs('bentos.index')">
+                {{ __('弁当一覧') }}
+            </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('receipt_settings.show')" :active="request()->routeIs('receipt_settings.show')">
                 {{ __('自社情報') }}
             </x-responsive-nav-link>
