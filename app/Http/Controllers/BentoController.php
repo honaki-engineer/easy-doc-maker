@@ -17,7 +17,7 @@ class BentoController extends Controller
      */
     public function index()
     {
-        //
+        return view('bentos.index');
     }
 
     /**
@@ -64,8 +64,9 @@ class BentoController extends Controller
             ]);
         }
 
-    
-        // return redirect()->route('bentos.index')->with('success', 'お弁当を複数登録しました');
+        return redirect()
+            ->route('bentos.index')
+            ->with('success', 'お弁当を登録しました。');
     }
 
     /**
