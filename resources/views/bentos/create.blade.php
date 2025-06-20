@@ -44,11 +44,14 @@
                                                             お弁当
                                                             <span class="text-red-500 text-xs ml-1">※必須</span>
                                                         </label>
-                                                        <input
+                                                        {{-- <input
                                                             type="text"
                                                             name="bento_names[]"
                                                             class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base py-1 px-3 leading-8 outline-none text-gray-700"
-                                                        >
+                                                        > --}}
+                                                        <select name="bento_names[]" class="bento_name w-full rounded border border-gray-300 text-base py-1 px-3 leading-8 outline-none text-gray-700">
+                                                            <option value=""></option>
+                                                        </select>
                                                     </div>
                                                 </div>
 
@@ -71,7 +74,7 @@
         </div>
     </div>
 
-    {{-- ⭐️ -------------------- 読み込み-------------------- --}}
+    {{-- ----- ⭐️ 読み込み-------------------- --}}
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Select2 -->
@@ -79,7 +82,6 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
 
-    {{-- ⭐️ -------------------- CSS -------------------- --}}
     <style>
         /* セレクトボックス本体（枠・高さ・内側の文字）を調整 */
         .select2-container--default .select2-selection--single {
@@ -114,14 +116,21 @@
     </style>
 
 
-    {{-- ⭐️ -------------------- JS -------------------- --}}
     <script>
+        // ----- ⭐️ Select2付きのお弁当入力フォームを複数追加・削除できるUIを実現する処理 --------------------
         $(document).ready(function () {
             // ✅ Select2 を適用する関数
             function applySelect2() {
                 $('.bento_brand').select2({
                     tags: true,
                     placeholder: 'ブランドを選択または入力',
+                    allowClear: false,
+                    width: '100%'
+                });
+
+                $('.bento_name').select2({
+                    tags: true,
+                    placeholder: 'お弁当を選択または入力',
                     allowClear: false,
                     width: '100%'
                 });
@@ -190,5 +199,31 @@
             });
         });
 
+
+        // ⭐️ ----- ブランド選択 → お弁当候補をAjaxで取得 --------------------
+        $(document).on('change', '.bento_brand', function () {
+            const selectedBrand = $(this).val();
+            const $bentoSelect = $(this).closest('.form-group') // 自分と同じフォーム行にある親を特定し
+                                        .find('.bento_name'); // その中の .bento_name（セレクト）だけを探す
+
+            // ✅ 既存オプション削除（自由入力除く）
+            $bentoSelect.find('option:not([value=""])').remove(); // 'option:not([value=""])' = value 属性が空でないものだけを指定(ん自由ニュ力はこの時点では空)
+
+            if(!selectedBrand) return;
+
+            // ✅ ajax通信
+            $.ajax({
+                url: '/api/bentos',
+                type: 'GET',
+                data: { brand: selectedBrand }, // 送信するデータ
+                success: function(response) { // 通信が成功したときに呼ばれる関数 | response にサーバーからの返却データ（JSON）が入る。
+                    response.forEach(bento => { // responseを小分けにしたものがbento
+                        const option = new Option(bento.name, bento.name, false, false); // <option> 要素を作成 | new Option(表示名, 値, selected?, defaultSelected?) の形式。
+                        $bentoSelect.append(option);
+                    });
+                    $bentoSelect.trigger('change'); // select2を更新
+                }
+            });
+        });
     </script>
 </x-app-layout>
