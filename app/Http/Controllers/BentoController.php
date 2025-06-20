@@ -17,7 +17,24 @@ class BentoController extends Controller
      */
     public function index()
     {
-        return view('bentos.index');
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // 弁当情報を取得
+        $bentos = $user->bentoNames()
+            ->join('bento_brands', 'bento_names.bento_brand_id', '=', 'bento_brands.id')
+                // join(くっつけるテーブル名, 自分の外部キー, '=', 相手の主キー)
+            ->orderBy('bento_brands.name') // ブランド名でソート
+                // ソートに「結合先のカラム（ブランド名）」を使っているため、上記でjoinを使う
+            ->select('bento_names.*')
+                // JOINすると、bento_brandsのカラム（nameなど）も一緒に取れてしまうので、それを防ぐために指定
+                // bento_names のカラムだけを明示的に取得
+            ->with('bentoBrand')
+                // join はブランドでソートするために使う
+                // with('bentoBrand') は $bento->bentoBrand を使えるようにする
+            ->get();
+
+        return view('bentos.index', compact('bentos'));
     }
 
     /**

@@ -19,8 +19,8 @@
                         @endif
 
                         {{-- ボタンエリア --}}
-                        <div class="w-full mt-8">
-                            <a href="{{ route('bentos.create') }}" class="inline-block text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-lg mb-4">お弁当登録</a>
+                        <div class="w-full mb-4">
+                            <a href="{{ route('bentos.create') }}" class="inline-block text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-lg">お弁当登録</a>
                         </div>
                         
                         <table class="whitespace-nowrap table-auto w-full text-left whitespace-no-wrap">
@@ -28,31 +28,30 @@
                                 <tr>
                                     <th
                                         class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                        詳細</th>
+                                        ブランド</th>
                                     <th
                                         class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                        学習日</th>
+                                        お弁当</th>
                                     <th
                                         class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                        学習時間</th>
-                                    <th
-                                        class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                        状態</th>
-                                    <th
-                                        class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                        コメント</th>
+                                        </th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($bentos as $bento)
                                     <tr>
                                         <td class="border-t-2 border-gray-200 px-4 py-3">
-                                            <a class="text-blue-500" href="">詳細</a>
+                                            @if($bento->bentoBrand)
+                                                {{ $bento->bentoBrand->name }}
+                                            @endif
                                         </td>
-                                        <td class="border-t-2 border-gray-200 px-4 py-3"></td>
-                                        <td class="border-t-2 border-gray-200 px-4 py-3"></td>
-                                        <td class="border-t-2 border-gray-200 px-4 py-3"></td>
-                                        <td class="border-t-2 border-gray-200 px-4 py-3"></td>
+                                        <td class="border-t-2 border-gray-200 px-4 py-3">{{ $bento->name }}</td>
+                                        <td class="border-t-2 border-gray-200 px-4 py-3">
+                                            <a href="{{ route('bentos.create') }}" class="inline-block text-white bg-green-500 border-0 py-1 px-4 focus:outline-none hover:bg-green-600 rounded text-lg">編集</a>
+                                            <a href="{{ route('bentos.create') }}" class="inline-block text-white bg-pink-500 border-0 py-1 px-4 focus:outline-none hover:bg-pink-600 rounded text-lg">削除</a>
+                                        </td>
                                     </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
