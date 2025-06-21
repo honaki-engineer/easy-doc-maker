@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\BentoBrand;
-use App\Models\BentoName;
+use App\Services\BentoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,9 +42,9 @@ class BentoController extends Controller
      */
     public function create()
     {
-        // $brands = Auth::user()->bentoBrands;
         /** @var \App\Models\User $user */
         $user = Auth::user();
+        // ブランド取得
         $brands = $user->bentoBrands()->get();
 
         return view('bentos.create', compact('brands'));
@@ -64,22 +62,9 @@ class BentoController extends Controller
 
         $brands = $request->bento_brands;
         $names = $request->bento_names;
-    
-        // 複数登録ループ
-        foreach($brands as $index => $brand) {
-            // ブランド名（またはID）が既存かチェックして取得・なければ作成
-            $brand = BentoBrand::firstOrCreate(
-                ['name' => $brand, 'user_id' => $user->id],
-                ['name' => $brand, 'user_id' => $user->id]
-            );
-    
-            // お弁当登録
-            BentoName::create([
-                'user_id' => $user->id,
-                'bento_brand_id' => $brand->id,
-                'name' => $names[$index],
-            ]);
-        }
+
+        // お弁当 + ブランド登録
+        BentoService::storeBentosWithBrands($brands, $user, $names);
 
         return redirect()
             ->route('bentos.index')
@@ -138,12 +123,8 @@ class BentoController extends Controller
         // お弁当を削除
         $bento->delete();
 
-        // 該当ブランドに他のお弁当が存在しないかチェック
-        $remaining = $brand->bentoNames()->exists();
-        // もし1件もなければブランドも削除
-        if(!$remaining) {
-            $brand->delete();
-        }
+        // 該当ブランドにお弁当が存在しない場合ブランドも削除
+        BentoService::destroyBrandIfEmpty($brand);
 
         return redirect()
             ->route('bentos.index')

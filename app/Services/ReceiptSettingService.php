@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ReceiptSettingService
 {
+    // - ⭐️ update --------------------------------------------------
     // 更新処理
     public static function updateReceiptSetting($receipt_setting, $request) {
         $receipt_setting->user_id = Auth::id();
