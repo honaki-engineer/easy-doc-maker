@@ -24,7 +24,7 @@ class BentoController extends Controller
         $bentos = $user->bentoNames()
             ->join('bento_brands', 'bento_names.bento_brand_id', '=', 'bento_brands.id')
                 // join(くっつけるテーブル名, 自分の外部キー, '=', 相手の主キー)
-            ->orderBy('bento_brands.name') // ブランド名でソート
+            ->orderBy('bento_brands.id') // ブランドidでソート
                 // ソートに「結合先のカラム（ブランド名）」を使っているため、上記でjoinを使う
             ->select('bento_names.*')
                 // JOINすると、bento_brandsのカラム（nameなど）も一緒に取れてしまうので、それを防ぐために指定
@@ -128,6 +128,25 @@ class BentoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $bento = $user->bentoNames()->find($id);
+        $deletedName = $bento->name;
+        $brand = $bento->bentoBrand;
+
+        // お弁当を削除
+        $bento->delete();
+
+        // 該当ブランドに他のお弁当が存在しないかチェック
+        $remaining = $brand->bentoNames()->exists();
+        // もし1件もなければブランドも削除
+        if(!$remaining) {
+            $brand->delete();
+        }
+
+        return redirect()
+            ->route('bentos.index')
+            ->with('success', "{$deletedName}を削除しました。");
     }
 }

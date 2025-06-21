@@ -44,11 +44,6 @@
                                                             お弁当
                                                             <span class="text-red-500 text-xs ml-1">※必須</span>
                                                         </label>
-                                                        {{-- <input
-                                                            type="text"
-                                                            name="bento_names[]"
-                                                            class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base py-1 px-3 leading-8 outline-none text-gray-700"
-                                                        > --}}
                                                         <select name="bento_names[]" class="bento_name w-full rounded border border-gray-300 text-base py-1 px-3 leading-8 outline-none text-gray-700">
                                                             <option value=""></option>
                                                         </select>
