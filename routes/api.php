@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/bentos', function(Request $request) {
     $brandName = $request->input('brand');
 
-    // ブランド名から BentoBrand モデルを取得
+    // `name`カラムが`$brandName`と一致するレコードを`bento_brands`テーブルから探し、最初の1件を取得
     $brand = BentoBrand::where('name', $brandName)->first();
 
     if(!$brand) {

@@ -12,6 +12,11 @@ class BentoService
     public static function storeBentosWithBrands($brands, $user, $names) {
         // 複数登録ループ
         foreach($brands as $index => $brand) {
+            // 空文字はスキップ
+            if (empty($brand) || empty($names[$index])) {
+                continue;
+            }
+
             // ブランド名（またはID）が既存かチェックして取得・なければ作成
             $brand = BentoBrand::firstOrCreate(
                 ['name' => $brand, 'user_id' => $user->id],
