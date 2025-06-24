@@ -40,6 +40,18 @@
                                         <td class="border-t-2 border-gray-200 px-4 py-3 break-words whitespace-normal">{{ $brand->name }}</td>
                                         <td class="border-t-2 border-gray-200 px-4 py-3">
                                             {{-- 削除ボタン --}}
+                                            <form
+                                                action="{{ route('brands.destroy', ['brand' => $brand->id]) }}"
+                                                method="post" id="delete_{{ $brand->id }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <div class="w-full">
+                                                    <button type="button"
+                                                        data-id="{{ $brand->id }}"
+                                                        onclick="deletePost(this)"
+                                                        class="text-white bg-pink-500 border-0 py-1 px-4 focus:outline-none hover:bg-pink-600 rounded text-lg">削除</button>
+                                                </div>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -50,6 +62,16 @@
             </div>
         </div>
     </div>
+
+    <!-- 確認メッセージ -->
+    <script>
+        function deletePost(e) {
+            'use strict'
+            if(confirm('本当に削除していいですか？ブランドのお弁当も全て削除されます。')) {
+                document.getElementById('delete_' + e.dataset.id).submit()
+            }
+        }
+    </script>
 
     <!-- フラッシュメッセージの時間設定 -->
     <script>
