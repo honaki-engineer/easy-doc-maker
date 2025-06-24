@@ -43,12 +43,7 @@ class BentoController extends Controller
      */
     public function create()
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        // ブランド取得
-        $brands = $user->bentoBrands()->get();
 
-        return view('bentos.create', compact('brands'));
     }
 
     /**
@@ -57,19 +52,9 @@ class BentoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BentoRequest $request)
+    public function store(Request $request)
     {
-        $user = Auth::user();
-
-        $brands = $request->bento_brands;
-        $names = $request->bento_names;
-
-        // お弁当 + ブランド登録
-        BentoService::storeBentosWithBrands($brands, $user, $names);
-
-        return redirect()
-            ->route('bentos.index')
-            ->with('success', 'お弁当を登録しました。');
+        
     }
 
     /**

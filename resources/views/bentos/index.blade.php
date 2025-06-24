@@ -20,7 +20,7 @@
 
                         {{-- ボタンエリア --}}
                         <div class="w-full mb-4">
-                            <a href="{{ route('bentos.create') }}" class="inline-block text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-lg">お弁当登録</a>
+                            <a href="" class="text-indigo-600 underline hover:text-indigo-800 hover:underline cursor-pointer font-medium transition duration-200">ブランド一覧に切り替える</a>
                         </div>
                         
                         <table class="whitespace-nowrap table-auto w-full text-left whitespace-no-wrap">
