@@ -20,7 +20,7 @@ class BrandController extends Controller
         // ブランド情報を取得
         $brands = $user->bentoBrands()
             ->orderBy('id')
-            ->get();
+            ->paginate(2);
 
         return view('brands.index', compact('brands'));
     }
