@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BentoRequest;
 use App\Services\BentoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

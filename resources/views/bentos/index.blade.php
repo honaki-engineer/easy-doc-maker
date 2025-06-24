@@ -20,7 +20,7 @@
 
                         {{-- ブランド一覧へ遷移 --}}
                         <div class="w-full mb-4">
-                            <a href="" class="text-indigo-600 underline hover:text-indigo-800 hover:underline cursor-pointer font-medium transition duration-200">ブランド一覧に切り替える</a>
+                            <a href="{{ route('brands.index') }}" class="text-indigo-600 underline hover:text-indigo-800 hover:underline cursor-pointer font-medium transition duration-200">ブランド一覧に切り替える</a>
                         </div>
 
                         {{-- 検索フォーム --}}
