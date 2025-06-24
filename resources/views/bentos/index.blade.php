@@ -18,10 +18,17 @@
                             </div>
                         @endif
 
-                        {{-- ボタンエリア --}}
+                        {{-- ブランド一覧へ遷移 --}}
                         <div class="w-full mb-4">
                             <a href="" class="text-indigo-600 underline hover:text-indigo-800 hover:underline cursor-pointer font-medium transition duration-200">ブランド一覧に切り替える</a>
                         </div>
+
+                        {{-- 検索フォーム --}}
+                        <form class="mb-4 flex justify-center items-center space-x-4" action="{{ route('bentos.index') }}" method="get">
+                            <input type="text" name="search" placeholder="検索" class="rounded w-1/2">
+                            <button
+                                class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">検索</button>
+                        </form>
                         
                         <table class="whitespace-nowrap table-auto w-full text-left whitespace-no-wrap">
                             <thead>

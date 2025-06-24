@@ -23,4 +23,24 @@ class BentoName extends Model
     protected $fillable = [
         'name', 'user_id', 'bento_brand_id'
     ];
+
+    // 検索
+    public function scopeSearch($query, $search)
+    {
+        if($search !== null){
+            $search_split = mb_convert_kana($search, 's'); // 全角スペース → 半角
+            $keywords = preg_split('/[\s]+/', $search_split); // 空白で分割
+
+            foreach($keywords as $word) {
+                // `$query`ごとにAND検索
+                $query->where(function($q) use($word) {
+                    // どれか部分一致でヒットのor検索
+                    $q->orWhere('bento_names.name', 'like', '%' . $word . '%')
+                    ->orWhere('bento_brands.name', 'like', '%' . $word . '%');
+                });
+            }
+        }
+
+        return $query;
+    }
 }

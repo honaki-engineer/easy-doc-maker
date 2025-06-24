@@ -14,8 +14,11 @@ class BentoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        // 検索結果
+        $search = $request->search;
+
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
@@ -31,7 +34,7 @@ class BentoController extends Controller
             ->with('bentoBrand')
                 // join はブランドでソートするために使う
                 // with('bentoBrand') は $bento->bentoBrand を使えるようにする
-            // ->get();
+            ->search($search)
             ->paginate(10);
 
         return view('bentos.index', compact('bentos'));
