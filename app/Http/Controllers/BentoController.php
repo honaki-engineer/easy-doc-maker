@@ -31,7 +31,8 @@ class BentoController extends Controller
             ->with('bentoBrand')
                 // join はブランドでソートするために使う
                 // with('bentoBrand') は $bento->bentoBrand を使えるようにする
-            ->get();
+            // ->get();
+            ->paginate(10);
 
         return view('bentos.index', compact('bentos'));
     }
@@ -54,7 +55,7 @@ class BentoController extends Controller
      */
     public function store(Request $request)
     {
-        
+
     }
 
     /**

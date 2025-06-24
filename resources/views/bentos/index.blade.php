@@ -66,6 +66,7 @@
                             </tbody>
                         </table>
                     </div>
+                    {{ $bentos->links() }}
                 </div>
             </div>
         </div>
