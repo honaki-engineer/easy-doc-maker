@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class BrandController extends Controller
+class ReceiptController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,15 +13,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-
-        // ブランド情報を取得
-        $brands = $user->bentoBrands()
-            ->orderBy('id')
-            ->paginate(10);
-
-        return view('brands.index', compact('brands'));
+        
     }
 
     /**
@@ -32,7 +23,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        //
+        return view('receipts.create');
     }
 
     /**
@@ -88,19 +79,6 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-
-        // ブランド情報の取得
-        $brand = $user->bentoBrands()->find($id);
-        // フラッシュメッセージ用の変数用意
-        $deletedName = $brand->name;
-
-        // お弁当を削除
-        $brand->delete();
-
-        return redirect()
-            ->route('brands.index')
-            ->with('success', "{$deletedName}を削除しました。");
+        //
     }
 }

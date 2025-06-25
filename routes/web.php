@@ -3,6 +3,7 @@
 use App\Http\Controllers\BentoController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\ReceiptSettingController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,9 @@ Route::middleware('auth')->group(function () {
     // お弁当関連
     Route::resource('bentos', BentoController::class);
     Route::resource('brands', BrandController::class);
+    
+    // 領収書
+    Route::resource('receipts', ReceiptController::class);
 });
 
 
