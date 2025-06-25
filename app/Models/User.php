@@ -58,6 +58,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Receipt::class);
     }
+    public function paymentMethods()
+    {
+        return $this->hasMany(PaymentMethod::class);
+    }
     public function bentoBrands()
     {
         return $this->hasMany(BentoBrand::class);

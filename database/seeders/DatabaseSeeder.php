@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             ReceiptSettingSeeder::class,
             BrandSeeder::class,
             BentoSeeder::class,
+            PaymentMethodSeeder::class,
         ]);
 
         // \App\Models\User::factory(10)->create();
