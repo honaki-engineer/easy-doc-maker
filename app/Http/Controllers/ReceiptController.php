@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReceiptController extends Controller
 {
@@ -23,7 +24,10 @@ class ReceiptController extends Controller
      */
     public function create()
     {
-        return view('receipts.create');
+        // 自社情報(create時はリレーションでOK)
+        $receipt_setting = Auth::user()->receiptSettings;
+
+        return view('receipts.create', compact('receipt_setting'));
     }
 
     /**
