@@ -9,7 +9,7 @@
     
 
     <!-- 領収書本体 -->
-    <div class="print-area bg-[#f2f2f2] border border-gray-400 mx-auto p-28 w-[794px] h-[1123px] text-[10px]">
+    <div class="print-area bg-[#f2f2f2] border border-gray-400 mx-auto p-28 max-w-[794px] w-full h-[1123px] text-[10px]">
         <!-- タイトル -->
         <div class="text-[16px] font-bold border-b-[3px] border-gray-600 pb-1 w-full mb-8">領収書</div>
 

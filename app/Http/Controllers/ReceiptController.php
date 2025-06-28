@@ -24,10 +24,18 @@ class ReceiptController extends Controller
      */
     public function create()
     {
-        // 自社情報(create時はリレーションでOK)
-        $receipt_setting = Auth::user()->receiptSettings;
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
-        return view('receipts.create', compact('receipt_setting'));
+        // 自社情報
+        $receipt_setting = Auth::user()->receiptSettings;
+        // 支払い方法
+        $payment_methods = Auth::user()->paymentMethods;
+        // ブランド&お弁当
+        // $bento_brands = Auth::user()->bentoBrands;
+        $bento_brands = $user->bentoBrands()->with('bentoNames')->get();
+
+        return view('receipts.create', compact('receipt_setting', 'payment_methods', 'bento_brands'));
     }
 
     /**
