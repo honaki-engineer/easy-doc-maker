@@ -345,7 +345,7 @@
                 updateSubtotal(); // 小計を計算して表示する
                 updateTaxTotal(); // 消費税の合計を計算して表示する
                 updateTotal(); // 合計
-                updateButsugaki();
+                updateProgateeceipt_note(); // 但し書きの表示
             });
         });
 
@@ -387,7 +387,7 @@
                 updateSubtotal();          // 金額を集計して小計へ
                 updateTaxTotal();          // 税込×数量 - 税抜×数量 = 消費税合計
                 updateTotal();             // 合計
-                updateButsugaki();
+                updateReceiptNote();        // 但し書きの表示
             });
         });
 
@@ -417,47 +417,53 @@
         function updateSubtotal() {
             let subtotal = 0;
 
+            // 🔹 金額(amount_result)の各金額をカンマ除去＆数値化して、合計(subtotal)に加える
             document.querySelectorAll('.amount_result').forEach(input => {
                 const value = input.value.replace(/,/g, '').trim();
                 const num = parseFloat(value);
-                if (!isNaN(num)) {
+                if(!isNaN(num)) {
                     subtotal += num;
                 }
             });
 
-            // 小計欄に反映（ここではid="subtotal"のinputに出すとする）
-            const subtotalInput = document.getElementById('subtotal');
-            if (subtotalInput) {
+            // 🔹 小計欄に反映
+            const subtotalInput = document.getElementById('subtotal'); // 小計
+            if(subtotalInput) {
                 subtotalInput.value = subtotal.toLocaleString();
             }
         }
 
 
     // ⭐️ 消費税の合計
+        // ✅ (税込金額×数量)-(税抜金額×数量)=消費税 → これの合計を計算・表示する
         function updateTaxTotal() {
             let taxTotal = 0;
 
+            // 🔹 各行で「(税込金額×数量)-(税抜金額×数量)=消費税」計算を行い、合計に加算している
             document.querySelectorAll('tr').forEach(row => {
                 const bentoFeeInput = row.querySelector('.bento_fee_input'); // 税込
                 const quantityInput = row.querySelector('.bento_quantity_input'); // 数量
-                const amountResult = row.querySelector('.amount_result'); // 金額（税抜 × 数量）
+                const amountResult = row.querySelector('.amount_result'); // 金額(税抜×数量)
 
-                if (!bentoFeeInput || !quantityInput || !amountResult) return;
+                if(!bentoFeeInput || !quantityInput || !amountResult) return;
 
+                // 🔸 数値化
                 const price = parseFloat(bentoFeeInput.value.replace(/,/g, '').trim());
                 const quantity = parseFloat(quantityInput.value);
-                const amount = parseFloat(amountResult.value.replace(/,/g, '').trim());
+                const amount = parseFloat(amountResult.value.replace(/,/g, '').trim());// 金額(税抜×数量)
 
-                if (!isNaN(price) && !isNaN(quantity) && !isNaN(amount)) {
+                // 🔸 (税込×数量)-(金額 = 税抜×数量)を引いて、消費税分を合計
+                if(!isNaN(price) && !isNaN(quantity) && !isNaN(amount)) {
                     const tax = (price * quantity) - amount;
-                    if (!isNaN(tax)) {
+                    if(!isNaN(tax)) {
                         taxTotal += tax;
                     }
                 }
             });
 
+            // 🔹 `tax_total`に表示
             const taxInput = document.getElementById('tax_total');
-            if (taxInput) {
+            if(taxInput) {
                 taxInput.value = Math.round(taxTotal).toLocaleString();
             }
         }
@@ -468,69 +474,74 @@
         function updateTotal() {
             let total = 0;
 
+            // 🔹 各行の「税込金額 × 数量」を合計して、合計金額を計算する
             document.querySelectorAll('tr').forEach(row => {
                 const feeInput = row.querySelector('.bento_fee_input');
                 const quantityInput = row.querySelector('.bento_quantity_input');
 
-                if (!feeInput || !quantityInput) return;
+                if(!feeInput || !quantityInput) return;
 
+                // 🔸 数値化
                 const fee = parseFloat(feeInput.value.replace(/,/g, '').trim());
                 const quantity = parseFloat(quantityInput.value);
 
-                if (!isNaN(fee) && !isNaN(quantity)) {
+                // 🔸 合計を計算
+                if(!isNaN(fee) && !isNaN(quantity)) {
                     total += fee * quantity;
                 }
             });
 
-            const totalValue = Math.round(total).toLocaleString(); // ⭐️ 追加
+            // 🔹 表示形式を整える
+            const totalValue = Math.round(total).toLocaleString();
 
+            // 🔹 合計を表示
             const totalInput = document.getElementById('total');
-            if (totalInput) {
+            if(totalInput) {
                 totalInput.value = totalValue;
             }
 
-            // ✅ 上部の ¥xxxx にも反映
+            // 🔹 「但し書き」上部にも反映
             const totalDiv = document.getElementById('total_display');
-            if (totalDiv) {
+            if(totalDiv) {
                 totalDiv.textContent = `¥${totalValue}`;
             }
         }
 
 
     // ⭐️ 但し書き
-        // 但し書きの表示
-        function updateButsugaki() {
+        // ✅ 但し書きの表示
+        function updateReceiptNote() {
             const map = {};
 
+            // 🔹 同じ税込金額ごとに数量を集計して、map に「金額: 合計数量」の形式でまとめる
             document.querySelectorAll('tr').forEach(row => {
-                const feeInput = row.querySelector('.bento_fee_input');
-                const quantityInput = row.querySelector('.bento_quantity_input');
+                const feeInput = row.querySelector('.bento_fee_input'); // 税込
+                const quantityInput = row.querySelector('.bento_quantity_input'); // 数量
 
-                if (!feeInput || !quantityInput) return;
+                if(!feeInput || !quantityInput) return;
 
+                // 🔸 数値に変換
                 const fee = parseFloat(feeInput.value.replace(/,/g, '').trim());
                 const quantity = parseInt(quantityInput.value);
 
-                if (!isNaN(fee) && !isNaN(quantity)) {
-                    const key = fee.toFixed(0); // 小数点なし文字列キー
+                // 🔸税込価格(fee)ごとに、数量(quantity)を集計してmapに蓄積する
+                if(!isNaN(fee) && !isNaN(quantity)) {
+                    const key = fee.toFixed(0); // 小数点なし文字列
                     map[key] = (map[key] || 0) + quantity;
                 }
             });
 
-            // 出力用テキスト整形
-            const resultText = Object.entries(map)
-                .map(([fee, qty]) => `￥${Number(fee).toLocaleString()} × ${qty}個`)
+            // 🔹 出力用テキスト整形
+            const resultText = Object.entries(map) // map オブジェクトを[税込金額, 数量]の配列に変換して扱いやすく
+                .map(([fee, qty]) => `¥${Number(fee).toLocaleString()} × ${qty}個`)
                 .join(', ');
 
-            // 表示先に出力（例：但し書きの <span id="receipt_note"> に出力する）
+            // 🔹 表示先に出力(例：但し書きの<span id="receipt_note">に出力する)
             const target = document.getElementById('receipt_note');
-            if (target) {
+            if(target) {
                 target.textContent = resultText;
             }
         }
-
-
     });
-
 </script>
 </x-app-layout>
