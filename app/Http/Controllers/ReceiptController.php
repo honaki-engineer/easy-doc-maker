@@ -50,23 +50,23 @@ class ReceiptController extends Controller
      */
     public function store(Request $request)
     {
+        // ✅ ユーザー情報の取得
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // ✅ 自社情報
+        // ✅ 自社情報の取得
         $receipt_setting = Auth::user()->receiptSettings;
 
 
         // ✅ 支払い方法情報
-        // 入力された`payment_method`を受け取る
+        // 🔹 入力された`payment_method`を受け取る
         $request_payment_method = $request->payment_method;
-        // 新規入力の場合は保存 | 既存の場合は取得
+        // 🔹 新規入力の場合は保存 | 既存の場合は取得
         $payment_method = PaymentMethod::firstOrCreate([
             'user_id' => $user->id,
             'name' => $request_payment_method,
         ]);
 
-        // dd((int) str_replace(',', '', $request->input('subtotal')));
 
         // ✅ receiptsテーブルへの保存
         $receipt = Receipt::create([
@@ -89,7 +89,9 @@ class ReceiptController extends Controller
             'remarks' => $request->remarks,
         ]);
 
-        // 領収書_弁当テーブルへの保存
+
+        // ✅ 領収書_弁当テーブルへの保存
+        // 🔹 $request情報を変数へ入れる
         $bentoBrands = $request->bento_brands;
         $bentoNames = $request->bento_names;
         $bentoFees = $request->bento_fees;
@@ -98,24 +100,26 @@ class ReceiptController extends Controller
         $unitPrices = $request->unit_prices; // 税抜
         $amounts = $request->amounts; // 金額
 
+        // 🔹 receipt_bento_detailsテーブルへの保存
         foreach($bentoBrands as $index => $bentoBrand) {
             if(empty($bentoBrand) && empty($bentoNames[$index])) {
                 continue; // 空行はスキップ
             }
 
-            // 🔸ブランドをfirstOrCreate（ユーザーごとに保存）
+            // 🔸 ブランドをfirstOrCreate(新規入力のみ保存)
             $brand = BentoBrand::firstOrCreate([
                 'user_id' => $user->id,
                 'name' => $bentoBrand,
             ]);
 
-            // 🔸ブランドに紐づけてお弁当名を保存（存在しなければ）
+            // 🔸 ブランドに紐づけてお弁当名をfirstOrCreate(新規入力のみ保存)
             BentoName::firstOrCreate([
                 'user_id' => $user->id,
                 'bento_brand_id' => $brand->id,
                 'name' => $bentoNames[$index],
             ]);
         
+            // 🔸 領収書_弁当テーブルへの保存
             ReceiptBentoDetail::create([
                 'receipt_id' => $receipt->id,
                 'bento_brand_name' => $bentoBrand,
@@ -129,14 +133,12 @@ class ReceiptController extends Controller
         }
 
 
-        // リダイレクトの分岐
+        // ✅ リダイレクトの分岐
         if($request->action === 'store_and_create') {
             return redirect()->route('receipts.create')->with('success', '領収書の登録完了しました。続けて作成可能です。');
         } elseif($request->action === 'store_and_index') {
             return redirect()->route('receipts.index')->with('success', '領収書の登録完了しました。');
         }
-
-        // return redirect()->route('receipts.index')->with('success', '登録完了しました');
     }
 
     /**
