@@ -21,6 +21,14 @@ return new class extends Migration
             $table->integer('bento_fee');
             $table->boolean('tax_rate');
             $table->integer('bento_quantity');
+            
+            // ----- 新規 -----
+            // 単価(税抜)
+            $table->integer('unit_price'); 
+            // 金額
+            $table->integer('amount');
+            // ----- 新規 -----
+
             $table->timestamps();
         });
     }

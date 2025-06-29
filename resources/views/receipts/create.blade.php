@@ -19,16 +19,15 @@
                 <!-- 上部情報 -->
                 <div class="flex justify-between mb-8">
                     <div class="font-bold text-[12px] mt-20">
-                        <input type="text" name="date" class="text-xs w-80 px-1 py-1 border border-gray-300 rounded"> 様
+                        <input type="text" name="customer_name" class="text-xs w-80 px-1 py-1 border border-gray-300 rounded"> 様
                     </div>
                     <div class="text-[10px] text-right leading-[1.6]">
-                        <p>
-                            <input type="date" name="date" class="text-xs w-[100px] px-1 py-[1px] border border-gray-300 rounded">
-                        </p>
+                        {{-- 日付 --}}
+                        <p><input type="date" name="issued_at" class="text-xs w-[100px] px-1 py-[1px] border border-gray-300 rounded"></p>
                         <p>{{ $receipt_setting->postal_code }}</p>
                         <p>{{ $receipt_setting->address_line1 }}</p>
                         <p>{{ $receipt_setting->address_line2 }}</p>
-                        <p>{{ $receipt_setting->address_line2 }}</p>
+                        <p>{{ $receipt_setting->issuer_name }}</p>
                         <p>登録番号：{{ $receipt_setting->issuer_number }}</p>
                         <p>TEL：{{ $receipt_setting->tel_fixed }}</p>
                         <p>MOBILE：{{ $receipt_setting->tel_mobile }}</p>
@@ -45,6 +44,7 @@
                 <!-- 但し書き -->
                 <div class="text-[10px] mb-8 leading-[1.6]">
                     但し、お弁当代 <span id="receipt_note" class="font-bold"></span> 分として、上記正に領収いたしました。<br>
+                    <input type="hidden" name="receipt_note" id="receipt_note_input">
                     <span class="font-bold">
                         <input list="payment_methods" name="payment_method" class="text-xs w-[120px] px-1 py-[2px] border border-gray-300 rounded"> 支払い
                         <datalist id="payment_methods">
@@ -117,19 +117,21 @@
                                 {{-- 単価(自動計算) --}}
                                 <td class="border border-black px-1 {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
                                     <input type="text" 
+                                        name="unit_prices[]"
                                         class="unit_price_result text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}" 
                                         readonly>
                                 </td>
                                 {{-- 金額(自動計算) --}}
                                 <td class="border border-black px-1 {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
                                     <input type="text" 
+                                        name="amounts[]"
                                         class="amount_result text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}" 
                                         readonly>
                                 </td>
                             </tr>
                             @endfor
                             <!-- 小計・消費税・合計 -->
-                            {{-- 小計 --}}
+                            {{-- 小計(自動計算) --}}
                             <tr>
                                 <td colspan="4" class="px-1 border-l-0 border-b-0 text-orange-500">
                                     ※オレンジ色の箇所は、印刷 / DLで表示されません。
@@ -138,28 +140,31 @@
                                 <td class="border border-black text-right px-1">
                                     <input type="text"
                                         id="subtotal" 
+                                        name="subtotal"
                                         class="text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded bg-transparent" 
                                         readonly>
                                 </td>
                             </tr>
-                            {{-- 消費税 --}}
+                            {{-- 消費税(自動計算) --}}
                             <tr>
                                 <td colspan="4" class="px-1 border-l-0 border-b-0"></td>
                                 <td colspan="2" class="border border-black font-bold">消費税</td>
                                 <td class="border border-black text-right px-1">
                                     <input type="text"
                                         id="tax_total" 
+                                        name="tax_total"
                                         class="text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded bg-transparent" 
                                         readonly>
                                 </td>
                             </tr>
-                            {{-- 合計 --}}
+                            {{-- 合計(自動計算) --}}
                             <tr>
                                 <td colspan="4" class="px-1 border-l-0 border-b-0"></td>
                                 <td colspan="2" class="border border-black font-bold">合計</td>
                                 <td class="border border-black font-bold text-right px-1">
                                     <input type="text"
                                         id="total"
+                                        name="total"
                                         class="text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded bg-transparent font-bold"
                                         readonly>
                                 </td>
@@ -175,6 +180,12 @@
                             placeholder="備考欄：例) 軽減税率8%対象"></textarea>
                 </div>
             </div>
+
+            {{-- ボタンエリア --}}
+            <div class="w-full mt-8">
+                <button class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">保存</button>
+            </div>
+
         </div>
     </form>
 
@@ -536,10 +547,12 @@
                 .map(([fee, qty]) => `¥${Number(fee).toLocaleString()} × ${qty}個`)
                 .join(', ');
 
-            // 🔹 表示先に出力(例：但し書きの<span id="receipt_note">に出力する)
+            // 🔹 表示用の<span>と送信用の<input>に、同じ但し書きテキストを反映
             const target = document.getElementById('receipt_note');
-            if(target) {
+            const hiddenInput = document.getElementById('receipt_note_input');
+            if(target && hiddenInput) {
                 target.textContent = resultText;
+                hiddenInput.value = resultText;
             }
         }
     });

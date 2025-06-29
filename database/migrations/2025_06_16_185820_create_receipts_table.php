@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('payment_method_id')->constrained();
             $table->string('customer_name', 255); // 会社or個人
-            $table->date('delivered_at'); // 会社or個人
+            $table->date('issued_at'); // 会社or個人
             $table->string('postal_code', 15); // 郵便番号(ハイフン込み)
             $table->string('address_line1', 255); // 住所
             $table->string('address_line2', 255)->nullable(); // 建物名
@@ -25,9 +26,12 @@ return new class extends Migration
             $table->string('issuer_number', 20)->nullable(); // 登録番号
             $table->string('tel_fixed', 20)->nullable(); // 固定電話(ハイフン込み)
             $table->string('tel_mobile', 20)->nullable(); // 携帯電話(ハイフン込み)
-            $table->string('responsible_name', 255);
-            $table->integer('payment_method');
-            $table->string('remarks', 500)->nullable();
+            $table->string('responsible_name', 255); // 相手
+            $table->string('receipt_note', 1000); // 但し書き
+            $table->integer('subtotal'); // 小計
+            $table->integer('tax_total');
+            $table->integer('total');
+            $table->string('remarks', 500)->nullable(); // 備考
             $table->timestamps();
         });
     }

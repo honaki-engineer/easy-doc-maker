@@ -14,4 +14,15 @@ class ReceiptBentoDetail extends Model
     {
         return $this->belongsTo(Receipt::class);
     }
+
+    protected $fillable = [
+        'receipt_id',
+        'bento_brand_name',
+        'bento_name',
+        'bento_fee',
+        'tax_rate',
+        'bento_quantity',
+        'unit_price',
+        'amount',
+    ];
 }
