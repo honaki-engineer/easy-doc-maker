@@ -19,7 +19,7 @@ class ReceiptController extends Controller
      */
     public function index()
     {
-        
+        return view('receipts.index');
     }
 
     /**
@@ -103,7 +103,6 @@ class ReceiptController extends Controller
                 continue; // 空行はスキップ
             }
 
-
             // 🔸ブランドをfirstOrCreate（ユーザーごとに保存）
             $brand = BentoBrand::firstOrCreate([
                 'user_id' => $user->id,
@@ -117,10 +116,6 @@ class ReceiptController extends Controller
                 'name' => $bentoNames[$index],
             ]);
         
-
-
-
-
             ReceiptBentoDetail::create([
                 'receipt_id' => $receipt->id,
                 'bento_brand_name' => $bentoBrand,
@@ -134,7 +129,14 @@ class ReceiptController extends Controller
         }
 
 
-        return redirect()->route('receipts.index')->with('success', '登録完了しました');
+        // リダイレクトの分岐
+        if($request->action === 'store_and_create') {
+            return redirect()->route('receipts.create')->with('success', '領収書の登録完了しました。続けて作成可能です。');
+        } elseif($request->action === 'store_and_index') {
+            return redirect()->route('receipts.index')->with('success', '領収書の登録完了しました。');
+        }
+
+        // return redirect()->route('receipts.index')->with('success', '登録完了しました');
     }
 
     /**

@@ -11,6 +11,17 @@
 
         <!-- 領収書の外側 -->
         <div class="bg-gray-200 py-8 print:bg-white print:py-8">
+
+            {{-- フラッシュメッセージ --}}
+            @if(session('success'))
+                <div class="overflow-x-auto max-w-[794px] mx-auto overflow-auto">
+                        <div id="flash-message"
+                            class="bg-green-100 text-green-800 rounded px-4 py-2 mb-2 transition-opacity duration-1000">
+                            {{ session('success') }}
+                        </div>
+                </div>
+            @endif
+
             <!-- 領収書本体 -->
             <div class="print-area bg-[#f2f2f2] border border-gray-400 mx-auto p-20 max-w-[794px] w-full h-[1123px] text-[10px]">
                 <!-- タイトル -->
@@ -182,8 +193,16 @@
             </div>
 
             {{-- ボタンエリア --}}
-            <div class="w-full mt-8">
-                <button class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">保存</button>
+            <div class="w-full mt-8 flex gap-4 justify-center">
+                <button type="submit" name="action" value="store_and_index"
+                    class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                    登録して「終了」
+                </button>
+
+                <button type="submit" name="action" value="store_and_create"
+                    class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                    登録して「次の作成へ」
+                </button>
             </div>
 
         </div>
@@ -556,5 +575,16 @@
             }
         }
     });
+
+
+    // ⭐️ フラッシュメッセージ
+        // ✅ フラッシュメッセージを10秒後にフェードアウトし、さらに2秒後に削除する
+        setTimeout(() => {
+            const flashMessage = document.getElementById('flash-message');
+            if(flashMessage) {
+                flashMessage.classList.add('opacity-0'); // フェードアウト
+                setTimeout(() => flashMessage.remove(), 2000); // 2秒後に flashMessage というHTML要素を DOM(画面上)から完全に削除
+            }
+        }, 10000); // 10秒後にフェード開始
 </script>
 </x-app-layout>
