@@ -19,7 +19,18 @@ class ReceiptController extends Controller
      */
     public function index()
     {
-        return view('receipts.index');
+        // ✅ ユーザー情報の取得
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // ✅ 領収書の取得
+        $receipts = $user
+            ->receipts()
+            ->orderBy('issued_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return view('receipts.index', compact('receipts'));
     }
 
     /**

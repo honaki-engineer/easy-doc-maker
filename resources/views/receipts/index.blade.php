@@ -17,44 +17,33 @@
                                 {{ session('success') }}
                             </div>
                         @endif
-
-                        {{-- お弁当一覧へ遷移 --}}
-                        <div class="w-full mb-4">
-                            <a href="" class="text-indigo-600 underline hover:text-indigo-800 hover:underline cursor-pointer font-medium transition duration-200">お弁当一覧に切り替える</a>
-                        </div>
                         
                         <table class="whitespace-nowrap table-auto w-full text-left whitespace-no-wrap">
                             <thead>
                                 <tr>
+                                    <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl-lg"></th>
                                     <th
                                         class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                        ブランド</th>
+                                        日付</th>
                                     <th
                                         class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                                        取引先</th>
+                                    <th
+                                        class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr-lg">
                                         </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                
+                                @foreach($receipts as $receipt)
                                     <tr>
-                                        <td class="border-t-2 border-gray-200 px-4 py-3 break-words whitespace-normal"></td>
-                                        <td class="border-t-2 border-gray-200 px-4 py-3">
-                                            {{-- 削除ボタン --}}
-                                            <form
-                                                action=""
-                                                method="post" id="delete_">
-                                                @csrf
-                                                @method('DELETE')
-                                                <div class="w-full">
-                                                    <button type="button"
-                                                        data-id=""
-                                                        onclick="deletePost(this)"
-                                                        class="text-white bg-pink-500 border-0 py-1 px-4 focus:outline-none hover:bg-pink-600 rounded text-lg">削除</button>
-                                                </div>
-                                            </form>
+                                        <td class="border-t-2 border-gray-200 px-4 py-3 break-words whitespace-normal">
+                                            <a href="#" class="text-blue-500 hover:text-blue-600">#</a>
                                         </td>
+                                        <td class="border-t-2 border-gray-200 px-4 py-3">{{ $receipt->issued_at }}</td>
+                                        <td class="border-t-2 border-gray-200 px-4 py-3">{{ $receipt->customer_name }}</td>
+                                        <td class="border-t-2 border-gray-200 px-4 py-3">☑️</td>
                                     </tr>
-                                
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
