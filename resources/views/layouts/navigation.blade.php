@@ -15,6 +15,9 @@
                     <x-nav-link :href="route('receipts.index')" :active="request()->routeIs('receipts.index')">
                         {{ __('領収書一覧') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('receipts.create')" :active="request()->routeIs('receipts.create')">
+                        {{ __('領収書作成') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('bentos.index')" :active="request()->routeIs('bentos.index')">
                         {{ __('弁当一覧') }}
                     </x-nav-link>
@@ -75,6 +78,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('receipts.index')" :active="request()->routeIs('receipts.index')">
                 {{ __('領収書一覧') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('receipts.create')" :active="request()->routeIs('receipts.create')">
+                {{ __('領収書作成') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('bentos.index')" :active="request()->routeIs('bentos.index')">
                 {{ __('弁当一覧') }}
