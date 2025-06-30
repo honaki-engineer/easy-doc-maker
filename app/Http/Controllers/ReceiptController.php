@@ -205,6 +205,14 @@ class ReceiptController extends Controller
      */
     public function destroy($id)
     {
-        //
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $receipt = $user->receipts()->find($id);
+        $receipt->delete();
+
+        return redirect()
+            ->route('receipts.index')
+            ->with('success', "領収書を削除しました。");
     }
 }
