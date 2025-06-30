@@ -46,25 +46,43 @@
                     </div>
                 </div>
 
-                <!-- 金額 -->
-                <div id="total_display" 
-                    class="inline-block bg-gray-600 text-white px-8 py-1 rounded text-2xl font-bold mb-2">
-                    {{-- 自動計算された合計金額が入る --}}
-                </div>
 
-                <!-- 但し書き -->
-                <div class="text-[10px] mb-8 leading-[1.6]">
-                    但し、お弁当代 <span id="receipt_note" class="font-bold"></span> 分として、上記正に領収いたしました。<br>
-                    <input type="hidden" name="receipt_note" id="receipt_note_input">
-                    <span class="font-bold">
-                        <input list="payment_methods" name="payment_method" class="text-xs w-[120px] px-1 py-[2px] border border-gray-300 rounded"> 支払い
-                        <datalist id="payment_methods">
-                            @foreach($payment_methods as $payment_method)
-                                <option value="{{ $payment_method->name }}">
-                            @endforeach
-                        </datalist>
-                    </span>
-                </div>
+
+
+<!-- 金額＆但し書き＋印紙欄 -->
+<div class="flex justify-between items-start mb-8">
+    <!-- 金額と但し書き -->
+    <div class="text-[10px] leading-[1.6]">
+        <!-- 金額 -->
+        <div id="total_display"
+            class="inline-block bg-gray-600 text-white px-8 py-1 rounded text-2xl font-bold mb-2">
+            {{-- 自動計算された合計金額が入る --}}
+        </div>
+
+        <!-- 但し書き -->
+        <div>
+            但し、お弁当代 <span id="receipt_note" class="font-bold"></span> 分として、上記正に領収いたしました。<br>
+            <input type="hidden" name="receipt_note" id="receipt_note_input">
+            <span class="font-bold">
+                <input list="payment_methods" name="payment_method" class="text-xs w-48 px-1 py-[2px] border border-gray-300 rounded"> 支払い
+                <datalist id="payment_methods">
+                    @foreach($payment_methods as $payment_method)
+                        <option value="{{ $payment_method->name }}">
+                    @endforeach
+                </datalist>
+            </span>
+        </div>
+    </div>
+
+    <!-- 印紙欄 -->
+    <div class="border border-dashed border-gray-600 w-40 h-20 text-center flex items-center justify-center ml-4 shrink-0">
+        印紙
+    </div>
+</div>
+
+                
+
+
 
                 <!-- 明細テーブル -->
                 <div class="text-[10px] mb-8">
