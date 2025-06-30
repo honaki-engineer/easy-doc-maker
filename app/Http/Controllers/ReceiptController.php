@@ -160,7 +160,18 @@ class ReceiptController extends Controller
      */
     public function show($id)
     {
-        //
+        // ✅ ユーザー情報の取得
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // ✅ 領収書の取得
+        $receipt = $user
+            ->receipts()
+            ->with('paymentMethod') // リレーション
+            ->with('bentoDetails') // リレーション
+            ->findOrFail($id);
+
+        return view('receipts.show', compact('receipt'));
     }
 
     /**

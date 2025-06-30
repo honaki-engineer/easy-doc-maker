@@ -37,7 +37,7 @@
                                 @foreach($receipts as $receipt)
                                     <tr>
                                         <td class="border-t-2 border-gray-200 px-4 py-3 break-words whitespace-normal">
-                                            <a href="#" class="text-blue-500 hover:text-blue-600">#</a>
+                                            <a href="{{ route('receipts.show', ['receipt' => $receipt->id]) }}" class="text-blue-500 hover:text-blue-600">#</a>
                                         </td>
                                         <td class="border-t-2 border-gray-200 px-4 py-3">{{ $receipt->issued_at }}</td>
                                         <td class="border-t-2 border-gray-200 px-4 py-3">{{ $receipt->customer_name }}</td>

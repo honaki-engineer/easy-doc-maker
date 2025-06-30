@@ -68,22 +68,22 @@
 
                 <!-- 明細テーブル -->
                 <div class="text-[10px] mb-8">
-                    <h2 class="mb-1">領収明細</h2>
+                    <h2 class="mb-1 font-bold text-xs">領収明細</h2>
                     <table class="w-full border-collapse border-black text-left">
                         <thead>
                             <tr>
-                                <th class="w-[12%] border border-black px-1 py-[2px] text-orange-500">ブランド</th>
-                                <th class="w-[35%] border border-black px-1 py-[2px]">品目</th>
-                                <th class="w-[11%] border border-black px-1 py-[2px] text-orange-500">税込</th>
-                                <th class="w-[8%] border border-black px-1 py-[2px] text-orange-500">消費税</th>
-                                <th class="w-[8%] border border-black px-1 py-[2px]">数量</th>
-                                <th class="w-[11%] border border-black px-1 py-[2px]">単価</th>
-                                <th class="w-[15%] border border-black px-1 py-[2px]">金額</th>
+                                <th class="w-[12%] border border-black px-1 py-[2px] text-orange-700 bg-orange-300">ブランド</th>
+                                <th class="w-[35%] border border-black px-1 py-[2px] bg-gray-300">品目</th>
+                                <th class="w-[11%] border border-black px-1 py-[2px] text-orange-700 bg-orange-300">税込</th>
+                                <th class="w-[8%] border border-black px-1 py-[2px] text-orange-700 bg-orange-300">消費税</th>
+                                <th class="w-[8%] border border-black px-1 py-[2px] bg-gray-300">数量</th>
+                                <th class="w-[11%] border border-black px-1 py-[2px] bg-gray-300">単価</th>
+                                <th class="w-[15%] border border-black px-1 py-[2px] bg-gray-300">金額</th>
                             </tr>
                         </thead>
                         <tbody>
                             {{-- レコード入力 --}}
-                            @for($i = 0; $i < 16; $i++)
+                            @for($i = 0; $i < 15; $i++)
                             <tr>
                                 {{-- ブランド --}}
                                 <td class="border border-black px-1 {{ $i % 2 === 0 ? 'bg-orange-100' : 'bg-orange-200' }}">
@@ -147,7 +147,7 @@
                                 <td colspan="4" class="px-1 border-l-0 border-b-0 text-orange-500">
                                     ※オレンジ色の箇所は、印刷 / DLで表示されません。
                                 </td>
-                                <td colspan="2" class="border border-black font-bold">小計</td>
+                                <td colspan="2" class="border border-black font-bold px-1 py-[2px] bg-gray-600 text-white">小計</td>
                                 <td class="border border-black text-right px-1">
                                     <input type="text"
                                         id="subtotal" 
@@ -159,7 +159,7 @@
                             {{-- 消費税(自動計算) --}}
                             <tr>
                                 <td colspan="4" class="px-1 border-l-0 border-b-0"></td>
-                                <td colspan="2" class="border border-black font-bold">消費税</td>
+                                <td colspan="2" class="border border-black font-bold px-1 py-[2px]">消費税</td>
                                 <td class="border border-black text-right px-1">
                                     <input type="text"
                                         id="tax_total" 
@@ -171,7 +171,7 @@
                             {{-- 合計(自動計算) --}}
                             <tr>
                                 <td colspan="4" class="px-1 border-l-0 border-b-0"></td>
-                                <td colspan="2" class="border border-black font-bold">合計</td>
+                                <td colspan="2" class="border border-black font-bold px-1 py-[2px] bg-gray-600 text-white">合計</td>
                                 <td class="border border-black font-bold text-right px-1">
                                     <input type="text"
                                         id="total"
@@ -186,9 +186,10 @@
 
                 <!-- 備考 -->
                 <div class="text-[10px]">
+                    <h2 class="mb-1 font-bold text-xs">備考：</h2>
                     <textarea name="remarks" 
                             class="w-full border text-xs rounded"
-                            placeholder="備考欄：例) 軽減税率8%対象"></textarea>
+                            placeholder="例) 軽減税率8%対象"></textarea>
                 </div>
             </div>
 

@@ -5,92 +5,157 @@
         </h2>
     </x-slot>
 
-    {{-- 戻るボタン --}}
-    
+    <!-- formタグ -->
+    <form action="" method="POST">
+        @csrf
 
-    <!-- 領収書本体 -->
-    <div class="print-area bg-[#f2f2f2] border border-gray-400 mx-auto p-28 max-w-[794px] w-full h-[1123px] text-[10px]">
-        <!-- タイトル -->
-        <div class="text-[16px] font-bold border-b-[3px] border-gray-600 pb-1 w-full mb-8">領収書</div>
+        <!-- 領収書の外側 -->
+        <div class="bg-gray-200 py-8 print:bg-white print:py-8">
 
-        <!-- 上部情報 -->
-        <div class="flex justify-between mb-8">
-            <div class="font-bold text-[12px] mt-20">〇〇〇〇〇株式会社 様</div>
-            <div class="text-[10px] text-right leading-[1.6]">
-                <p>2025/6/12</p>
-                <p>〒333-3333</p>
-                <p>埼玉県川口市川口1-1-1</p>
-                <p>川口ビル101</p>
-                <p>株式会社tone</p>
-                <p>登録番号T0000000000000</p>
-                <p>TEL：048-123-4567</p>
-                <p>MOBILE：090-1111-0000</p>
-                <p class="mt-1 font-semibold">担当：本多</p>
+            {{-- フラッシュメッセージ --}}
+            @if(session('success'))
+                <div class="overflow-x-auto max-w-[794px] mx-auto overflow-auto">
+                        <div id="flash-message"
+                            class="bg-green-100 text-green-800 rounded px-4 py-2 mb-2 transition-opacity duration-1000">
+                            {{ session('success') }}
+                        </div>
+                </div>
+            @endif
+
+            <!-- 領収書本体 -->
+            <div class="print-area bg-[#f2f2f2] border border-gray-400 mx-auto p-28 max-w-[794px] w-full h-[1123px] text-[10px]">
+                <!-- タイトル -->
+                <div class="text-[16px] font-bold border-b-[3px] border-gray-600 pb-1 w-full mb-8">領収書</div>
+
+                <!-- 上部情報 -->
+                <div class="flex justify-between mb-8">
+                    <div class="font-bold text-[12px] mt-20">{{ $receipt->customer_name }} 様</div>
+                    <div class="text-[10px] text-right leading-[1.6]">
+                        <p>{{ $receipt->issued_at }}</p>
+                        <p>{{ $receipt->postal_code }}</p>
+                        <p>{{ $receipt->address_line1 }}</p>
+                        <p>{{ $receipt->address_line2 }}</p>
+                        <p>{{ $receipt->issuer_name }}</p>
+                        <p>登録番号：{{ $receipt->issuer_number }}</p>
+                        <p>TEL：{{ $receipt->tel_fixed }}</p>
+                        <p>MOBILE：{{ $receipt->tel_mobile }}</p>
+                        <p class="mt-1 font-semibold">担当：{{ $receipt->responsible_name }}</p>
+                    </div>
+                </div>
+
+                <!-- 金額 -->
+                <div id="total_display" 
+                    class="inline-block bg-gray-600 text-white px-8 py-1 rounded text-2xl font-bold mb-2">
+                    ¥{{ number_format($receipt->total) }}
+                </div>
+
+                <!-- 但し書き -->
+                <div class="text-[10px] mb-8 leading-[1.6]">
+                    但し、お弁当代 <span id="receipt_note" class="font-bold"> {{ $receipt->receipt_note }} </span>分として、上記正に領収いたしました。<br>
+                    <input type="hidden" name="receipt_note" id="receipt_note_input">
+                    
+                    <span class="font-bold text-xs">
+                        {{ $receipt->paymentMethod->name }}支払い
+                    </span>
+                </div>
+
+                <!-- 明細テーブル -->
+                <div class="text-[10px] mb-8">
+                    <h2 class="mb-1 font-bold text-xs">領収明細</h2>
+                    <table class="w-full border-collapse border-black text-left">
+                        <thead>
+                            <tr class="bg-gray-300">
+                                <th class="w-[66%] border border-black px-1 py-[2px]">品目</th>
+                                <th class="w-[8%] border border-black px-1 py-[2px]">数量</th>
+                                <th class="w-[10%] border border-black px-1 py-[2px]">単価</th>
+                                <th class="w-[16%] border border-black px-1 py-[2px]">金額</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- レコード入力 --}}
+                            @for($i = 0; $i < 15; $i++)
+                            <tr>
+                                {{-- 品目（選択肢はJSで切り替え） --}}
+                                <td class="border border-black px-1 py-[2px] {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
+                                    {!! $receipt->bentoDetails[$i]->bento_name ?? '&nbsp;' !!}
+                                </td>
+                                {{-- 数量 --}}
+                                <td class="text-right border border-black px-1 py-[2px] {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
+                                    {{-- `number_format`がnullだとPHPエラーになるため条件分岐で表示 --}}
+                                    {!! isset($receipt->bentoDetails[$i]) && $receipt->bentoDetails[$i]->bento_quantity !== null
+                                        ? number_format($receipt->bentoDetails[$i]->bento_quantity)
+                                        : '&nbsp;' !!}
+                                </td>
+                                {{-- 単価(自動計算) --}}
+                                <td class="text-right border border-black px-1 py-[2px] {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
+                                    {!! isset($receipt->bentoDetails[$i]) && $receipt->bentoDetails[$i]->unit_price !== null
+                                        ? number_format($receipt->bentoDetails[$i]->unit_price)
+                                        : '&nbsp;' !!}
+                                </td>
+                                {{-- 金額(自動計算) --}}
+                                <td class="text-right border border-black px-1 py-[2px] {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
+                                    {!! isset($receipt->bentoDetails[$i]) && $receipt->bentoDetails[$i]->amount !== null
+                                        ? number_format($receipt->bentoDetails[$i]->amount)
+                                        : '&nbsp;' !!}
+                                </td>
+                            </tr>
+                            @endfor
+                            <!-- 小計・消費税・合計 -->
+                            {{-- 小計(自動計算) --}}
+                            <tr>
+                                <td class=""></td>
+                                <td colspan="2" class="border border-black font-bold px-1 py-[2px] bg-gray-600 text-white">小計</td>
+                                <td class="border border-black text-right px-1 py-[2px]">
+                                    {{ number_format($receipt->subtotal) }}
+                                </td>
+                            </tr>
+                            {{-- 消費税(自動計算) --}}
+                            <tr>
+                                <td class="px-1 border-l-0 border-b-0"></td>
+                                <td colspan="2" class="border border-black font-bold px-1 py-[2px]">消費税</td>
+                                <td class="border border-black text-right px-1">
+                                    {{ number_format($receipt->tax_total) }}
+                                </td>
+                            </tr>
+                            {{-- 合計(自動計算) --}}
+                            <tr>
+                                <td class="px-1 border-l-0 border-b-0"></td>
+                                <td colspan="2" class="border border-black font-bold px-1 py-[2px] bg-gray-600 text-white">合計</td>
+                                <td class="border border-black font-bold text-right px-1">
+                                    {{ number_format($receipt->total) }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 備考 -->
+                <div class="text-[10px]">
+                    @if($receipt->remarks)
+                        <h2 class="mb-1 font-bold text-xs">備考：</h2>
+                        {{ $receipt->remarks }}
+                    @endif
+                </div>
             </div>
-        </div>
 
-        <!-- 金額 -->
-        <div class="inline-block bg-gray-600 text-white px-8 py-1 rounded text-2xl font-bold mb-2">
-            ¥60,480
-        </div>
+            {{-- ボタンエリア --}}
+            <div class="w-full mt-8 flex gap-4 justify-center">
+                <button type="submit" name="action" value="store_and_index"
+                    class="text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">
+                    削除
+                </button>
 
-        <!-- 但し書き -->
-        <div class="text-[10px] mb-8 leading-[1.6]">
-            但し、お弁当代 <span class="font-bold">￥2,160 × 28個</span> 分として、上記正に領収いたしました。<br>
-            <span class="font-bold">クレジットカード払い</span>
-        </div>
+                <button type="submit" name="action" value="store_and_create"
+                    class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                    印刷
+                </button>
 
-        <!-- 明細テーブル -->
-        <div class="text-[10px] mb-8">
-            <h2 class="mb-1">領収明細</h2>
-            <table class="w-full border-collapse border-black text-left">
-                <thead>
-                    <tr>
-                        <th class="w-[65%] border border-black px-1 py-[2px]">品目</th>
-                        <th class="w-[10%] border border-black px-1 py-[2px]">単価</th>
-                        <th class="w-[10%] border border-black px-1 py-[2px]">数量</th>
-                        <th class="w-[15%] border border-black px-1 py-[2px]">金額</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-black px-1">炭焼き和牛サーロイン＆ハンバーグ弁当</td>
-                        <td class="border border-black text-right px-1">88888888</td>
-                        <td class="border border-black text-right px-1"></td>
-                        <td class="border border-black text-right px-1"></td>
-                    </tr>
-                    @for($i = 0; $i < 16; $i++)
-                    <tr>
-                        <td class="border border-black">&nbsp;</td>
-                        <td class="border border-black">&nbsp;</td>
-                        <td class="border border-black">&nbsp;</td>
-                        <td class="border border-black">&nbsp;</td>
-                    </tr>
-                    @endfor
+                <button type="submit" name="action" value="store_and_create"
+                    class="text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
+                    DL(PDF)
+                </button>
+            </div>
 
-                    <!-- 小計・消費税・合計 -->
-                    <tr>
-                        <td class="px-1 border-l-0 border-b-0"></td>
-                        <td colspan="2" class="border border-black">小計</td>
-                        <td class="border border-black text-right px-1">56,000</td>
-                    </tr>
-                    <tr>
-                        <td class="px-1 border-l-0 border-b-0"></td>
-                        <td colspan="2" class="border border-black">消費税</td>
-                        <td class="border border-black text-right px-1">4,480</td>
-                    </tr>
-                    <tr>
-                        <td class="px-1 border-l-0 border-b-0"></td>
-                        <td colspan="2" class="border border-black font-bold">合計</td>
-                        <td class="border border-black font-bold text-right px-1">60,480</td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
-
-        <!-- 備考 -->
-        <div class="text-[10px]">
-            備考：軽減税率8%対象
-        </div>
-    </div>
+    </form>
 </x-app-layout>
