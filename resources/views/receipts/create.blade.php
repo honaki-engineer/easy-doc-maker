@@ -16,7 +16,7 @@
             @if(session('success'))
                 <div class="overflow-x-auto max-w-[794px] mx-auto overflow-auto">
                         <div id="flash-message"
-                            class="bg-green-100 text-green-800 rounded px-4 py-2 mb-2 transition-opacity duration-1000">
+                            class="inline-block bg-green-100 text-green-800 rounded px-4 py-2 mb-4 transition-opacity duration-1000">
                             {{ session('success') }}
                         </div>
                 </div>
