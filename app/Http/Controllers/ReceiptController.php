@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReceiptRequest;
 use App\Models\PaymentMethod;
 use App\Services\ReceiptService;
 use Illuminate\Http\Request;
@@ -58,7 +59,7 @@ class ReceiptController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ReceiptRequest $request)
     {
         // ✅ ユーザー情報の取得
         /** @var \App\Models\User $user */

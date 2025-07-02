@@ -34,9 +34,9 @@ class ReceiptService
             'tel_mobile' => $receipt_setting->tel_mobile,
             'responsible_name' => $receipt_setting->responsible_name,
             'receipt_note' => $request->receipt_note,
-            'subtotal' => (int) str_replace(',', '', $request->input('subtotal')),
-            'tax_total' => (int) str_replace(',', '', $request->input('tax_total')),
-            'total' => (int) str_replace(',', '', $request->input('total')),
+            'subtotal' => (int) $request->subtotal,
+            'tax_total' => (int) $request->tax_total,
+            'total' => (int) $request->total,
             'remarks' => $request->remarks,
           ]);
           
@@ -68,11 +68,11 @@ class ReceiptService
                     'receipt_id' => $receipt->id,
                     'bento_brand_name' => $bentoBrand,
                     'bento_name' => $bentoNames[$index],
-                    'bento_fee' =>  (int) str_replace(',', '', $bentoFees[$index]),
-                    'tax_rate' =>  (int) str_replace('%', '', $taxRates[$index]),
+                    'bento_fee' =>  (int) $bentoFees[$index],
+                    'tax_rate' =>  (int) $taxRates[$index],
                     'bento_quantity' => $bentoQuantities[$index],
-                    'unit_price' =>  (int) str_replace(',', '', $unitPrices[$index] ?? 0),
-                    'amount' =>  (int) str_replace(',', '', $amounts[$index] ?? 0),
+                    'unit_price' =>  (int) $unitPrices[$index],
+                    'amount' =>  (int) $amounts[$index],
                 ]);
             }
         }

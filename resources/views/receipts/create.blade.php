@@ -22,6 +22,11 @@
                 </div>
             @endif
 
+            {{-- バリデーションエラーメッセージ --}}
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+
             <!-- 領収書本体 -->
             <div class="print-area bg-[#f2f2f2] border border-gray-400 mx-auto p-20 max-w-[794px] w-full h-[1123px] text-[10px]">
                 <!-- タイトル -->
