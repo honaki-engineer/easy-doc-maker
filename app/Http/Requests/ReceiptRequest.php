@@ -30,16 +30,16 @@ class ReceiptRequest extends FormRequest
             'customer_name' => ['required', 'string', 'max:255'], // 顧客名
             'receipt_note' => ['required', 'string', 'max:500'], // 但し書き
             'payment_method' => ['required'], // 支払い方法
-            'bento_brands.*' => ['required', 'string', 'max:50'], // ブランド
-            'bento_names.*' => ['required', 'string', 'max:255'], // お弁当
-            'bento_fees.*' => ['required', 'integer', 'max:10'], // 税込価格
-            'tax_rates.*' => ['required', 'integer'], // 消費税
-            'bento_quantities.*' => ['required', 'integer', 'max:10'], // 個数
-            'unit_prices.*' => ['required', 'integer', 'max:10'], // 単価(税抜)
-            'amounts.*' => ['required', 'integer', 'max:10'], // 金額
-            'subtotal' => ['required', 'integer', 'max:10'], // 小計
-            'tax_total' => ['required', 'integer', 'max:10'], // 消費税の合計
-            'total' => ['required', 'integer', 'max:10'], // 合計
+            'bento_brands' => ['array'], // ブランド
+            'bento_names' => ['array'], // お弁当
+            'bento_fees' => ['array'], // 税込価格
+            'tax_rates' => ['array'], // 消費税
+            'bento_quantities' => ['array'], // 個数
+            'unit_prices' => ['array'], // 単価(税抜)
+            'amounts' => ['array'], // 金額
+            'subtotal' => ['required', 'integer', 'digits_between:1,10'], // 小計
+            'tax_total' => ['required', 'integer', 'digits_between:1,10'], // 消費税の合計
+            'total' => ['required', 'integer', 'digits_between:1,10'], // 合計
             'remarks' => ['nullable', 'string', 'max:500'], // 合計
         ];
     }
@@ -49,19 +49,99 @@ class ReceiptRequest extends FormRequest
     {
         $validator->after(function ($validator) {
 
-            // ✅ ----- ユーザー情報 -----
+            // ✅ ----- 情報取得 -----
+            // 🔹 ユーザー情報を取得
             /** @var \App\Models\User $user */
             $user = Auth::user();
 
-            // ✅ ----- ブランド、お弁当 -----
             // 🔹 requestデータ取得
-            $brands = $this->bento_brands;
-            $bentos = $this->bento_names;
+            $brands = $this->bento_brands ?? [];
+            $bentos = $this->bento_names ?? [];
+            $fees = $this->bento_fees ?? [];
+            $taxRates = $this->tax_rates ?? [];
+            $quantities = $this->bento_quantities ?? [];
+            $unitPrices = $this->unit_prices ?? [];
+            $amounts = $this->amounts ?? [];
+
+            // 🔹 空欄を削除するフィルター
+            $filteredBrands = collect($brands)->filter(fn($val) => $val !== null && $val !== '');
+            $filteredBentos = collect($bentos)->filter(fn($val) => $val !== null && $val !== '');
+            $filteredFees = collect($fees)->filter(fn($val) => $val !== null && $val !== '');
+            $filteredTaxRates = collect($taxRates)->filter(fn($val) => $val !== null && $val !== '');
+            $filteredQuantities = collect($quantities)->filter(fn($val) => $val !== null && $val !== '');
+            $filteredUnitPrices = collect($unitPrices)->filter(fn($val) => $val !== null && $val !== '');
+            $filteredAmounts = collect($amounts)->filter(fn($val) => $val !== null && $val !== '');
+
+            // ✅ ----- `.*`を1度のみバリデーションエラーメッセージを表示する処理 -----
+            // 🔹 ----- bento_brands ----- 
+            // 空チェック（1つ以上必要）
+            if($filteredBrands->isEmpty()) {
+                $validator->errors()->add('bento_brands', 'ブランドは必ず指定してください。');
+            } elseif ($filteredBrands->contains(fn($val) => !is_string($val))) {
+                $validator->errors()->add('bento_brands', 'ブランドは必ず文字で指定してください(数字のみNG)。');
+            } elseif ($filteredBrands->contains(fn($val) => mb_strlen($val) > 50)) {
+                $validator->errors()->add('bento_brands', 'ブランドは50文字以内で指定してください。');
+            }
+            
+            // 🔹 ----- bento_names ----- 
+            if($filteredBentos->isEmpty()) {
+                $validator->errors()->add('bento_names', '品目は必ず指定してください。');
+            } elseif (collect($filteredBentos)->contains(fn($val) => !is_string($val))) {
+                $validator->errors()->add('bento_names', '品目は必ず文字で指定してください(数字のみNG)。');
+            } elseif (collect($filteredBentos)->contains(fn($val) => mb_strlen($val) > 255)) {
+                $validator->errors()->add('bento_names', '品目は255文字以内で指定してください。');
+            }
+            
+            // 🔹 ----- bento_fees ----- 
+            if($filteredFees->isEmpty()) {
+                $validator->errors()->add('bento_fees', '税込は必ず指定してください。');
+            } elseif (collect($filteredFees)->contains(fn($val) => !is_string($val))) {
+                $validator->errors()->add('bento_fees', '税込は必ず数字で指定してください。');
+            } elseif (collect($filteredFees)->contains(fn($val) => strlen((string)$val) > 10)) {
+                $validator->errors()->add('bento_fees', '税込は10文字以内で指定してください。');
+            }
+
+            // 🔹 ----- tax_rates ----- 
+            if($filteredTaxRates->isEmpty()) {
+                $validator->errors()->add('tax_rates', '消費税は必ず指定してください。');
+            } elseif (collect($filteredTaxRates)->contains(fn($val) => !is_string($val))) {
+                $validator->errors()->add('tax_rates', '消費税は必ず数字で指定してください。');
+            }
+
+            // 🔹 ----- bento_quantities ----- 
+            if($filteredQuantities->isEmpty()) {
+                $validator->errors()->add('bento_quantities', '数量は必ず指定してください。');
+            } elseif (collect($filteredQuantities)->contains(fn($val) => !is_string($val))) {
+                $validator->errors()->add('bento_quantities', '数量は必ず数字で指定してください。');
+            } elseif (collect($filteredQuantities)->contains(fn($val) => strlen((string)$val) > 10)) {
+                $validator->errors()->add('bento_quantities', '数量は10文字以内で指定してください。');
+            }
+
+            // 🔹 ----- unit_prices ----- 
+            if($filteredUnitPrices->isEmpty()) {
+                $validator->errors()->add('unit_prices', '単価は必ず指定してください。');
+            } elseif (collect($filteredUnitPrices)->contains(fn($val) => !is_string($val))) {
+                $validator->errors()->add('unit_prices', '単価は必ず数字で指定してください。');
+            } elseif (collect($filteredUnitPrices)->contains(fn($val) => strlen((string)$val) > 10)) {
+                $validator->errors()->add('unit_prices', '単価は10文字以内で指定してください。');
+            }
+
+            // 🔹 ----- amounts ----- 
+            if($filteredAmounts->isEmpty()) {
+                $validator->errors()->add('amounts', '金額は必ず指定してください。');
+            } elseif (collect($filteredAmounts)->contains(fn($val) => !is_string($val))) {
+                $validator->errors()->add('amounts', '金額は必ず数字で指定してください。');
+            } elseif (collect($filteredAmounts)->contains(fn($val) => strlen((string)$val) > 10)) {
+                $validator->errors()->add('amounts', '金額は10文字以内で指定してください。');
+            }
+
+
+            // ✅ -----重複チェック -----
             if(!$brands || !$bentos || count($brands) !== count($bentos)) {
                 return;
             }
 
-            // 🔹 ----- ブランド -----
+            // 🔹 ----- bento_brands -----
             // 🔸 DBに存在するブランド名一覧を取得
             $existingBrands = $user
                 ->bentoBrands()
@@ -71,12 +151,11 @@ class ReceiptRequest extends FormRequest
             // 🔸 重複チェック(同じ単語は一度だけ)
             foreach(array_unique($brands) as $brand) {
                 if(in_array($brand, $existingBrands)) {
-                    $validator->errors()->add('bento_brands', "ブランド名 '{$brand}' は既に登録されています。");
+                    $validator->errors()->add('bento_brands', "ブランド '{$brand}' は既に登録されています。");
                 }
             }
 
-
-            // 🔹 ----- お弁当 -----
+            // 🔹 ----- bento_names -----
             $combinationSet = [];
             for($i = 0; $i < count($brands); $i++) {
                 // 🔸 `$i`番目のブランド/お弁当を取得
@@ -138,18 +217,5 @@ class ReceiptRequest extends FormRequest
             'total' => str_replace(',', '', $this->total),
         ]);
     }
-
-    // ⭐️ バリデーションのエラーメッセージを上書き
-    public function messages()
-    {
-        return [
-            'bento_brands.*.required' => 'ブランド名を入力してください。',
-            'bento_brands.*.max' => 'ブランド名は50文字以内で入力してください。',
-            'bento_names.*.required' => 'お弁当名を入力してください。',
-            'bento_names.*.max' => 'お弁当名は255文字以内で入力してください。',
-        ];
-    }
-
-
 
 }

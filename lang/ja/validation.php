@@ -166,12 +166,31 @@ return [
         
         // 自社情報
         'postal_code' => '郵便番号',
-        'address_line1' => 'メールアドレス',
-        'address_line2' => 'メールアドレス',
-        'issuer_name' => 'メールアドレス',
-        'issuer_number' => 'メールアドレス',
-        'tel_fixed' => 'メールアドレス',
-        'tel_mobile' => 'メールアドレス',
-        'responsible_name' => 'メールアドレス',
+        'address_line1' => '住所',
+        'address_line2' => '建物名',
+        'issuer_name' => '会社名',
+        'issuer_number' => '登録番号',
+        'tel_fixed' => '固定電話',
+        '携帯電話' => 'メールアドレス',
+        'responsible_name' => '担当者',
+        
+        // 領収書
+        'issued_at' => '日付',
+        'customer_name' => '顧客名',
+        'receipt_note' => '但し書き',
+        'payment_method' => '支払い方法',
+        // ----- `/ReceiptRequest.php`の`withValidator`に記載
+        // 'bento_brands' => 'ブランド',
+        // 'bento_names' => '品目',
+        // 'bento_fees' => '税込',
+        // 'tax_rates' => '消費税',
+        // 'bento_quantities' => '数量',
+        // 'unit_prices' => '単価(税抜)', // 自動計算
+        // 'amounts' => '金額', // 自動計算
+        // ----- 
+        'subtotal' => '小計', // 自動計算
+        'tax_total' => '消費税の合計', // 自動計算
+        'total' => '合計金額', // 自動計算
+        'remarks' => '備考',
     ],
 ];
