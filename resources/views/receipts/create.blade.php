@@ -23,22 +23,23 @@
             @endif
 
             {{-- バリデーションエラーメッセージ --}}
-
-            <x-input-error :messages="$errors->get('issued_at')" class="mt-2" />
-            <x-input-error :messages="$errors->get('customer_name')" class="mt-2" />
-            <x-input-error :messages="$errors->get('receipt_note')" class="mt-2" />
-            <x-input-error :messages="$errors->get('payment_method')" class="mt-2" />
-            <x-input-error :messages="$errors->get('bento_brands')" class="mt-2" />
-            <x-input-error :messages="$errors->get('bento_names')" class="mt-2" />
-            <x-input-error :messages="$errors->get('bento_fees')" class="mt-2" />
-            <x-input-error :messages="$errors->get('tax_rates')" class="mt-2" />
-            <x-input-error :messages="$errors->get('bento_quantities')" class="mt-2" />
-            <x-input-error :messages="$errors->get('unit_prices')" class="mt-2" />
-            <x-input-error :messages="$errors->get('amounts')" class="mt-2" />
-            <x-input-error :messages="$errors->get('subtotal')" class="mt-2" />
-            <x-input-error :messages="$errors->get('tax_total')" class="mt-2" />
-            <x-input-error :messages="$errors->get('total')" class="mt-2" />
-            <x-input-error :messages="$errors->get('remarks')" class="mt-2" />
+            <div class="mx-auto max-w-[794px] w-full text-[10px] mb-2">
+                <x-input-error :messages="$errors->get('issued_at')" class="mt-2" />
+                <x-input-error :messages="$errors->get('customer_name')" class="mt-2" />
+                <x-input-error :messages="$errors->get('receipt_note')" class="mt-2" />
+                <x-input-error :messages="$errors->get('payment_method')" class="mt-2" />
+                <x-input-error :messages="$errors->get('bento_brands')" class="mt-2" />
+                <x-input-error :messages="$errors->get('bento_names')" class="mt-2" />
+                <x-input-error :messages="$errors->get('bento_fees')" class="mt-2" />
+                <x-input-error :messages="$errors->get('tax_rates')" class="mt-2" />
+                <x-input-error :messages="$errors->get('bento_quantities')" class="mt-2" />
+                <x-input-error :messages="$errors->get('unit_prices')" class="mt-2" />
+                <x-input-error :messages="$errors->get('amounts')" class="mt-2" />
+                <x-input-error :messages="$errors->get('subtotal')" class="mt-2" />
+                <x-input-error :messages="$errors->get('tax_total')" class="mt-2" />
+                <x-input-error :messages="$errors->get('total')" class="mt-2" />
+                <x-input-error :messages="$errors->get('remarks')" class="mt-2" />
+            </div>
 
 
             <!-- 領収書本体 -->
