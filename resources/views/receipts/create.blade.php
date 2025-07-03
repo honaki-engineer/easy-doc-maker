@@ -23,9 +23,23 @@
             @endif
 
             {{-- バリデーションエラーメッセージ --}}
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
+
+            <x-input-error :messages="$errors->get('issued_at')" class="mt-2" />
+            <x-input-error :messages="$errors->get('customer_name')" class="mt-2" />
+            <x-input-error :messages="$errors->get('receipt_note')" class="mt-2" />
+            <x-input-error :messages="$errors->get('payment_method')" class="mt-2" />
+            <x-input-error :messages="$errors->get('bento_brands')" class="mt-2" />
+            <x-input-error :messages="$errors->get('bento_names')" class="mt-2" />
+            <x-input-error :messages="$errors->get('bento_fees')" class="mt-2" />
+            <x-input-error :messages="$errors->get('tax_rates')" class="mt-2" />
+            <x-input-error :messages="$errors->get('bento_quantities')" class="mt-2" />
+            <x-input-error :messages="$errors->get('unit_prices')" class="mt-2" />
+            <x-input-error :messages="$errors->get('amounts')" class="mt-2" />
+            <x-input-error :messages="$errors->get('subtotal')" class="mt-2" />
+            <x-input-error :messages="$errors->get('tax_total')" class="mt-2" />
+            <x-input-error :messages="$errors->get('total')" class="mt-2" />
+            <x-input-error :messages="$errors->get('remarks')" class="mt-2" />
+
 
             <!-- 領収書本体 -->
             <div class="print-area bg-[#f2f2f2] border border-gray-400 mx-auto p-20 max-w-[794px] w-full h-[1123px] text-[10px]">
