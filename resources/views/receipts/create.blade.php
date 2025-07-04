@@ -271,7 +271,7 @@
         }));
 
         // ✅ ブランド入力に応じて、対応する品目欄の有効化と候補リストの切り替えを行う処理
-                document.querySelectorAll('.brand_input').forEach((brandInput) => {
+        document.querySelectorAll('.brand_input').forEach((brandInput) => {
             // 🔹 情報取得
             const index = brandInput.dataset.index;
             const bentoInput = document.querySelector(`.bento_input[data-index="${index}"]`);
@@ -634,6 +634,13 @@
                 hiddenInput.value = resultText;
             }
         }
+
+
+    // ⭐️ 最後に計算処理を一度すべて実行して、バリデーション後でも反映されるようにする
+        updateSubtotal();
+        updateTaxTotal();
+        updateTotal();
+        updateReceiptNote();
     });
 
 
