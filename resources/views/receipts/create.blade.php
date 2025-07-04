@@ -50,11 +50,11 @@
                 <!-- 上部情報 -->
                 <div class="flex justify-between mb-8">
                     <div class="font-bold text-[12px] mt-20">
-                        <input type="text" name="customer_name" class="text-xs w-80 px-1 py-1 border border-gray-300 rounded"> 様
+                        <input type="text" name="customer_name" value="{{ old('customer_name') }}" class="text-xs w-80 px-1 py-1 border border-gray-300 rounded"> 様
                     </div>
                     <div class="text-[10px] text-right leading-[1.6]">
                         {{-- 日付 --}}
-                        <p><input type="date" name="issued_at" id="date" class="text-xs w-[100px] px-1 py-[1px] border border-gray-300 rounded cursor-pointer"></p>
+                        <p><input type="date" name="issued_at" value="{{ old('issued_at') }}" id="date" class="text-xs w-[100px] px-1 py-[1px] border border-gray-300 rounded cursor-pointer"></p>
                         <p>{{ $receipt_setting->postal_code }}</p>
                         <p>{{ $receipt_setting->address_line1 }}</p>
                         <p>{{ $receipt_setting->address_line2 }}</p>
@@ -79,9 +79,9 @@
                         <!-- 但し書き -->
                         <div>
                             但し、お弁当代 <span id="receipt_note" class="font-bold"></span> 分として、上記正に領収いたしました。<br>
-                            <input type="hidden" name="receipt_note" id="receipt_note_input">
+                            <input type="hidden" name="receipt_note" value="{{ old('receipt_note') }}" id="receipt_note_input">
                             <span class="font-bold">
-                                <input list="payment_methods" name="payment_method" class="text-xs w-48 px-1 py-[2px] border border-gray-300 rounded"> 支払い
+                                <input list="payment_methods" name="payment_method" value="{{ old('payment_method') }}" class="text-xs w-48 px-1 py-[2px] border border-gray-300 rounded"> 支払い
                                 <datalist id="payment_methods">
                                     @foreach($payment_methods as $payment_method)
                                         <option value="{{ $payment_method->name }}">
@@ -120,6 +120,7 @@
                                 <td class="border border-black px-1 {{ $i % 2 === 0 ? 'bg-orange-100' : 'bg-orange-200' }}">
                                     <input list="brand_list_{{ $i }}" 
                                         name="bento_brands[]" 
+                                        value="{{ old('bento_brands.' . $i) }}"
                                         class="brand_input text-xs w-full px-1 py-[2px] border border-gray-300 rounded {{ $i % 2 === 0 ? 'bg-orange-100' : 'bg-orange-200' }}" 
                                         data-index="{{ $i }}">
                                     <datalist id="brand_list_{{ $i }}">
@@ -132,6 +133,7 @@
                                 <td class="border border-black px-1 {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
                                     <input list="bento_list_{{ $i }}" 
                                         name="bento_names[]" 
+                                        value="{{ old('bento_names.' . $i) }}"
                                         class="bento_input text-xs w-full px-1 py-[2px] border border-gray-300 rounded {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}" 
                                         data-index="{{ $i }}">
                                     <datalist id="bento_list_{{ $i }}">
@@ -141,18 +143,21 @@
                                 {{-- 税込 --}}
                                 <td class="border border-black px-1 {{ $i % 2 === 0 ? 'bg-orange-100' : 'bg-orange-200' }}">
                                     <input name="bento_fees[]" 
+                                        value="{{ old('bento_fees.' . $i) }}"
                                         type="text"
                                         class="bento_fee_input text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded {{ $i % 2 === 0 ? 'bg-orange-100' : 'bg-orange-200' }}">
                                 </td>
                                 {{-- 消費税 --}}
                                 <td class="border border-black px-1 {{ $i % 2 === 0 ? 'bg-orange-100' : 'bg-orange-200' }}">
                                     <input name="tax_rates[]" 
+                                        value="{{ old('tax_rates.' . $i) }}"
                                         type="text"
                                         class="tax_rate_input text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded {{ $i % 2 === 0 ? 'bg-orange-100' : 'bg-orange-200' }}">
                                 </td>
                                 {{-- 数量 --}}
                                 <td class="border border-black px-1 {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
                                     <input name="bento_quantities[]" 
+                                        value="{{ old('bento_quantities.' . $i) }}"
                                         type="number"
                                         class="bento_quantity_input text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
                                 </td>
@@ -160,6 +165,7 @@
                                 <td class="border border-black px-1 {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
                                     <input type="text" 
                                         name="unit_prices[]"
+                                        value="{{ old('unit_prices.' . $i) }}"
                                         class="unit_price_result text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}" 
                                         readonly>
                                 </td>
@@ -167,6 +173,7 @@
                                 <td class="border border-black px-1 {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
                                     <input type="text" 
                                         name="amounts[]"
+                                        value="{{ old('amounts.' . $i) }}"
                                         class="amount_result text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}" 
                                         readonly>
                                 </td>
@@ -183,6 +190,7 @@
                                     <input type="text"
                                         id="subtotal" 
                                         name="subtotal"
+                                        value="{{ old('subtotal.') }}"
                                         class="text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded bg-transparent" 
                                         readonly>
                                 </td>
@@ -195,6 +203,7 @@
                                     <input type="text"
                                         id="tax_total" 
                                         name="tax_total"
+                                        value="{{ old('tax_total') }}"
                                         class="text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded bg-transparent" 
                                         readonly>
                                 </td>
@@ -207,6 +216,7 @@
                                     <input type="text"
                                         id="total"
                                         name="total"
+                                        value="{{ old('total') }}"
                                         class="text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded bg-transparent font-bold"
                                         readonly>
                                 </td>
@@ -220,7 +230,7 @@
                     <h2 class="mb-1 font-bold text-xs">備考：</h2>
                     <textarea name="remarks" 
                             class="w-full border text-xs rounded"
-                            placeholder="例) 軽減税率8%対象"></textarea>
+                            placeholder="例) 軽減税率8%対象">{{ old('remarks') }}</textarea>
                 </div>
             </div>
 
@@ -261,13 +271,30 @@
         }));
 
         // ✅ ブランド入力に応じて、対応する品目欄の有効化と候補リストの切り替えを行う処理
-        document.querySelectorAll('.brand_input').forEach((brandInput) => {
+                document.querySelectorAll('.brand_input').forEach((brandInput) => {
+            // 🔹 情報取得
             const index = brandInput.dataset.index;
             const bentoInput = document.querySelector(`.bento_input[data-index="${index}"]`);
             const datalist = document.getElementById(`bento_list_${index}`);
 
-            // 🔹 初期状態で品目入力を無効化
-            bentoInput.disabled = true;
+            const selectedBrand = brandInput.value.trim(); // `old()`で復元された値を取得
+            const bentoNames = brandBentoMap[selectedBrand];
+
+            // 🔹 old()対応：ブランドが入力or選択されていて登録済みなら`datalist`と品目入力を復元
+            if(selectedBrand !== '') {
+                bentoInput.disabled = false;
+                datalist.innerHTML = '';
+
+                if (Array.isArray(bentoNames)) {
+                    bentoNames.forEach(name => {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        datalist.appendChild(option);
+                    });
+                }
+            } else {
+                bentoInput.disabled = true;
+            }
 
             // 🔹 ブランドを入力したら、それに紐づくお弁当候補を表示する
             brandInput.addEventListener('input', function () {
@@ -276,10 +303,10 @@
 
                 // 🔸 品目欄を初期化
                 bentoInput.value = '';
-                datalist.innerHTML = ''; // <datalist>の中の<option>をすべて削除(空に)する
+                datalist.innerHTML = '';
 
                 // 🔸 ブランド未入力 ⇒ 品目入力不可
-                if(selectedBrand === '') {
+                if (selectedBrand === '') {
                     bentoInput.disabled = true;
                     return;
                 }
@@ -288,7 +315,7 @@
                 bentoInput.disabled = false;
 
                 // 🔸 登録済みブランド ⇒ 候補を出す
-                if(Array.isArray(bentoNames)) {
+                if (Array.isArray(bentoNames)) {
                     bentoNames.forEach(name => {
                         const option = document.createElement('option');
                         option.value = name;
@@ -297,6 +324,7 @@
                 }
             });
         });
+
 
 
     // ⭐️ ブランド
