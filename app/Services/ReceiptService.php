@@ -46,24 +46,28 @@ class ReceiptService
         // ✅ receipt_bento_detailsテーブルへの保存
         public static function storeReceiptBentoDetails($bentoBrands, $user, $bentoNames, $receipt, $bentoFees, $taxRates, $bentoQuantities, $unitPrices, $amounts) {
             foreach($bentoBrands as $index => $bentoBrand) {
-                if(empty($bentoBrand) && empty($bentoNames[$index])) {
-                    continue; // 空行はスキップ
+                $brandName = trim($rawBrand ?? '');
+                $bentoName = trim($bentoNames[$index] ?? '');
+
+                // 🔹 両方とも空ならスキップ(完全に空の行)
+                if ($brandName === '' && $bentoName === '') {
+                    continue;
                 }
 
-                // 🔸 ブランドをfirstOrCreate(新規入力のみ保存)
+                // 🔹 ブランドをfirstOrCreate(新規入力のみ保存)
                 $brand = BentoBrand::firstOrCreate([
                     'user_id' => $user->id,
                     'name' => $bentoBrand,
                 ]);
 
-                // 🔸 ブランドに紐づけてお弁当名をfirstOrCreate(新規入力のみ保存)
+                // 🔹 ブランドに紐づけてお弁当名をfirstOrCreate(新規入力のみ保存)
                 BentoName::firstOrCreate([
                     'user_id' => $user->id,
                     'bento_brand_id' => $brand->id,
                     'name' => $bentoNames[$index],
                 ]);
             
-                // 🔸 領収書_弁当テーブルへの保存
+                // 🔹 領収書_弁当テーブルへの保存
                 ReceiptBentoDetail::create([
                     'receipt_id' => $receipt->id,
                     'bento_brand_name' => $bentoBrand,
