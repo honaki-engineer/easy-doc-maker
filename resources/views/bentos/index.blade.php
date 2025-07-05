@@ -25,7 +25,7 @@
 
                         {{-- 検索フォーム --}}
                         <form class="mb-4 flex justify-center items-center space-x-4" action="{{ route('bentos.index') }}" method="get">
-                            <input type="text" name="search" placeholder="検索" class="rounded w-1/2">
+                            <input type="text" name="search" placeholder="検索" class="rounded w-1/2 cursor-pointer">
                             <button
                                 class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">検索</button>
                         </form>
