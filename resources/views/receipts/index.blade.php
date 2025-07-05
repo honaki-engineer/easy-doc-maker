@@ -47,7 +47,7 @@
                             </tbody>
                         </table>
                     </div>
-
+                    {{ $receipts->links() }}
                 </div>
             </div>
         </div>

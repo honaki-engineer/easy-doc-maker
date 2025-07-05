@@ -26,7 +26,7 @@ class ReceiptController extends Controller
             ->receipts()
             ->orderBy('issued_at', 'desc')
             ->orderBy('id', 'desc')
-            ->get();
+            ->paginate(10);
 
         return view('receipts.index', compact('receipts'));
     }
