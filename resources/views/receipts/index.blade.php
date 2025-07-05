@@ -17,6 +17,13 @@
                                 {{ session('success') }}
                             </div>
                         @endif
+
+                        {{-- 検索フォーム --}}
+                        <form action="{{ route('receipts.index') }}" method="GET" class="mb-4">
+                            <input type="date" name="search_issued_at" value="{{ request('search_issued_at') }}" id="date" class="border border-gray-300 rounded cursor-pointer">
+                            <input type="text" name="search_customer_name" value="{{ request('search_customer_name') }}" placeholder="検索" class="border border-gray-300 rounded cursor-pointer">
+                            <button class="mx-auto text-white bg-indigo-500 border-0 py-2 px-8 ml-4 focus:outline-none hover:bg-indigo-600 rounded text-lg">検索</button>
+                        </form>
                         
                         <table class="whitespace-nowrap table-auto w-full text-left whitespace-no-wrap">
                             <thead>

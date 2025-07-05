@@ -15,15 +15,22 @@ class ReceiptController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         // ✅ ユーザー情報の取得
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        // ✅ 検索情報の取得
+        $searches = [
+            'search_issued_at' => $request->search_issued_at,
+            'search_customer_name' => $request->search_customer_name,
+        ];
+
         // ✅ 領収書の取得
         $receipts = $user
             ->receipts()
+            ->search($searches) // 検索処理
             ->orderBy('issued_at', 'desc')
             ->orderBy('id', 'desc')
             ->paginate(10);

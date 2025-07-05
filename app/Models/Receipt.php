@@ -9,7 +9,7 @@ class Receipt extends Model
 {
     use HasFactory;
 
-    // リレーション
+    // ⭐️ リレーション
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -42,4 +42,25 @@ class Receipt extends Model
         'total',
         'remarks',
     ];
+
+    // ⭐️ 検索
+    public function scopeSearch($query, $searches)
+    {
+        // ✅ 日付検索
+        if(!empty($searches['search_issued_at'])) {
+            $query->whereDate('issued_at', $searches['search_issued_at']);
+        }
+
+        // ✅ 取引先検索
+        if(!empty($searches['search_customer_name'])) {
+            $search_split = mb_convert_kana($searches['search_customer_name'], 's'); // 全角→半角
+            $keywords = preg_split('/[\s]+/', $search_split); // 空白で分割
+
+            foreach($keywords as $keyword) {
+                $query->where('customer_name', 'like', '%' . $keyword . '%');
+            }
+        }
+
+        return $query;
+    }
 }
