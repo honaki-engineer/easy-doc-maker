@@ -27,7 +27,7 @@
                                                 </label>
                                                 <input type="text" id="postal_code" name="postal_code"
                                                     value="{{ $receipt_setting->postal_code }}"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out cursor-pointer">
                                                 <x-input-error :messages="$errors->get('postal_code')" class="mt-2" />
                                             </div>
                                         </div>
@@ -41,7 +41,7 @@
                                                 </label>
                                                 <input type="text" id="address_line1" name="address_line1"
                                                     value="{{ $receipt_setting->address_line1 }}"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out cursor-pointer">
                                                 <x-input-error :messages="$errors->get('address_line1')" class="mt-2" />
                                             </div>
                                         </div>
@@ -52,7 +52,7 @@
                                                     class="leading-7 text-sm text-gray-600">建物名</label>
                                                 <input type="text" id="address_line2" name="address_line2"
                                                     value="{{ $receipt_setting->address_line2 }}"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out cursor-pointer">
                                                 <x-input-error :messages="$errors->get('address_line2')" class="mt-2" />
                                             </div>
                                         </div>
@@ -66,7 +66,7 @@
                                                 </label>
                                                 <input type="text" id="issuer_name" name="issuer_name"
                                                     value="{{ $receipt_setting->issuer_name }}"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out cursor-pointer">
                                                 <x-input-error :messages="$errors->get('issuer_name')" class="mt-2" />
                                             </div>
                                         </div>
@@ -77,7 +77,7 @@
                                                     class="leading-7 text-sm text-gray-600">登録番号</label>
                                                 <input type="text" id="issuer_number" name="issuer_number"
                                                     value="{{ $receipt_setting->issuer_number }}"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out cursor-pointer">
                                                 <x-input-error :messages="$errors->get('issuer_number')" class="mt-2" />
                                             </div>
                                         </div>
@@ -88,7 +88,7 @@
                                                     class="leading-7 text-sm text-gray-600">固定電話(ハイフン有)</label>
                                                 <input type="text" id="tel_fixed" name="tel_fixed"
                                                     value="{{ $receipt_setting->tel_fixed }}"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out cursor-pointer">
                                                 <x-input-error :messages="$errors->get('tel_fixed')" class="mt-2" />
                                             </div>
                                         </div>
@@ -99,7 +99,7 @@
                                                     class="leading-7 text-sm text-gray-600">携帯電話(ハイフン有)</label>
                                                 <input type="text" id="tel_mobile" name="tel_mobile"
                                                     value="{{ $receipt_setting->tel_mobile }}"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out cursor-pointer">
                                                 <x-input-error :messages="$errors->get('tel_mobile')" class="mt-2" />
                                             </div>
                                         </div>
@@ -113,7 +113,7 @@
                                                 </label>
                                                 <input type="text" id="responsible_name" name="responsible_name"
                                                     value="{{ $receipt_setting->responsible_name }}"
-                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                    class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out cursor-pointer">
                                                 <x-input-error :messages="$errors->get('responsible_name')" class="mt-2" />
                                             </div>
                                         </div>
