@@ -60,19 +60,18 @@
         </div>
     </div>
 
-    <!-- 確認メッセージ -->
+
     <script>
+        // ⭐️ 確認メッセージ
         function deletePost(e) {
             'use strict'
             if(confirm('本当に削除していいですか？ブランドのお弁当も全て削除されます。')) {
                 document.getElementById('delete_' + e.dataset.id).submit()
             }
         }
-    </script>
 
-    <!-- フラッシュメッセージの時間設定 -->
-    <script>
-        // フラッシュメッセージ
+
+        // ⭐️ フラッシュメッセージ
         setTimeout(() => {
             const flashMessage = document.getElementById('flash-message');
             if(flashMessage) {
@@ -80,6 +79,12 @@
                 setTimeout(() => flashMessage.remove(), 2000); // 2秒後に flashMessage というHTML要素を DOM(画面上)から完全に削除
             }
         }, 10000); // 10秒後にフェード開始
+
+        
+        // ⭐️ 日付クリック有効範囲を全域にする
+        document.getElementById("date").addEventListener("click", function() {
+            this.showPicker(); // Chrome でカレンダーを開く
+        });
     </script>
 
 </x-app-layout>
