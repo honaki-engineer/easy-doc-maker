@@ -7,6 +7,7 @@ use App\Models\PaymentMethod;
 use App\Services\ReceiptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Browsershot\Browsershot;
 
 class ReceiptController extends Controller
 {
@@ -171,5 +172,39 @@ class ReceiptController extends Controller
         return redirect()
             ->route('receipts.index')
             ->with('success', "領収書を削除しました。");
+    }
+
+    // ⭐️ PDFダウンロード
+    public function downloadPdf($id)
+    {
+        // ✅ ユーザー情報の取得
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // ✅ 領収書の取得
+        $receipt = $user
+            ->receipts()
+            ->with('paymentMethod') // リレーション
+            ->with('bentoDetails') // リレーション
+            ->findOrFail($id);
+
+        // ✅ BladeテンプレートをHTML文字列に変換して、PDF生成に使うための処理
+        $html = view('pdf.receipt', compact('receipt'))->render();
+
+        // ✅ PDFファイルの保存先のフルパスを生成
+        $pdfPath = storage_path("app/public/receipt_{$id}.pdf");
+
+        // dd($pdfPath);
+
+        // ✅ Tailwind対応のPDF（背景・影も含む）としてA4で保存
+        Browsershot::html($html) // `$html`でPDFを作る準備
+            ->setNodeBinary('/usr/local/bin/node') // MAMPなどNodeパス必要
+            ->setIncludePath('/usr/local/bin') // Puppeteer(画面なしブラウザ)パス
+            ->format('A4')
+            ->showBackground() // Tailwindのbg色やshadowが表示されるように
+            ->save($pdfPath);
+
+        // ✅ ダウンロード後に削除
+        return response()->download($pdfPath)->deleteFileAfterSend();
     }
 }

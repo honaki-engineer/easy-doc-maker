@@ -30,6 +30,9 @@ Route::middleware('auth')->group(function () {
     
     // 領収書
     Route::resource('receipts', ReceiptController::class);
+
+    // 領収書PDFダウンロード
+    Route::get('/receipts/{id}/download-pdf', [ReceiptController::class, 'downloadPdf'])->name('receipts.download.pdf');
 });
 
 

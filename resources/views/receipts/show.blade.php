@@ -170,10 +170,15 @@
                 印刷
             </button>
 
-            <button type="submit" name="action" value="store_and_create"
-                class="text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
-                DL(PDF)
-            </button>
+            <form 
+                action="{{ route('receipts.download.pdf', [ 'id' => $receipt->id ]) }}"
+                method="GET">
+                <button 
+                    type="submit"
+                    class="text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
+                    DL:PDF
+                </button>
+            </form>
         </div>
 
     </div>
