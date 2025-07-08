@@ -24,35 +24,61 @@
                             <input type="text" name="search_customer_name" value="{{ request('search_customer_name') }}" placeholder="検索" class="border border-gray-300 rounded cursor-pointer">
                             <button class="mx-auto text-white bg-indigo-500 border-0 py-2 px-8 ml-4 focus:outline-none hover:bg-indigo-600 rounded text-lg">検索</button>
                         </form>
-                        
-                        <table class="whitespace-nowrap table-auto w-full text-left whitespace-no-wrap">
-                            <thead>
-                                <tr>
-                                    <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl-lg"></th>
-                                    <th
-                                        class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                        日付</th>
-                                    <th
-                                        class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                        取引先</th>
-                                    <th
-                                        class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr-lg">
-                                        </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($receipts as $receipt)
+
+                        <form action="{{ route('receipts.bulkDownload') }}" method="POST">
+                            @csrf
+
+                            {{-- ダウンロードボタン --}}
+                            <button 
+                                type="submit"
+                                class="mb-4 text-white bg-gray-500 px-4 py-2 rounded hover:bg-gray-600">
+                                ✅ 選択したPDFを一括DL
+                            </button>
+
+                            {{-- ダウンロードチェックボックスエラーメッセージ --}}
+                            @if(session('error'))
+                                <div id="flash-message-error" class="text-red-500 mb-2">{{ session('error') }}</div>
+                            @endif
+
+                            {{-- 全て選択ボタン --}}
+                            <div class="text-right">
+                                <label class="inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="select-all" class="form-checkbox text-indigo-600 cursor-pointer">
+                                    <span class="ml-1">すべて選択 / 解除</span>
+                                </label>
+                            </div>
+
+                            <table class="whitespace-nowrap table-auto w-full text-left whitespace-no-wrap">
+                                <thead>
                                     <tr>
-                                        <td class="border-t-2 border-gray-200 px-4 py-3 break-words whitespace-normal">
-                                            <a href="{{ route('receipts.show', ['receipt' => $receipt->id]) }}" class="text-blue-500 hover:text-blue-600">#</a>
-                                        </td>
-                                        <td class="border-t-2 border-gray-200 px-4 py-3">{{ $receipt->issued_at }}</td>
-                                        <td class="border-t-2 border-gray-200 px-4 py-3">{{ $receipt->customer_name }}</td>
-                                        <td class="border-t-2 border-gray-200 px-4 py-3">☑️</td>
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl-lg"></th>
+                                        <th
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                                            日付</th>
+                                        <th
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                                            取引先</th>
+                                        <th
+                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr-lg"></th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach($receipts as $receipt)
+                                        <tr>
+                                            <td class="border-t-2 border-gray-200 px-4 py-3 break-words whitespace-normal">
+                                                <a href="{{ route('receipts.show', ['receipt' => $receipt->id]) }}" class="text-blue-500 hover:text-blue-600">#</a>
+                                            </td>
+                                            <td class="border-t-2 border-gray-200 px-4 py-3">{{ $receipt->issued_at }}</td>
+                                            <td class="border-t-2 border-gray-200 px-4 py-3">{{ $receipt->customer_name }}</td>
+                                            {{-- チェックボックス --}}
+                                            <td class="border-t-2 border-gray-200 px-4 py-3">
+                                                <input type="checkbox" name="receipt_ids[]" value="{{ $receipt->id }}" class="cursor-pointer">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </form>
                     </div>
                     {{ $receipts->links() }}
                 </div>
@@ -73,7 +99,7 @@
 
         // ⭐️ フラッシュメッセージ
         setTimeout(() => {
-            const flashMessage = document.getElementById('flash-message');
+            const flashMessage = document.getElementById('flash-message') || document.getElementById('flash-message-error');
             if(flashMessage) {
                 flashMessage.classList.add('opacity-0'); // フェードアウト
                 setTimeout(() => flashMessage.remove(), 2000); // 2秒後に flashMessage というHTML要素を DOM(画面上)から完全に削除
@@ -84,6 +110,12 @@
         // ⭐️ 日付クリック有効範囲を全域にする
         document.getElementById("date").addEventListener("click", function() {
             this.showPicker(); // Chrome でカレンダーを開く
+        });
+
+        // ⭐️ 全てのチェックボックスを一括で選択または解除
+        document.getElementById('select-all').addEventListener('click', function () {
+            const checkboxes = document.querySelectorAll('input[name="receipt_ids[]"]');
+            checkboxes.forEach(cb => cb.checked = this.checked);
         });
     </script>
 

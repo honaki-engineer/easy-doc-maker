@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
 
     // 領収書PDFダウンロード
     Route::get('/receipts/{id}/download-pdf', [ReceiptController::class, 'downloadPdf'])->name('receipts.download.pdf');
+    // 領収書一括ダウンロード
+    Route::post('/receipts/bulk-download', [ReceiptController::class, 'bulkDownload'])->name('receipts.bulkDownload');
 });
 
 

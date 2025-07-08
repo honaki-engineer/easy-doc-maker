@@ -7,7 +7,9 @@ use App\Models\PaymentMethod;
 use App\Services\ReceiptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Spatie\Browsershot\Browsershot;
+use ZipArchive;
 
 class ReceiptController extends Controller
 {
@@ -192,9 +194,8 @@ class ReceiptController extends Controller
         $html = view('pdf.receipt', compact('receipt'))->render();
 
         // ✅ PDFファイルの保存先のフルパスを生成
-        $pdfPath = storage_path("app/public/receipt_{$id}.pdf");
-
-        // dd($pdfPath);
+        $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customer_name);
+        $pdfPath = storage_path("app/public/receipt_{$customerName}_{$id}.pdf");
 
         // ✅ Tailwind対応のPDF（背景・影も含む）としてA4で保存
         Browsershot::html($html) // `$html`でPDFを作る準備
@@ -206,5 +207,67 @@ class ReceiptController extends Controller
 
         // ✅ ダウンロード後に削除
         return response()->download($pdfPath)->deleteFileAfterSend();
+    }
+
+    // ⭐️ PDF一括ダウンロード
+    public function bulkDownload(Request $request)
+    {
+        // ✅ request情報の取得
+        $ids = $request->input('receipt_ids', []);
+
+        // ✅ エラー時のメッセージ
+        if(empty($ids)) {
+            return back()->with('error', 'PDFを出力する領収書を選択してください。');
+        }
+
+         // ✅ ユーザー情報の取得
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // ✅ 複数の領収書をPDFに変換し、一時保存してパスを配列にまとめる
+        $pdfPaths = [];
+        foreach($ids as $id) {
+            // 🔹 領収書情報の取得
+            $receipt = $user->receipts()
+                ->with(['paymentMethod', 'bentoDetails'])
+                ->findOrFail($id);
+
+            // 🔹 領収書のHTMLを生成し、そのPDFの保存先パスを設定
+            $html = view('pdf.receipt', compact('receipt'))->render();
+            $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customer_name);
+            $pdfPath = storage_path("app/public/receipt_{$customerName}_{$id}.pdf");
+
+            // 🔹 HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$pdfPath`の場所に保存
+            Browsershot::html($html)
+                ->setNodeBinary('/usr/local/bin/node')
+                ->setIncludePath('/usr/local/bin')
+                ->format('A4')
+                ->showBackground()
+                ->save($pdfPath);
+
+            $pdfPaths[] = $pdfPath;
+        }
+
+        // ✅ ZIP作成
+        $zipName = 'receipts_' . now()->format('Ymd_His') . '.zip';
+        $zipPath = storage_path("app/public/{$zipName}");
+
+        // ✅ PHPのZipArchiveクラスを使ってZIPファイルを操作するためのインスタンスを生成
+        $zip = new ZipArchive;
+
+        // ✅ PDFをまとめてZIPファイルに詰めて保存
+        if($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+            foreach($pdfPaths as $pdf) {
+                $zip->addFile($pdf, basename($pdf));
+            }
+            $zip->close();
+        }
+
+        // ✅ 一時PDF削除
+        foreach($pdfPaths as $pdf) {
+            File::delete($pdf);
+        }
+
+        return response()->download($zipPath)->deleteFileAfterSend();
     }
 }
