@@ -220,7 +220,7 @@ class ReceiptController extends Controller
             return back()->with('error', 'PDFを出力する領収書を選択してください。');
         }
 
-         // ✅ ユーザー情報の取得
+        // ✅ ユーザー情報の取得
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
@@ -269,5 +269,39 @@ class ReceiptController extends Controller
         }
 
         return response()->download($zipPath)->deleteFileAfterSend();
+    }
+
+    // ⭐️ 印刷：PDF生成＆中継ビュー表示処理
+    public function generateAndPrint($id)
+    {
+        // ✅ 情報の取得
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $receipt = $user
+            ->receipts()
+            ->with(['paymentMethod', 'bentoDetails'])
+            ->findOrFail($id);
+
+        // ✅ PDF生成
+        $html = view('pdf.receipt', compact('receipt'))->render();
+        $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customer_name);
+        $filename = "receipt_{$customerName}_{$id}.pdf";
+        $pdfPath = storage_path("app/public/tmp/{$filename}");
+
+        Browsershot::html($html)
+            ->setNodeBinary('/usr/local/bin/node')
+            ->setIncludePath('/usr/local/bin')
+            ->format('A4')
+            ->showBackground()
+            ->save($pdfPath);
+
+        // ✅ PDF作成完了後、中継ビューへリダイレクト
+        return redirect()->route('receipts.print.show', ['filename' => $filename]);
+    }
+
+    public function showPrintView($filename)
+    {
+        $pdfUrl = asset("storage/tmp/{$filename}");
+        return view('pdf.print_redirect', compact('pdfUrl'));
     }
 }

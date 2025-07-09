@@ -149,9 +149,7 @@
         {{-- ボタンエリア --}}
         <div class="w-full mt-8 flex gap-4 justify-center">
 
-            <!-- formタグ -->
-
-            
+            {{-- 削除 --}}
             <form
                 action="{{ route('receipts.destroy', ['receipt' => $receipt->id]) }}"
                 method="post" id="delete_{{ $receipt->id }}">
@@ -164,12 +162,15 @@
                         class="text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">削除</button>
                 </div>
             </form>
-
-            <button type="submit" name="action" value="store_and_create"
-                class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-                印刷
-            </button>
-
+            {{-- 印刷 --}}
+            <form action="{{ route('receipts.generate_and_print', [ 'id' => $receipt->id ]) }}"
+                target="_blank">
+                <button type="submit"
+                    class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                    印刷する
+                </button>
+            </form>
+            {{-- PDFダウンロード --}}
             <form 
                 action="{{ route('receipts.download.pdf', [ 'id' => $receipt->id ]) }}"
                 method="GET">

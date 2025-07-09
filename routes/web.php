@@ -35,6 +35,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/receipts/{id}/download-pdf', [ReceiptController::class, 'downloadPdf'])->name('receipts.download.pdf');
     // 領収書一括ダウンロード
     Route::post('/receipts/bulk-download', [ReceiptController::class, 'bulkDownload'])->name('receipts.bulkDownload');
+
+    // 印刷
+    // PDF生成
+    Route::get('/receipts/pdf/print/{id}', [ReceiptController::class, 'generateAndPrint'])->name('receipts.generate_and_print');
+    // 印刷表示(中継ビュー)
+    Route::get('/receipts/print/show/{filename}', [ReceiptController::class, 'showPrintView'])->name('receipts.print.show');
 });
 
 

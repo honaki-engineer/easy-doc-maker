@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // 毎時このコマンドを実行（1時間以上前のPDF削除）
+        $schedule->command('pdf:cleanup')->hourly();
     }
 
     /**
