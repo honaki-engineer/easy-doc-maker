@@ -47,9 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/receipts/print/show/{filename}', [ReceiptController::class, 'showPrintView'])->name('receipts.print.show');
 });
 
-
+// ログイン画面をTOPとする
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login'); 
 });
 
 Route::get('/dashboard', function () {
