@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Carbon\Carbon;
 
 class DeleteOldPdfs extends Command
 {
@@ -15,9 +16,9 @@ class DeleteOldPdfs extends Command
         $dir = storage_path('app/public/tmp');
         $deleted = 0;
 
-        foreach (File::files($dir) as $file) {
+        foreach(File::files($dir) as $file) {
             // ファイルの作成から1時間以上経ってたら削除
-            if (now()->diffInMinutes(filemtime($file)) > 60) {
+            if(now()->diffInMinutes(Carbon::createFromTimestamp(filemtime($file))) > 60) {
                 File::delete($file);
                 $deleted++;
             }

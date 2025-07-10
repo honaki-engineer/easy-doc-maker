@@ -36,9 +36,13 @@ Route::middleware('auth')->group(function () {
     // 領収書一括ダウンロード
     Route::post('/receipts/bulk-download', [ReceiptController::class, 'bulkDownload'])->name('receipts.bulkDownload');
 
-    // 印刷
+    // --- 単体印刷 ---
     // PDF生成
     Route::get('/receipts/pdf/print/{id}', [ReceiptController::class, 'generateAndPrint'])->name('receipts.generate_and_print');
+    // --- 複数印刷 ---
+    // 複数PDFの生成 → 中継ビューへリダイレクト
+    Route::post('/receipts/pdf/print-multiple', [ReceiptController::class, 'generateAndPrintMultiple'])->name('receipts.generate_and_print_multiple');
+    // --- 単体 & 複数印刷 ---
     // 印刷表示(中継ビュー)
     Route::get('/receipts/print/show/{filename}', [ReceiptController::class, 'showPrintView'])->name('receipts.print.show');
 });

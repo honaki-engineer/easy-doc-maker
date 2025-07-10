@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Spatie\Browsershot\Browsershot;
 use ZipArchive;
+use setasign\Fpdi\Fpdi;
 
 class ReceiptController extends Controller
 {
@@ -299,9 +300,84 @@ class ReceiptController extends Controller
         return redirect()->route('receipts.print.show', ['filename' => $filename]);
     }
 
+    // ⭐️ 中間ビュー
     public function showPrintView($filename)
     {
         $pdfUrl = asset("storage/tmp/{$filename}");
         return view('pdf.print_redirect', compact('pdfUrl'));
+    }
+
+    // ⭐️ 選択された複数の領収書をPDF化して1つに結合し、印刷用の中継画面にリダイレクトする
+    public function generateAndPrintMultiple(Request $request)
+    {
+        // ✅ 情報を取得
+        $ids = $request->input('receipt_ids', []);
+        if(empty($ids)) {
+            return back()->with('error', '印刷する領収書を選択してください。');
+        }
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // ✅ 選択された各領収書を`HTML`から`PDF`に変換して一時保存し、ファイル名を配列にまとめている
+        $filenames = [];
+        foreach($ids as $id) {
+            $receipt = $user->receipts()->with(['paymentMethod', 'bentoDetails'])->findOrFail($id);
+            $html = view('pdf.receipt', compact('receipt'))->render();
+
+            $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customer_name);
+            $filename = "receipt_{$customerName}_{$id}.pdf";
+            $pdfPath = storage_path("app/public/tmp/{$filename}");
+
+            Browsershot::html($html)
+                ->setNodeBinary('/usr/local/bin/node')
+                ->setIncludePath('/usr/local/bin')
+                ->format('A4')
+                ->showBackground()
+                ->save($pdfPath);
+
+            $filenames[] = $filename;
+        }
+
+        // ✅ PDFファイルの絶対パス(結合用に必要)
+        $pdfPaths = array_map(function ($filename) {
+            return storage_path("app/public/tmp/{$filename}");
+        }, $filenames);
+
+        // ✅ 結合後のPDF保存先
+        $mergedFilename = 'merged_receipt.pdf';
+        $mergedPath = storage_path("app/public/tmp/{$mergedFilename}");
+
+        // ✅ 結合処理
+        $this->mergePdfs($pdfPaths, $mergedPath); // $this = `generateAndPrintMultiple()メソッド`が定義されているクラス
+
+        // ✅ 中継ビューへリダイレクト（iframe + 印刷）
+        return redirect()->route('receipts.print.show', ['filename' => $mergedFilename]);
+    }
+
+    // ⭐️ 複数のPDFファイルを1つに結合して指定パスに保存する
+    public function mergePdfs(array $pdfPaths, string $mergedPath)
+    {
+        // ✅ Fpdfを継承したFpdiインスタンスを作成
+        $pdf = new class extends Fpdi {
+            // 何も追加しなくてOK（匿名クラス）
+        };
+
+        foreach($pdfPaths as $file) {
+            // 🔹 読み込むPDFファイルを指定して、ページ数などの情報を取得
+            $pageCount = $pdf->setSourceFile($file);
+
+            // 🔹 `$pdfPaths`の中にある`PDF($file)`の各ページを読み込んで、新しいPDFに1ページずつ同じサイズで追加
+            for($pageNo = 1; $pageNo <= $pageCount; $pageNo++) { // 例)A領収書:1ページ、B:1,B:2、C:1
+                $tplIdx = $pdf->importPage($pageNo); // 「$pageNo ページ目をコピー機に乗せる準備をする」
+                $size = $pdf->getTemplateSize($tplIdx);
+
+                $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                $pdf->useTemplate($tplIdx);
+            }
+        }
+
+        // ✅ 作ったPDFを保存
+        $pdf->Output('F', $mergedPath); //（ファイルとして保存, ファイルパス）
     }
 }

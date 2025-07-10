@@ -25,15 +25,24 @@
                             <button class="mx-auto text-white bg-indigo-500 border-0 py-2 px-8 ml-4 focus:outline-none hover:bg-indigo-600 rounded text-lg">検索</button>
                         </form>
 
-                        <form action="{{ route('receipts.bulkDownload') }}" method="POST">
+                        <form id="receipt-form" method="POST" target="_blank">
                             @csrf
 
-                            {{-- ダウンロードボタン --}}
-                            <button 
-                                type="submit"
-                                class="mb-4 text-white bg-gray-500 px-4 py-2 rounded hover:bg-gray-600">
-                                ✅ 選択したPDFを一括DL
-                            </button>
+                            <div class="flex gap-2 mb-4">
+                                <button 
+                                    type="submit"
+                                    onclick="submitForm('{{ route('receipts.bulkDownload') }}')"
+                                    class="text-white bg-gray-500 px-4 py-2 rounded hover:bg-gray-600">
+                                    ✅ 選択したPDFを一括DL
+                                </button>
+
+                                <button 
+                                    type="submit"
+                                    onclick="submitForm('{{ route('receipts.generate_and_print_multiple') }}')"
+                                    class="text-white bg-green-500 px-4 py-2 rounded hover:bg-green-600">
+                                    🖨️ 選択したPDFを一括印刷
+                                </button>
+                            </div>
 
                             {{-- ダウンロードチェックボックスエラーメッセージ --}}
                             @if(session('error'))
@@ -112,11 +121,20 @@
             this.showPicker(); // Chrome でカレンダーを開く
         });
 
+        
+        // ⭐️ PDFダウンロード、印刷ボタンクリック時
+        function submitForm(action) {
+            const form = document.getElementById('receipt-form');
+            form.action = action;
+            form.submit();
+        }
+
+        
         // ⭐️ 全てのチェックボックスを一括で選択または解除
         document.getElementById('select-all').addEventListener('click', function () {
             const checkboxes = document.querySelectorAll('input[name="receipt_ids[]"]');
             checkboxes.forEach(cb => cb.checked = this.checked);
         });
-    </script>
+</script>
 
 </x-app-layout>
