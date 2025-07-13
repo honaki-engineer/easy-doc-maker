@@ -13,14 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // ダミーデータ
         $this->call([
             UserSeeder::class,
             ReceiptSettingSeeder::class,
             BrandSeeder::class,
             BentoSeeder::class,
             PaymentMethodSeeder::class,
-            LogoSeeder::class,
         ]);
 
         // \App\Models\User::factory(10)->create();
