@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             BentoSeeder::class,
             PaymentMethodSeeder::class,
+            LogoSeeder::class,
         ]);
 
         // \App\Models\User::factory(10)->create();
