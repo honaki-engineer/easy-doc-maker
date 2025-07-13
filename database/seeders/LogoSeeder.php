@@ -15,7 +15,7 @@ class LogoSeeder extends Seeder
     public function run()
     {
         // ✅ ロゴ画像を public/storage/images にコピー
-        $source = storage_path('app/public/images/easyDocMaker.png'); // storage
+        $source = public_path('images/easyDocMaker.png'); // public
         $destination = public_path('storage/images/easyDocMaker.png'); // public
 
         if(!File::exists($destination)) {
