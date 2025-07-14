@@ -33,7 +33,7 @@ return [
 
     'browsershot' => [
         'node_path' => env('NODE_PATH'),
-        'node_dir' => env('NODE_DIR'),
+        'node_dir'  => env('NODE_DIR'),
     ],
 
 ];
