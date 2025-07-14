@@ -200,10 +200,8 @@ class ReceiptController extends Controller
 
         // ✅ Tailwind対応のPDF（背景・影も含む）としてA4で保存
         Browsershot::html($html) // `$html`でPDFを作る準備
-            // ->setNodeBinary('/usr/local/bin/node') // MAMPなどNodeパス必要
-            // ->setIncludePath('/usr/local/lib/node_modules:/usr/local/bin') // Puppeteer(画面なしブラウザ)パス
-            ->setNodeBinary(config('services.browsershot.node_path'))
-            ->setIncludePath(config('services.browsershot.node_dir'))
+            ->setNodeBinary('/usr/local/bin/node') // MAMPなどNodeパス必要
+            ->setIncludePath('/usr/local/bin') // Puppeteer(画面なしブラウザ)パス
             ->format('A4')
             ->showBackground() // Tailwindのbg色やshadowが表示されるように
             ->save($pdfPath);
@@ -242,10 +240,8 @@ class ReceiptController extends Controller
 
             // 🔹 HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$pdfPath`の場所に保存
             Browsershot::html($html)
-                // ->setNodeBinary('/usr/local/bin/node')
-                // ->setIncludePath('/usr/local/lib/node_modules:/usr/local/bin')
-                ->setNodeBinary(config('services.browsershot.node_path'))
-                ->setIncludePath(config('services.browsershot.node_dir'))
+                ->setNodeBinary('/usr/local/bin/node')
+                ->setIncludePath('/usr/local/bin')
                 ->format('A4')
                 ->showBackground()
                 ->save($pdfPath);
@@ -294,10 +290,8 @@ class ReceiptController extends Controller
         $pdfPath = storage_path("app/public/tmp/{$filename}");
 
         Browsershot::html($html)
-            // ->setNodeBinary('/usr/local/bin/node')
-            // ->setIncludePath('/usr/local/lib/node_modules:/usr/local/bin')
-            ->setNodeBinary(config('services.browsershot.node_path'))
-            ->setIncludePath(config('services.browsershot.node_dir'))
+            ->setNodeBinary('/usr/local/bin/node')
+            ->setIncludePath('/usr/local/bin')
             ->format('A4')
             ->showBackground()
             ->save($pdfPath);
@@ -336,10 +330,8 @@ class ReceiptController extends Controller
             $pdfPath = storage_path("app/public/tmp/{$filename}");
 
             Browsershot::html($html)
-                // ->setNodeBinary('/usr/local/bin/node')
-                // ->setIncludePath('/usr/local/lib/node_modules:/usr/local/bin')
-                ->setNodeBinary(config('services.browsershot.node_path'))
-                ->setIncludePath(config('services.browsershot.node_dir'))
+                ->setNodeBinary('/usr/local/bin/node')
+                ->setIncludePath('/usr/local/bin')
                 ->format('A4')
                 ->showBackground()
                 ->save($pdfPath);
