@@ -200,8 +200,8 @@ class ReceiptController extends Controller
 
         // ✅ Tailwind対応のPDF（背景・影も含む）としてA4で保存
         Browsershot::html($html) // `$html`でPDFを作る準備
-            ->setNodeBinary(env('NODE_PATH')) // MAMPなどNodeパス必要
-            ->setIncludePath(env('NODE_DIR')) // Puppeteer(画面なしブラウザ)パス
+            ->setNodeBinary(config('services.browsershot.node_path')) // MAMPなどNodeパス必要
+            ->setIncludePath(config('services.browsershot.node_dir')) // Puppeteer(画面なしブラウザ)パス
             ->format('A4')
             ->showBackground() // Tailwindのbg色やshadowが表示されるように
             ->save($pdfPath);
@@ -240,8 +240,8 @@ class ReceiptController extends Controller
 
             // 🔹 HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$pdfPath`の場所に保存
             Browsershot::html($html)
-                ->setNodeBinary(env('NODE_PATH'))
-                ->setIncludePath(env('NODE_DIR'))
+                ->setNodeBinary(config('services.browsershot.node_path'))
+                ->setIncludePath(config('services.browsershot.node_dir'))
                 ->format('A4')
                 ->showBackground()
                 ->save($pdfPath);
@@ -290,8 +290,8 @@ class ReceiptController extends Controller
         $pdfPath = storage_path("app/public/tmp/{$filename}");
 
         Browsershot::html($html)
-            ->setNodeBinary(env('NODE_PATH'))
-            ->setIncludePath(env('NODE_DIR'))
+            ->setNodeBinary(config('services.browsershot.node_path'))
+            ->setIncludePath(config('services.browsershot.node_dir'))
             ->format('A4')
             ->showBackground()
             ->save($pdfPath);
@@ -330,8 +330,8 @@ class ReceiptController extends Controller
             $pdfPath = storage_path("app/public/tmp/{$filename}");
 
             Browsershot::html($html)
-                ->setNodeBinary(env('NODE_PATH'))
-                ->setIncludePath(env('NODE_DIR'))
+                ->setNodeBinary(config('services.browsershot.node_path'))
+                ->setIncludePath(config('services.browsershot.node_dir'))
                 ->format('A4')
                 ->showBackground()
                 ->save($pdfPath);
