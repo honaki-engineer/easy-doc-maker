@@ -203,6 +203,7 @@ class ReceiptController extends Controller
             ->setNodeBinary(config('browsershot.node_binary')) // MAMPなどNodeパス必要
             ->setIncludePath(config('browsershot.include_path')) // Puppeteer(画面なしブラウザ)パス
             ->setChromePath(config('browsershot.chrome_path'))
+            ->noSandbox() // 本番環境のみ
             ->format('A4')
             ->showBackground() // Tailwindのbg色やshadowが表示されるように
             ->save($pdfPath);
@@ -244,6 +245,7 @@ class ReceiptController extends Controller
                 ->setNodeBinary(config('browsershot.node_binary'))
                 ->setIncludePath(config('browsershot.include_path'))
                 ->setChromePath(config('browsershot.chrome_path'))
+                ->noSandbox() // 本番環境のみ
                 ->format('A4')
                 ->showBackground()
                 ->save($pdfPath);
@@ -295,6 +297,7 @@ class ReceiptController extends Controller
             ->setNodeBinary(config('browsershot.node_binary'))
             ->setIncludePath(config('browsershot.include_path'))
             ->setChromePath(config('browsershot.chrome_path'))
+            ->noSandbox() // 本番環境のみ
             ->format('A4')
             ->showBackground()
             ->save($pdfPath);
@@ -336,6 +339,7 @@ class ReceiptController extends Controller
                 ->setNodeBinary(config('browsershot.node_binary'))
                 ->setIncludePath(config('browsershot.include_path'))
                 ->setChromePath(config('browsershot.chrome_path'))
+                ->noSandbox() // 本番環境のみ
                 ->format('A4')
                 ->showBackground()
                 ->save($pdfPath);
