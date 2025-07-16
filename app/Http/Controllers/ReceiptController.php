@@ -200,8 +200,9 @@ class ReceiptController extends Controller
 
         // ✅ Tailwind対応のPDF（背景・影も含む）としてA4で保存
         Browsershot::html($html) // `$html`でPDFを作る準備
-            ->setNodeBinary('/usr/local/bin/node') // MAMPなどNodeパス必要
-            ->setIncludePath('/usr/local/bin') // Puppeteer(画面なしブラウザ)パス
+            ->setNodeBinary(config('browsershot.node_binary')) // MAMPなどNodeパス必要
+            ->setIncludePath(config('browsershot.include_path')) // Puppeteer(画面なしブラウザ)パス
+            ->setChromePath(config('browsershot.chrome_path'))
             ->format('A4')
             ->showBackground() // Tailwindのbg色やshadowが表示されるように
             ->save($pdfPath);
@@ -240,8 +241,9 @@ class ReceiptController extends Controller
 
             // 🔹 HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$pdfPath`の場所に保存
             Browsershot::html($html)
-                ->setNodeBinary('/usr/local/bin/node')
-                ->setIncludePath('/usr/local/bin')
+                ->setNodeBinary(config('browsershot.node_binary'))
+                ->setIncludePath(config('browsershot.include_path'))
+                ->setChromePath(config('browsershot.chrome_path'))
                 ->format('A4')
                 ->showBackground()
                 ->save($pdfPath);
@@ -290,8 +292,9 @@ class ReceiptController extends Controller
         $pdfPath = storage_path("app/public/tmp/{$filename}");
 
         Browsershot::html($html)
-            ->setNodeBinary('/usr/local/bin/node')
-            ->setIncludePath('/usr/local/bin')
+            ->setNodeBinary(config('browsershot.node_binary'))
+            ->setIncludePath(config('browsershot.include_path'))
+            ->setChromePath(config('browsershot.chrome_path'))
             ->format('A4')
             ->showBackground()
             ->save($pdfPath);
@@ -330,8 +333,9 @@ class ReceiptController extends Controller
             $pdfPath = storage_path("app/public/tmp/{$filename}");
 
             Browsershot::html($html)
-                ->setNodeBinary('/usr/local/bin/node')
-                ->setIncludePath('/usr/local/bin')
+                ->setNodeBinary(config('browsershot.node_binary'))
+                ->setIncludePath(config('browsershot.include_path'))
+                ->setChromePath(config('browsershot.chrome_path'))
                 ->format('A4')
                 ->showBackground()
                 ->save($pdfPath);
