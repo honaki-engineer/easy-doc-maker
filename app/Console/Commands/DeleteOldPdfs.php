@@ -16,6 +16,12 @@ class DeleteOldPdfs extends Command
         $dir = storage_path('app/public/tmp');
         $deleted = 0;
 
+        // ディレクトリがない場合
+        if(!File::exists($dir)) {
+            $this->info("📂 ディレクトリが存在しません: {$dir}");
+            return;
+        }
+
         foreach(File::files($dir) as $file) {
             // ファイルの作成から1時間以上経ってたら削除
             if(now()->diffInMinutes(Carbon::createFromTimestamp(filemtime($file))) > 60) {
