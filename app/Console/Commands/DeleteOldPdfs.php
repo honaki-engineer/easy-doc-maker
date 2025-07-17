@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class DeleteOldPdfs extends Command
@@ -30,6 +31,7 @@ class DeleteOldPdfs extends Command
             }
         }
 
-        $this->info("🗑️ {$deleted}個の古いPDFを削除しました！");
+        $this->info("🗑️ {$deleted}個の古いPDFを削除しました！"); // コマンド表示
+        Log::info("🗑️ [pdf:cleanup] 削除数: {$deleted}"); // ログ
     }
 }
