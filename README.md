@@ -2,8 +2,8 @@
 
 ## 概要
 
-領収書作成アプリは、高級お弁当店からの依頼により開発した、**特定クライアント専用**の Laravel 製 Web アプリです。
-取引先や支払い情報を入力するだけで、Tailwind CSS で整えた**美しい領収書を高精度**に PDF 出力できます。
+領収書作成アプリは、高級お弁当店からの依頼により開発した、**特定クライアント専用**の Laravel 製 Web アプリです。  
+取引先や支払い情報を入力するだけで、Tailwind CSS で整えた**美しい領収書を高精度**に PDF 出力できます。  
 ZIP一括ダウンロードやワンクリック印刷機能も搭載し、**領収書発行業務を大幅に効率化**します。
 
 ---
@@ -34,24 +34,24 @@ ZIP一括ダウンロードやワンクリック印刷機能も搭載し、**領
 - **データベース**：MySQL 8.0 (ローカル) / MariaDB 10.5 (conohaVPS・MySQL互換)  
 - **インフラ・環境**：MAMP / macOS Sequoia 15.3.1 / conohaVPS / AlmaLinux 9.5 / Apache
 - **ビルド環境**：Node.js 22.x (ローカル) / Node.js 20.x (ConoHa VPS / NodeSource導入) / Composer 2.x  
-- **開発ツール**：VSCode / Git / GitHub / phpMyAdmin. 
+- **開発ツール**：VSCode / Git / GitHub / phpMyAdmin  
 
 ---
 
 ## 主な機能
 ### 開発者目線
 
-- **ユーザー認証(Laravel Breeze)**：ログイン / ログアウト / パスワード再発行. 
-- **領収書管理**：作成・削除・一覧表示・詳細表示・PDF出力・一括ZIP・印刷. 
-- **自社情報管理**：領収書テンプレートに反映される設定情報の編集. 
-- **ブランド/お弁当管理**：作成・削除・一覧表示 + 領収書作成時の自動登録・候補化に対応. 
-- **支払い方法の管理**：領収書作成時の自動登録・候補化に対応. 
-- **バリデーション対応**：入力保持（`old()`） + エラーメッセージ表示. 
-- **一覧画面**：ページネーション / 検索フォームよる絞り込み対応. 
-- **PDF機能**：Browsershot + Tailwind による A4 高精度PDF生成. 
-- **一括PDF**：複数PDFをZIPで出力 or 結合して1ファイル化 (印刷中継画面付き). 
-- **カスタムエラーページ対応**：400〜503に独自UIを実装. 
-- **プロフィール編集**：編集. 
+- **ユーザー認証(Laravel Breeze)**：ログイン / ログアウト / パスワード再発行  
+- **領収書管理**：作成・削除・一覧表示・詳細表示・PDF出力・一括ZIP・印刷  
+- **自社情報管理**：領収書テンプレートに反映される設定情報の編集  
+- **ブランド/お弁当管理**：作成・削除・一覧表示 + 領収書作成時の自動登録・候補化に対応  
+- **支払い方法の管理**：領収書作成時の自動登録・候補化に対応  
+- **バリデーション対応**：入力保持（`old()`） + エラーメッセージ表示  
+- **一覧画面**：ページネーション / 検索フォームによる絞り込み対応  
+- **PDF機能**：Browsershot + Tailwind による A4 高精度PDF生成  
+- **一括PDF**：複数PDFをZIPで出力 or 結合して1ファイル化 (印刷中継画面付き)  
+- **カスタムエラーページ対応**：400〜503に独自UIを実装  
+- **プロフィール編集**：編集  
 
 ### ユーザー目線
 #### 区分別 機能対応表
@@ -72,10 +72,11 @@ ZIP一括ダウンロードやワンクリック印刷機能も搭載し、**領
 ## セットアップに必要な環境
 
 - PHP 8.2 以上
+- Laravel 9.x
 - Composer 2.x
 - MySQL (ローカル or conohaVPS上で構成)
-- Node.js (Tailwindをビルド)
-- Git（クローンする場合）
+- Node.js (Tailwind CSS のビルドに使用)
+- Git（クローン / バージョン管理に使用）
 
 .env の `DB_` 各項目などは、Xserver またはローカルの環境に応じて適宜変更してください。
 
@@ -176,7 +177,8 @@ easy_doc_maker/
 - Laravel 9.x
 - Composer 2.x
 - Node.js 22.x (ローカル開発)
-- ConohaVPS (本番環境 / Node.js 20.x ※ NodeSource導入 にて導入)
+- MySQL 8.0（ローカル環境）
+- 推奨ブラウザ：Google Chrome 最新版
 
 ---
 
@@ -184,11 +186,11 @@ easy_doc_maker/
 
 ConohaVPS 上で Laravel アプリを本番公開する際の詳細な手順は、以下の記事にまとめています：
 
-- ① 【DNSレコード作成前】ConoHa VPSでLaravel + Apache + phpMyAdminを公開する手順（2025年版）
+- ① 【DNSレコード作成前】ConoHa VPSでLaravel + Apache + phpMyAdminを公開する手順（2025年版）  
   https://qiita.com/honaki/items/b0060303c21682c0e8e5
 
-- ② 【DNSレコード】ConoHa VPSでLaravel + Apache + phpMyAdminを公開する手順（2025年版）
+- ② 【DNSレコード】ConoHa VPSでLaravel + Apache + phpMyAdminを公開する手順（2025年版）  
   https://qiita.com/honaki/items/11343be97c3cee2c3102
 
-- ③ 【DNSレコード後】ConoHa VPSでLaravel + Apache + phpMyAdminを公開する手順（2025年版）
+- ③ 【DNSレコード後】ConoHa VPSでLaravel + Apache + phpMyAdminを公開する手順（2025年版）  
   https://qiita.com/honaki/items/834b4fe730441db2d2fa
