@@ -237,12 +237,14 @@
             {{-- ボタンエリア --}}
             <div class="w-full mt-8 flex gap-4 justify-center">
                 <button type="submit" name="action" value="store_and_index"
-                    class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                    class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                    onclick="this.disabled=true; this.form.submit();">
                     登録して「終了」
                 </button>
 
                 <button type="submit" name="action" value="store_and_create"
-                    class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                    class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                    onclick="this.disabled=true; this.form.submit();">
                     登録して「次の作成へ」
                 </button>
             </div>
