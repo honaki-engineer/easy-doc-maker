@@ -25,20 +25,20 @@
                             <button class="mx-auto text-white bg-indigo-500 border-0 py-2 px-8 ml-4 focus:outline-none hover:bg-indigo-600 rounded text-lg">検索</button>
                         </form>
 
-                        <form id="receipt-form" method="POST" target="_blank">
+                        <form id="receipt-form" method="POST">
                             @csrf
 
                             <div class="flex gap-2 mb-4">
                                 <button 
                                     type="submit"
-                                    onclick="submitForm('{{ route('receipts.bulkDownload') }}')"
+                                    onclick="submitForm('{{ route('receipts.bulkDownload') }}', false)"
                                     class="text-white bg-gray-500 px-4 py-2 rounded hover:bg-gray-600">
                                     ✅ 選択したPDFを一括DL
                                 </button>
 
                                 <button 
                                     type="submit"
-                                    onclick="submitForm('{{ route('receipts.generate_and_print_multiple') }}')"
+                                    onclick="submitForm('{{ route('receipts.generate_and_print_multiple') }}', true)"
                                     class="text-white bg-green-500 px-4 py-2 rounded hover:bg-green-600">
                                     🖨️ 選択したPDFを一括印刷
                                 </button>
@@ -123,9 +123,10 @@
 
         
         // ⭐️ PDFダウンロード、印刷ボタンクリック時
-        function submitForm(action) {
+        function submitForm(action, openInNewTab = false) {
             const form = document.getElementById('receipt-form');
             form.action = action;
+            form.target = openInNewTab ? '_blank' : '_self';
             form.submit();
         }
 
