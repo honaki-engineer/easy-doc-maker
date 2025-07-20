@@ -30,14 +30,14 @@
 
                             <div class="flex gap-2 mb-4">
                                 <button 
-                                    type="submit"
+                                    type="button" {{-- `submitForm`で`submit`をするため --}}
                                     onclick="submitForm('{{ route('receipts.bulkDownload') }}', false)"
                                     class="text-white bg-gray-500 px-4 py-2 rounded hover:bg-gray-600">
                                     ✅ 選択したPDFを一括DL
                                 </button>
 
                                 <button 
-                                    type="submit"
+                                    type="button" {{-- `submitForm`で`submit`をするため --}}
                                     onclick="submitForm('{{ route('receipts.generate_and_print_multiple') }}', true)"
                                     class="text-white bg-green-500 px-4 py-2 rounded hover:bg-green-600">
                                     🖨️ 選択したPDFを一括印刷
@@ -130,7 +130,6 @@
             form.submit();
         }
 
-        
         // ⭐️ 全てのチェックボックスを一括で選択または解除
         document.getElementById('select-all').addEventListener('click', function () {
             const checkboxes = document.querySelectorAll('input[name="receipt_ids[]"]');
