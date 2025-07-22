@@ -50,7 +50,7 @@
                 <!-- 上部情報 -->
                 <div class="flex justify-between mb-8">
                     <div class="font-bold text-[12px] mt-20">
-                        <input type="text" name="customer_name" value="{{ old('customer_name') }}" class="text-xs w-80 px-1 py-1 border border-red-300 rounded cursor-pointer"> 様
+                        <input type="text" name="customer_name" value="{{ old('customer_name') }}" class="text-xs w-80 px-1 py-1 border border-red-300 rounded cursor-pointer" autocomplete="off"> 様
                     </div>
                     <div class="text-[10px] text-right leading-[1.6]">
                         {{-- 日付 --}}
@@ -81,7 +81,7 @@
                             但し、お弁当代 <span id="receipt_note" class="font-bold"></span> 分として、上記正に領収いたしました。<br>
                             <input type="hidden" name="receipt_note" value="{{ old('receipt_note') }}" id="receipt_note_input">
                             <span class="font-bold">
-                                <input list="payment_methods" name="payment_method" value="{{ old('payment_method') }}" class="text-xs w-48 px-1 py-[2px] border border-red-300 rounded cursor-pointer"> 支払い
+                                <input list="payment_methods" name="payment_method" value="{{ old('payment_method') }}" class="text-xs w-48 px-1 py-[2px] border border-red-300 rounded cursor-pointer" autocomplete="off"> 支払い
                                 <datalist id="payment_methods">
                                     @foreach($payment_methods as $payment_method)
                                         <option value="{{ $payment_method->name }}">
@@ -122,7 +122,8 @@
                                         name="bento_brands[]" 
                                         value="{{ old('bento_brands.' . $i) }}"
                                         class="brand_input text-xs w-full px-1 py-[2px] border border-red-300 rounded cursor-pointer {{ $i % 2 === 0 ? 'bg-orange-100' : 'bg-orange-200' }}" 
-                                        data-index="{{ $i }}">
+                                        data-index="{{ $i }}"
+                                        autocomplete="off">
                                     <datalist id="brand_list_{{ $i }}">
                                         @foreach($bento_brands as $brand)
                                             <option value="{{ $brand->name }}">
@@ -135,7 +136,8 @@
                                         name="bento_names[]" 
                                         value="{{ old('bento_names.' . $i) }}"
                                         class="bento_input text-xs w-full px-1 py-[2px] border border-red-300 rounded cursor-pointer {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}" 
-                                        data-index="{{ $i }}">
+                                        data-index="{{ $i }}"
+                                        autocomplete="off">
                                     <datalist id="bento_list_{{ $i }}">
                                         {{-- JavaScriptで動的に入れ替え --}}
                                     </datalist>
