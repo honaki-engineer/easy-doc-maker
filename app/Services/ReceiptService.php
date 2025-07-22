@@ -19,11 +19,11 @@ class ReceiptService
       
     // ⭐️ store --------------------------------------------------
         // ✅ receiptsテーブルへの保存
-        public static function storeReceipt($payment_method, $request, $receipt_setting) {
+        public static function storeReceipt($payment_method, $customer_name, $request, $receipt_setting) {
           $receipt = Receipt::create([
             'user_id' => Auth::id(),
             'payment_method_id' => $payment_method->id,
-            'customer_name' => $request->customer_name,
+            'customer_name_id' => $customer_name->id,
             'issued_at' => $request->issued_at,
             'postal_code' => $receipt_setting->postal_code,
             'address_line1' => $receipt_setting->address_line1,

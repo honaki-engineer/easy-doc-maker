@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ReceiptRequest;
 use App\Models\PaymentMethod;
+use App\Models\customerName;
 use App\Services\ReceiptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,10 +59,13 @@ class ReceiptController extends Controller
         // ✅ 支払い方法の取得
         $payment_methods = Auth::user()->paymentMethods;
 
+        // ✅ 顧客名の取得
+        $customer_names = Auth::user()->customerNames;
+
         // ✅ ブランド&お弁当の取得
         $bento_brands = $user->bentoBrands()->with('bentoNames')->get();
 
-        return view('receipts.create', compact('receipt_setting', 'payment_methods', 'bento_brands'));
+        return view('receipts.create', compact('receipt_setting', 'payment_methods', 'customer_names', 'bento_brands'));
     }
 
     /**
@@ -89,8 +93,19 @@ class ReceiptController extends Controller
             'name' => $request_payment_method,
         ]);
 
+        // 🔹 顧客情報の$request & 保存or取得
+        // 🔸 入力された`payment_method`を受け取る
+        $request_customer_name = $request->customer_name;
+        // 🔸 新規入力の場合は保存 | 既存の場合は取得
+        $customer_name = customerName::firstOrCreate([
+            'user_id' => $user->id,
+            'name' => $request_customer_name,
+        ]);
+
+        // dd($customer_name->id);
+
         // 🔹 receiptsテーブルへの保存
-        $receipt = ReceiptService::storeReceipt($payment_method, $request, $receipt_setting);
+        $receipt = ReceiptService::storeReceipt($payment_method, $customer_name, $request, $receipt_setting);
         
         // ✅ ----- 領収書_弁当テーブルへの保存 -----
         // 🔹 $request情報を変数へ入れる

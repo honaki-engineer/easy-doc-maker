@@ -30,7 +30,7 @@ class Receipt extends Model
     protected $fillable = [
         'user_id', 
         'payment_method_id',
-        'customer_name',
+        'customer_name_id',
         'issued_at',
         'postal_code',
         'address_line1',
