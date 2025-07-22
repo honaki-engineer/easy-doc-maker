@@ -102,8 +102,6 @@ class ReceiptController extends Controller
             'name' => $request_customer_name,
         ]);
 
-        // dd($customer_name->id);
-
         // 🔹 receiptsテーブルへの保存
         $receipt = ReceiptService::storeReceipt($payment_method, $customer_name, $request, $receipt_setting);
         
