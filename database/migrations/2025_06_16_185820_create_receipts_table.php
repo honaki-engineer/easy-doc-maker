@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('payment_method_id')->constrained();
-            $table->string('customer_name', 255); // 会社or個人
+            $table->foreignId('customer_name_id')->constrained(); // 会社or個人
             $table->date('issued_at'); // 会社or個人
             $table->string('postal_code', 15); // 郵便番号(ハイフン込み)
             $table->string('address_line1', 255); // 住所
