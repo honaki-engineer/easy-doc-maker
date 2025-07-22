@@ -25,7 +25,7 @@
 
             <!-- 上部情報 -->
             <div class="flex justify-between mb-8">
-                <div class="font-bold text-[12px] mt-20">{{ $receipt->customer_name }} 様</div>
+                <div class="font-bold text-[12px] mt-20">{{ $receipt->customerName->name }} 様</div>
                 <div class="text-[10px] text-right leading-[1.6]">
                     <p>{{ $receipt->issued_at }}</p>
                     <p>{{ $receipt->postal_code }}</p>
