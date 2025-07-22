@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ReceiptRequest;
 use App\Models\PaymentMethod;
-use App\Models\customerName;
+use App\Models\CustomerName;
 use App\Services\ReceiptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
