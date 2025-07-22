@@ -18,6 +18,10 @@ class Receipt extends Model
     {
         return $this->belongsTo(PaymentMethod::class);
     }
+    public function customerName()
+    {
+        return $this->belongsTo(CustomerName::class);
+    }
     public function bentoDetails()
     {
         return $this->hasMany(ReceiptBentoDetail::class);
