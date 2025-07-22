@@ -61,7 +61,9 @@ class Receipt extends Model
             $keywords = preg_split('/[\s]+/', $search_split); // 空白で分割
 
             foreach($keywords as $keyword) {
-                $query->where('customer_name', 'like', '%' . $keyword . '%');
+                $query->whereHas('customerName', function ($q) use ($keyword) {
+                    $q->where('name', 'like', '%' . $keyword . '%');
+                });
             }
         }
 
