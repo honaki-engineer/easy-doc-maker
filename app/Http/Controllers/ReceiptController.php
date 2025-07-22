@@ -97,7 +97,7 @@ class ReceiptController extends Controller
         // 🔸 入力された`payment_method`を受け取る
         $request_customer_name = $request->customer_name;
         // 🔸 新規入力の場合は保存 | 既存の場合は取得
-        $customer_name = customerName::firstOrCreate([
+        $customer_name = CustomerName::firstOrCreate([
             'user_id' => $user->id,
             'name' => $request_customer_name,
         ]);
