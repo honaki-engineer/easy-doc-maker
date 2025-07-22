@@ -50,26 +50,11 @@
                 <!-- 上部情報 -->
                 <div class="flex justify-between mb-8">
                     <div class="font-bold text-[12px] mt-20">
-                        {{-- <input type="text" name="customer_name" value="{{ old('customer_name') }}" class="text-xs w-80 px-1 py-1 border border-red-300 rounded cursor-pointer" autocomplete="off"> 様
-                        
-                        <input list="brand_list_{{ $i }}" 
-                            name="bento_brands[]" 
-                            value="{{ old('bento_brands.' . $i) }}"
-                            class="brand_input text-xs w-full px-1 py-[2px] border border-red-300 rounded cursor-pointer {{ $i % 2 === 0 ? 'bg-orange-100' : 'bg-orange-200' }}" 
-                            data-index="{{ $i }}"
-                            autocomplete="off">
-                        <datalist id="brand_list_{{ $i }}">
-                            @foreach($bento_brands as $brand)
-                                <option value="{{ $brand->name }}">
-                            @endforeach
-                        </datalist> --}}
-
                         <input list="customer_name_list"
                             name="customer_name"
                             value="{{ old('customer_name') }}"
                             class="text-xs w-80 px-1 py-1 border border-red-300 rounded cursor-pointer"
-                            autocomplete="off">
-
+                            autocomplete="off"> 様
                         <datalist id="customer_name_list">
                             @foreach($customer_names as $customer_name)
                                 <option value="{{ $customer_name->name }}">
