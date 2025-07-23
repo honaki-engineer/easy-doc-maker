@@ -240,7 +240,7 @@
                 <div class="text-[10px]">
                     <h2 class="mb-1 font-bold text-xs">備考(未入力OK)：</h2>
                     <textarea name="remarks" 
-                            class="w-full border border-red-300 text-xs rounded cursor-pointer"
+                            class="w-full max-h-32 border border-red-300 text-xs rounded cursor-pointer"
                             placeholder="例) 軽減税率8%対象">{{ old('remarks') }}</textarea>
                 </div>
             </div>
