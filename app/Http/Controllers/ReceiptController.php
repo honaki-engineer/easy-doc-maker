@@ -208,7 +208,7 @@ class ReceiptController extends Controller
         $html = view('pdf.receipt', compact('receipt'))->render();
 
         // ✅ PDFファイルの保存先のフルパスを生成
-        $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customer_name);
+        $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customerName->name);
         $pdfPath = storage_path("app/public/receipt_{$customerName}_{$id}.pdf");
 
         // ✅ Tailwind対応のPDF（背景・影も含む）としてA4で保存
@@ -250,7 +250,7 @@ class ReceiptController extends Controller
 
             // 🔹 領収書のHTMLを生成し、そのPDFの保存先パスを設定
             $html = view('pdf.receipt', compact('receipt'))->render();
-            $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customer_name);
+            $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customerName->name);
             $pdfPath = storage_path("app/public/receipt_{$customerName}_{$id}.pdf");
 
             // 🔹 HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$pdfPath`の場所に保存
@@ -302,7 +302,7 @@ class ReceiptController extends Controller
 
         // ✅ PDF生成
         $html = view('pdf.receipt', compact('receipt'))->render();
-        $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customer_name);
+        $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customerName->name);
         $filename = "receipt_{$customerName}_{$id}.pdf";
         $pdfPath = storage_path("app/public/tmp/{$filename}");
 
@@ -344,7 +344,7 @@ class ReceiptController extends Controller
             $receipt = $user->receipts()->with(['paymentMethod', 'bentoDetails'])->findOrFail($id);
             $html = view('pdf.receipt', compact('receipt'))->render();
 
-            $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customer_name);
+            $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customerName->name);
             $filename = "receipt_{$customerName}_{$id}.pdf";
             $pdfPath = storage_path("app/public/tmp/{$filename}");
 
