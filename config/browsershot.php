@@ -1,6 +1,6 @@
 <?php
 
-putenv('HOME=' . env('BROWSERSHOT_HOME', '/var/www')); // 本番環境のみ
+putenv('HOME=' . env('BROWSERSHOT_HOME', '/var/www/.browsershot')); // 本番環境のみ
 
 return [
     'node_binary' => env('NODE_BINARY_PATH'),
