@@ -634,7 +634,7 @@
 
             // 🔹 出力用テキスト整形
             const resultText = Object.entries(map) // map オブジェクトを[税込金額, 数量]の配列に変換して扱いやすく
-                .map(([fee, qty]) => `¥${Number(fee).toLocaleString()} × ${qty}個`)
+                .map(([fee, qty]) => `¥${Number(fee).toLocaleString()}×${qty}個`)
                 .join(', ');
 
             // 🔹 表示用の<span>と送信用の<input>に、同じ但し書きテキストを反映
