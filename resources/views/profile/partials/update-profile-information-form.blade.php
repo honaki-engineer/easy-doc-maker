@@ -19,13 +19,13 @@
 
         <div>
             <x-input-label for="name" :value="__('profile.name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full {{ Auth::user()->isGuest() ? 'cursor-not-allowed' : '' }}" :value="old('name', $user->name)" required autofocus autocomplete="name" :disabled="Auth::user()->isGuest()" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
         <div>
             <x-input-label for="email" :value="__('profile.email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full {{ Auth::user()->isGuest() ? 'cursor-not-allowed' : '' }}" :value="old('email', $user->email)" required autocomplete="username" :disabled="Auth::user()->isGuest()" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
@@ -48,7 +48,15 @@
         </div>
 
         <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('profile.save') }}</x-primary-button>
+            @if(Auth::user()->isGuest())
+                <x-primary-button disabled class="opacity-50 cursor-not-allowed">
+                    {{ __('profile.save') }}
+                </x-primary-button>
+            @else
+                <x-primary-button>
+                    {{ __('profile.save') }}
+                </x-primary-button>
+            @endif
 
             @if (session('status') === 'profile-updated')
                 <p

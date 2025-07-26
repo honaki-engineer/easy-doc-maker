@@ -9,10 +9,18 @@
         </p>
     </header>
 
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('profile.delete_account.') }}</x-danger-button>
+    @if(Auth::user()->isGuest())
+        <x-danger-button disabled class="opacity-50 cursor-not-allowed">
+            {{ __('profile.delete_account.') }}
+        </x-danger-button>
+    @else
+        <x-danger-button
+            x-data=""
+            x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
+        >
+            {{ __('profile.delete_account.') }}
+        </x-danger-button>
+    @endif
 
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
         <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
@@ -46,9 +54,17 @@
                     {{ __('profile.cancel') }}
                 </x-secondary-button>
 
-                <x-danger-button class="ml-3">
-                    {{ __('profile.delete_account') }}
-                </x-danger-button>
+                @if(Auth::user()->isGuest())
+                    {{-- 表示はされるが無効化 --}}
+                    <x-danger-button class="ml-3 opacity-50 cursor-not-allowed" disabled>
+                        {{ __('profile.delete_account') }}
+                    </x-danger-button>
+                @else
+                    {{-- 通常ユーザー用 --}}
+                    <x-danger-button type="submit" class="ml-3">
+                        {{ __('profile.delete_account') }}
+                    </x-danger-button>
+                @endif
             </div>
         </form>
     </x-modal>

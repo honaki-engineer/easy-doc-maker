@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BentoController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\GuestLoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\ReceiptSettingController;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/guest-login', [GuestLoginController::class, 'login'])->name('guest.login');
 
 Route::middleware('auth')->group(function () {
     // 自社情報

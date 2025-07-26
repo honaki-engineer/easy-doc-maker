@@ -73,4 +73,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(BentoName::class);
     }
+
+    // ゲストログイン
+    public function isGuest()
+    {
+    return $this->email === 'guest@example.com';
+    }
 }
