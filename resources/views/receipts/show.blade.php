@@ -162,14 +162,6 @@
                         class="text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg">削除</button>
                 </div>
             </form>
-            {{-- 印刷 --}}
-            <form action="{{ route('receipts.generate_and_print', [ 'id' => $receipt->id ]) }}"
-                target="_blank">
-                <button type="submit"
-                    class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-                    印刷する
-                </button>
-            </form>
             {{-- PDFダウンロード --}}
             <form 
                 action="{{ route('receipts.download.pdf', [ 'id' => $receipt->id ]) }}"
@@ -178,6 +170,14 @@
                     type="submit"
                     class="text-white bg-gray-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">
                     DL:PDF
+                </button>
+            </form>
+            {{-- 印刷 --}}
+            <form action="{{ route('receipts.generate_and_print', [ 'id' => $receipt->id ]) }}"
+                target="_blank">
+                <button type="submit"
+                    class="text-white bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg">
+                    印刷する
                 </button>
             </form>
         </div>
