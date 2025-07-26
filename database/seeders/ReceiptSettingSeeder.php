@@ -17,13 +17,13 @@ class ReceiptSettingSeeder extends Seeder
         DB::table('receipt_settings')->insert([
             [
                 'user_id' => 1,
-                'postal_code' => '333-4444',
+                'postal_code' => '123-4567',
                 'address_line1' => '埼玉県川口市1-1-1',
-                'address_line2' => '再頭ビル203',
-                'issuer_name' => '株式会社one',
+                'address_line2' => '川口マンション101',
+                'issuer_name' => '株式会社Kawaguchi',
                 'issuer_number' => 'T1010001111110',
-                'tel_fixed' => '048-111-1111',
-                'tel_mobile' => '090-2222-3333',
+                'tel_fixed' => '048-123-4567',
+                'tel_mobile' => '090-1234-5678',
                 'responsible_name' => '本多',
             ],
         ]);
