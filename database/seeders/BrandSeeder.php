@@ -14,7 +14,7 @@ class BrandSeeder extends Seeder
      */
     public function run()
     {
-        $brands = ['炭治郎', '牛亭', '俺のフレンチ', 'かまつ田'];
+        $brands = ['ほっともっと', 'オリジン弁当', '玉子屋', '日本亭'];
 
         foreach($brands as $brand) {
             DB::table('bento_brands')->insert([
