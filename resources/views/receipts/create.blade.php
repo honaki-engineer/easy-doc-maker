@@ -446,7 +446,7 @@
                 updateSubtotal(); // 小計を計算して表示する
                 updateTaxTotal(); // 消費税の合計を計算して表示する
                 updateTotal(); // 合計
-                updateProgateeceipt_note(); // 但し書きの表示
+                updateReceiptNote(); // 但し書きの表示
             });
         });
 
