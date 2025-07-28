@@ -156,6 +156,7 @@ class ReceiptRequest extends FormRequest
         $this->merge([
             'bento_fees' => array_map(fn($v) => str_replace(',', '', $v), $this->bento_fees ?? []),
             'tax_rates' => array_map(fn($v) => str_replace(['%', ','], '', $v), $this->tax_rates ?? []),
+            'bento_quantities' => array_map(fn($v) => str_replace(',', '', $v), $this->bento_quantities ?? []),
             'unit_prices' => array_map(fn($v) => str_replace(',', '', $v), $this->unit_prices ?? []),
             'amounts' => array_map(fn($v) => str_replace(',', '', $v), $this->amounts ?? []),
             'subtotal' => str_replace(',', '', $this->subtotal),

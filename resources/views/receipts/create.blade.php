@@ -169,7 +169,7 @@
                                 <td class="border border-black px-1 {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
                                     <input name="bento_quantities[]" 
                                         value="{{ old('bento_quantities.' . $i) }}"
-                                        type="number"
+                                        type="text"
                                         class="bento_quantity_input text-xs text-right w-full px-1 py-[2px] border border-red-300 rounded cursor-pointer {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}">
                                 </td>
                                 {{-- 単価(自動計算) --}}
@@ -431,6 +431,31 @@
                 }
             });
         });
+    
+    
+    // ⭐️ 数量
+        document.querySelectorAll('.bento_quantity_input').forEach(input => {
+            input.addEventListener('input', function () {
+                const raw = this.value.replace(/,/g, '');
+                if (raw === '') return;
+
+                if (!isNaN(raw)) {
+                    this.value = Number(raw).toLocaleString();
+                }
+            });
+
+            // ✅ カンマ付きでも数値として処理できるようにフォーカスが外れたときに内部計算用処理を呼び出す
+            input.addEventListener('blur', function () {
+                const $row = this.closest('tr') || this.closest('td')?.parentElement;
+                if (!$row) return;
+
+                updateAmountResult($row);
+                updateSubtotal();
+                updateTaxTotal();
+                updateTotal();
+                updateReceiptNote();
+            });
+        });
 
 
     // ⭐️ 単価(自動計算)
@@ -500,7 +525,7 @@
             const amountResult = $row.querySelector('.amount_result'); // 金額
 
             // 🔹 文字列→数値
-            const quantity = parseFloat(quantityInput?.value);
+            const quantity = parseFloat(quantityInput?.value.replace(/,/g, ''));
             const price = parseFloat(unitPriceResult?.value.replace(/,/g, ''));
 
             // 🔹 数量と単価が数値なら金額を計算して表示し、どちらかが未入力なら空にする
@@ -550,7 +575,7 @@
 
                 // 🔸 数値化
                 const price = parseFloat(bentoFeeInput.value.replace(/,/g, '').trim());
-                const quantity = parseFloat(quantityInput.value);
+                const quantity = parseFloat(quantityInput.value.replace(/,/g, ''));
                 const amount = parseFloat(amountResult.value.replace(/,/g, '').trim());// 金額(税抜×数量)
 
                 // 🔸 (税込×数量)-(金額 = 税抜×数量)を引いて、消費税分を合計
@@ -584,7 +609,7 @@
 
                 // 🔸 数値化
                 const fee = parseFloat(feeInput.value.replace(/,/g, '').trim());
-                const quantity = parseFloat(quantityInput.value);
+                const quantity = parseFloat(quantityInput.value.replace(/,/g, ''));
 
                 // 🔸 合計を計算
                 if(!isNaN(fee) && !isNaN(quantity)) {
@@ -623,7 +648,7 @@
 
                 // 🔸 数値に変換
                 const fee = parseFloat(feeInput.value.replace(/,/g, '').trim());
-                const quantity = parseInt(quantityInput.value);
+                const quantity = parseInt(quantityInput.value.replace(/,/g, ''));
 
                 // 🔸税込価格(fee)ごとに、数量(quantity)を集計してmapに蓄積する
                 if(!isNaN(fee) && !isNaN(quantity)) {
@@ -634,7 +659,7 @@
 
             // 🔹 出力用テキスト整形
             const resultText = Object.entries(map) // map オブジェクトを[税込金額, 数量]の配列に変換して扱いやすく
-                .map(([fee, qty]) => `¥${Number(fee).toLocaleString()}×${qty}個`)
+                .map(([fee, qty]) => `¥${Number(fee).toLocaleString()}×${qty.toLocaleString()}個`)
                 .join(', ');
 
             // 🔹 表示用の<span>と送信用の<input>に、同じ但し書きテキストを反映

@@ -56,10 +56,10 @@
           <table class="w-full border-collapse border-black text-left">
               <thead>
                   <tr class="bg-gray-300">
-                      <th class="w-[66%] border border-black px-1 py-[2px]">品目</th>
-                      <th class="w-[8%] border border-black px-1 py-[2px]">数量</th>
-                      <th class="w-[10%] border border-black px-1 py-[2px]">単価</th>
-                      <th class="w-[16%] border border-black px-1 py-[2px]">金額</th>
+                      <th class="w-[70%] border border-black px-1 py-[2px]">品目</th>
+                      <th class="w-[7%] border border-black px-1 py-[2px]">数量</th>
+                      <th class="w-[9%] border border-black px-1 py-[2px]">単価</th>
+                      <th class="w-[14%] border border-black px-1 py-[2px]">金額</th>
                   </tr>
               </thead>
               <tbody>
