@@ -71,7 +71,7 @@
                         <p>登録番号：{{ $receipt_setting->issuer_number }}</p>
                         <p>TEL：{{ $receipt_setting->tel_fixed }}</p>
                         <p>MOBILE：{{ $receipt_setting->tel_mobile }}</p>
-                        <p class="mt-1 font-semibold">担当：{{ $receipt_setting->responsible_name }}</p>
+                        <p class="mt-1">担当：{{ $receipt_setting->responsible_name }}</p>
                     </div>
                 </div>
 
@@ -86,17 +86,15 @@
                         </div>
 
                         <!-- 但し書き -->
-                        <div>
-                            但し、お弁当代 <span id="receipt_note" class="font-bold"></span> 分として、上記正に領収いたしました。<br>
+                        <div class="font-bold">
+                            但し、お弁当代<span id="receipt_note"></span>分として、上記正に領収いたしました。<br>
                             <input type="hidden" name="receipt_note" value="{{ old('receipt_note') }}" id="receipt_note_input">
-                            <span class="font-bold">
-                                <input list="payment_methods" name="payment_method" value="{{ old('payment_method') }}" class="text-xs w-48 px-1 py-[2px] border border-red-300 rounded cursor-pointer" autocomplete="off"> 支払い
-                                <datalist id="payment_methods">
-                                    @foreach($payment_methods as $payment_method)
-                                        <option value="{{ $payment_method->name }}">
-                                    @endforeach
-                                </datalist>
-                            </span>
+                            <input list="payment_methods" name="payment_method" value="{{ old('payment_method') }}" class="text-xs w-48 px-1 py-[2px] border border-red-300 rounded cursor-pointer" autocomplete="off"> 支払い
+                            <datalist id="payment_methods">
+                                @foreach($payment_methods as $payment_method)
+                                    <option value="{{ $payment_method->name }}">
+                                @endforeach
+                            </datalist>
                         </div>
                     </div>
 
@@ -223,12 +221,12 @@
                             <tr>
                                 <td colspan="4" class="px-1 border-l-0 border-b-0"></td>
                                 <td colspan="2" class="border border-black font-bold px-1 py-[2px] bg-gray-600 text-white">合計</td>
-                                <td class="border border-black font-bold text-right px-1">
+                                <td class="border border-black text-right px-1">
                                     <input type="text"
                                         id="total"
                                         name="total"
                                         value="{{ old('total') }}"
-                                        class="text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded bg-transparent font-bold"
+                                        class="text-xs text-right w-full px-1 py-[2px] border border-gray-300 rounded bg-transparent"
                                         readonly>
                                 </td>
                             </tr>
