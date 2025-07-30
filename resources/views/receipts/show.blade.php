@@ -27,15 +27,15 @@
             <div class="flex justify-between mb-8">
                 <div class="font-bold text-[12px] mt-20">{{ $receipt->customerName->name }} 様</div>
                 <div class="text-[10px] text-right leading-[1.6]">
-                    <p>{{ $receipt->issued_at }}</p>
-                    <p>{{ $receipt->postal_code }}</p>
-                    <p>{{ $receipt->address_line1 }}</p>
-                    <p>{{ $receipt->address_line2 }}</p>
-                    <p>{{ $receipt->issuer_name }}</p>
-                    <p>登録番号：{{ $receipt->issuer_number }}</p>
-                    <p>TEL：{{ $receipt->tel_fixed }}</p>
-                    <p>MOBILE：{{ $receipt->tel_mobile }}</p>
-                    <p class="mt-1">担当：{{ $receipt->responsible_name }}</p>
+                    <p>{{ $receipt->issued_at }}</p> {{-- 必須 --}}
+                    <p>{{ $receipt->postal_code }}</p> {{-- 必須 --}}
+                    <p>{{ $receipt->address_line1 }}</p> {{-- 必須 --}}
+                    @if($receipt->address_line2 !== null && $receipt->address_line2 !== '')<p>{{ $receipt->address_line2 }}</p>@endif
+                    @if($receipt->issuer_name !== null && $receipt->issuer_name !== '')<p>{{ $receipt->issuer_name }}</p>@endif
+                    @if($receipt->issuer_number !== null && $receipt->issuer_number !== '')<p>登録番号：{{ $receipt->issuer_number }}</p>@endif
+                    @if($receipt->tel_fixed !== null && $receipt->tel_fixed !== '')<p>TEL：{{ $receipt->tel_fixed }}</p>@endif
+                    @if($receipt->tel_mobile !== null && $receipt->tel_mobile !== '')<p>MOBILE：{{ $receipt->tel_mobile }}</p>@endif
+                    <p class="mt-1">担当：{{ $receipt->responsible_name }}</p> {{-- 必須 --}}
                 </div>
             </div>
 
