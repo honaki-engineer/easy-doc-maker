@@ -18,7 +18,7 @@
               <p>登録番号：{{ $receipt->issuer_number }}</p>
               <p>TEL：{{ $receipt->tel_fixed }}</p>
               <p>MOBILE：{{ $receipt->tel_mobile }}</p>
-              <p class="mt-1 font-semibold">担当：{{ $receipt->responsible_name }}</p>
+              <p class="mt-1">担当：{{ $receipt->responsible_name }}</p>
           </div>
       </div>
 
@@ -33,11 +33,9 @@
               </div>
 
               <!-- 但し書き -->
-              <div>
-                  但し、お弁当代 <span id="receipt_note" class="font-bold"> {{ $receipt->receipt_note }} </span>分として、上記正に領収いたしました。<br>
-                  <input type="hidden" name="receipt_note" id="receipt_note_input">
-                  
-                  <span class="font-bold text-xs">
+              <div class="font-bold">
+                  但し、お弁当代<span id="receipt_note">{{ $receipt->receipt_note }}</span>分として、上記正に領収いたしました。<br>
+                  <span class="text-xs">
                       {{ $receipt->paymentMethod->name }}支払い
                   </span>
               </div>
@@ -112,7 +110,7 @@
                   <tr>
                       <td class="px-1 border-l-0 border-b-0"></td>
                       <td colspan="2" class="border border-black font-bold px-1 py-[2px] bg-gray-600 text-white">合計</td>
-                      <td class="border border-black font-bold text-right px-1">
+                      <td class="border border-black text-right px-1">
                           {{ number_format($receipt->total) }}
                       </td>
                   </tr>
