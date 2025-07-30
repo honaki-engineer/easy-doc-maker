@@ -64,14 +64,14 @@
                     <div class="text-[10px] text-right leading-[1.6]">
                         {{-- 日付 --}}
                         <p><input type="date" name="issued_at" value="{{ old('issued_at') }}" id="date" class="text-xs w-[100px] px-1 py-[1px] border border-red-300 rounded cursor-pointer"></p>
-                        <p>{{ $receipt_setting->postal_code }}</p>
-                        <p>{{ $receipt_setting->address_line1 }}</p>
-                        <p>{{ $receipt_setting->address_line2 }}</p>
-                        <p>{{ $receipt_setting->issuer_name }}</p>
-                        <p>登録番号：{{ $receipt_setting->issuer_number }}</p>
-                        <p>TEL：{{ $receipt_setting->tel_fixed }}</p>
-                        <p>MOBILE：{{ $receipt_setting->tel_mobile }}</p>
-                        <p class="mt-1">担当：{{ $receipt_setting->responsible_name }}</p>
+                        <p>{{ $receipt_setting->postal_code }}</p> {{-- 必須 --}}
+                        <p>{{ $receipt_setting->address_line1 }}</p> {{-- 必須 --}}
+                        @if($receipt_setting->address_line2 !== null && $receipt_setting->address_line2 !== '')<p>{{ $receipt_setting->address_line2 }}</p>@endif
+                        @if($receipt_setting->issuer_name !== null && $receipt_setting->issuer_name !== '')<p>{{ $receipt_setting->issuer_name }}</p>@endif
+                        @if($receipt_setting->issuer_number !== null && $receipt_setting->issuer_number !== '')<p>{{ $receipt_setting->issuer_number }}</p>@endif
+                        @if($receipt_setting->tel_fixed !== null && $receipt_setting->tel_fixed !== '')<p>{{ $receipt_setting->tel_fixed }}</p>@endif
+                        @if($receipt_setting->tel_mobile !== null && $receipt_setting->tel_mobile !== '')<p>{{ $receipt_setting->tel_mobile }}</p>@endif
+                        <p class="mt-1">担当：{{ $receipt_setting->responsible_name }}</p> {{-- 必須 --}}
                     </div>
                 </div>
 
