@@ -28,7 +28,7 @@
                 <div class="font-bold text-[12px] mt-20">{{ $receipt->customerName->name }} 様</div>
                 <div class="text-[10px] text-right leading-[1.6]">
                     <p>{{ $receipt->issued_at }}</p> {{-- 必須 --}}
-                    <p>{{ $receipt->postal_code }}</p> {{-- 必須 --}}
+                    <p>〒{{ $receipt->postal_code }}</p> {{-- 必須 --}}
                     <p>{{ $receipt->address_line1 }}</p> {{-- 必須 --}}
                     @if($receipt->address_line2 !== null && $receipt->address_line2 !== '')<p>{{ $receipt->address_line2 }}</p>@endif
                     @if($receipt->issuer_name !== null && $receipt->issuer_name !== '')<p>{{ $receipt->issuer_name }}</p>@endif
