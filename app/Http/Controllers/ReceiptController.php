@@ -63,7 +63,7 @@ class ReceiptController extends Controller
         $customer_names = Auth::user()->customerNames;
 
         // ✅ ブランド&お弁当の取得
-        $bento_brands = $user->bentoBrands()->with('bentoNames')->get();
+        $bento_brands = $user->bentoBrands()->with('bentoNames')->orderBy('id')->get();
 
         return view('receipts.create', compact('receipt_setting', 'payment_methods', 'customer_names', 'bento_brands'));
     }

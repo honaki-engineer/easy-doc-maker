@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('bento_brands', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('name', 50)->unique();
+            $table->string('name', 50); // ユーザー単位でのブランド重複禁止
+            $table->unique(['user_id', 'name']);
             $table->timestamps();
         });
     }

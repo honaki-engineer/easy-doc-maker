@@ -17,10 +17,10 @@ class GuestLoginController extends Controller
 
         // ✅ ゲストユーザーを取得 or 作成
         $guestUser = User::firstOrCreate(
-            ['email' => 'guest@example.com'],
+            ['email' => config('app.guest_email')],
             [
                 'name' => 'ゲスト',
-                'password' => bcrypt('guestpassword'), // 初回だけ実行
+                'password' => bcrypt(config('app.guest_password')), // 初回だけ実行
             ]
         );
 

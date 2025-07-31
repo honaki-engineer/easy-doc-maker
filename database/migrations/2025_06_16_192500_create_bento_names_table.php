@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('bento_brand_id')->constrained()->onDelete('cascade');
             $table->string('name', 255);
             $table->timestamps();
-            $table->unique(['bento_brand_id', 'name']); // ブランド単位で弁当名の重複を禁止
+            $table->unique(['user_id', 'bento_brand_id', 'name']); // ユーザー別に同じブランドIDで同じ弁当名を許容したい
         });
     }
 

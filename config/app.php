@@ -215,4 +215,9 @@ return [
 
     // ゲストログインの遷移元とのトークンを指定
     'guest_token' => env('GUEST_LOGIN_TOKEN'),
+
+    // ゲストログインのパスワード
+    'guest_password' => env('GUEST_PASSWORD'),
+    // ゲストログインのメールアドレス
+    'guest_email' => env('GUEST_EMAIL'),
 ];

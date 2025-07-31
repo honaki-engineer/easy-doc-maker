@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,6 +15,9 @@ class ReceiptSettingSeeder extends Seeder
      */
     public function run()
     {
+        // ゲスト情報
+        $guest = User::where('email', config('app.guest_email'))->first();
+
         DB::table('receipt_settings')->insert([
             [
                 'user_id' => 1,
@@ -25,6 +29,16 @@ class ReceiptSettingSeeder extends Seeder
                 'tel_fixed' => '048-123-4567',
                 'tel_mobile' => '090-1234-5678',
                 'responsible_name' => '本多',
+            ],[
+                'user_id' => $guest->id,
+                'postal_code' => '123-4567',
+                'address_line1' => '埼玉県川口市1-1-1',
+                'address_line2' => '川口マンション101',
+                'issuer_name' => '株式会社Guest',
+                'issuer_number' => 'T1010001111110',
+                'tel_fixed' => '048-123-4567',
+                'tel_mobile' => '090-1234-5678',
+                'responsible_name' => 'ゲスト',
             ],
         ]);
     }
