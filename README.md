@@ -1,4 +1,4 @@
-# Easy Doc Maker (領収書作成アプリ)
+# Easy Doc Maker (領収書作成アプリ) ※デモ用
 
 ## 概要
 
@@ -10,7 +10,7 @@ ZIP一括ダウンロードやワンクリック印刷機能も搭載し、**領
 
 ## サイト
 
-🔗 （※必要に応じてURLを記入）
+🔗 https://easy-doc-maker.akkun1114.com/
 
 ---
 
@@ -88,7 +88,7 @@ ZIP一括ダウンロードやワンクリック印刷機能も搭載し、**領
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=easy_doc_makers
+DB_DATABASE=easy-doc-makers
 DB_USERNAME=root
 DB_PASSWORD=
 ```
@@ -99,8 +99,8 @@ DB_PASSWORD=
 
 1. リポジトリをクローン
 ```bash
-git clone https://github.com/HondaAkihito/easy_doc_maker.git
-cd easy_doc_maker
+git clone https://github.com/HondaAkihito/easy-doc-maker.git
+cd easy-doc-maker
 ```
 2. 環境変数を設定
 ```bash
@@ -134,7 +134,7 @@ php artisan serve
 ## ディレクトリ構成
 
 ```txt
-easy_doc_maker/
+easy-doc-maker/
 ├── app/                     # アプリケーションロジック（モデル、コントローラ、サービスなど）
 │   ├── Console/             
 │   ├── Exceptions/          
