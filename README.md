@@ -6,10 +6,10 @@
 取引先や支払い情報を入力するだけで、Tailwind CSS で整えた**美しい領収書を高精度**に PDF 出力できます。  
 ZIP 一括ダウンロードや印刷（単体・一括）機能も搭載し、**領収書発行業務を大幅に効率化**します。  
   
-※ 実運用は店舗専用の URL、デモは店舗専用とは別の URL で公開しています（機能・構成は同一、データはダミー、Githubリポジトリは別）。  
+※ 実運用は店舗専用の URL、**デモは店舗専用とは別の URL** で公開しています（機能・構成は同一、データはダミー、Githubリポジトリは別）。  
   
 ※ 本アプリはクライアント（高級弁当店）の業務フローに合わせてPC利用を前提に設計されています。  
-  スマートフォンでは表示が大きく崩れるため、PCまたはタブレットでのご利用を推奨します。
+  スマートフォンでは表示が大きく崩れるため、**PCまたはタブレットでのご利用**を推奨します。
 
 ---
 
@@ -17,7 +17,7 @@ ZIP 一括ダウンロードや印刷（単体・一括）機能も搭載し、*
 
 🔗 アプリ  
   https://easy-doc-maker.akkun1114.com/  
-🔗 ゲストログイン（今すぐ試せます）
+🔗 ゲストログイン（今すぐ試せます）  
   https://easy-doc-maker.akkun1114.com/guest-login?token=guest123  
 
 ---
@@ -73,7 +73,7 @@ ZIP 一括ダウンロードや印刷（単体・一括）機能も搭載し、*
 | 領収書のダウンロード / 印刷（詳細ページ）        | -                 | ●      |
 | 領収書の一括ダウンロード / 一括印刷（一覧ページ） | -                 | ●      |
 | 自社情報の詳細表示                           | -                 | ●      |
-| 自社情報の詳細の更新                          | -                 | ●      |
+| 自社情報の更新                               | -                 | ●      |
 | お弁当、ブランドの一覧表示                     | -                 | ●      |
 | お弁当、ブランドの削除                        | -                 | ●      |
 | 「フリー検索」によるお弁当、ブランド検索         | -                 | ●      |
@@ -117,9 +117,10 @@ MAIL_FROM_ADDRESS="hello@example.com"
 MAIL_FROM_NAME="${APP_NAME}"
 
 # Browsershot（PDF・印刷）
-NODE_BINARY_PATH=/opt/homebrew/bin/node
-NODE_INCLUDE_PATH=/opt/homebrew/bin
-CHROME_PATH="/Applications/Chromium.app/Contents/MacOS/Chromium"
+# 各自の環境で実際のパスを確認して置き換えてください（↓確認方法あり）
+NODE_BINARY_PATH=/usr/bin/node                                    # ← `which node`
+NODE_INCLUDE_PATH=/usr/local/bin                                  # ← `dirname $(which node)`
+CHROME_PATH="/Applications/Chromium.app/Contents/MacOS/Chromium"  # ← Chromium の実体パス
 
 # ゲストログイン
 GUEST_LOGIN_TOKEN=guest123 # ゲストログイントークン
@@ -155,7 +156,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 # Browsershot（PDF・印刷）
 # 各自の環境で実際のパスを確認して置き換えてください（↓確認方法あり）
 NODE_BINARY_PATH=/usr/bin/node           # ← `which node`
-NODE_INCLUDE_PATH=/usr/bin               # ← `dirname $(which node)`
+NODE_INCLUDE_PATH=/usr/local/bin         # ← `dirname $(which node)`
 CHROME_PATH="/usr/bin/chromium-browser"  # ← `which chromium-browser`
 
 # 本番のみ：Browsershot が一時ファイルを置くディレクトリ
