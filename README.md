@@ -209,9 +209,10 @@ npm run dev
 npm install
 npm run build
 ```
-7. ストレージリンク作成（画像表示のため必須）
+7. 初期画像作成（+ ストレージリンク作成）
 ```bash
-php artisan storage:link
+chmod +x setup.sh
+./setup.sh
 ```
 8. サーバー起動（ローカル開発用）
 ```bash
