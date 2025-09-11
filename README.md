@@ -118,7 +118,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 # Browsershot（PDF・印刷）
 # 各自の環境で実際のパスを確認して置き換えてください（↓確認方法あり）
-NODE_BINARY_PATH=/usr/bin/node                                    # ← `which node`
+NODE_BINARY_PATH=/usr/local/bin/node                              # ← `which node`
 NODE_INCLUDE_PATH=/usr/local/bin                                  # ← `dirname $(which node)`
 CHROME_PATH="/Applications/Chromium.app/Contents/MacOS/Chromium"  # ← Chromium の実体パス
 
@@ -155,7 +155,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 # Browsershot（PDF・印刷）
 # 各自の環境で実際のパスを確認して置き換えてください（↓確認方法あり）
-NODE_BINARY_PATH=/usr/bin/node           # ← `which node`
+NODE_BINARY_PATH=/usr/local/bin/node     # ← `which node`
 NODE_INCLUDE_PATH=/usr/local/bin         # ← `dirname $(which node)`
 CHROME_PATH="/usr/bin/chromium-browser"  # ← `which chromium-browser`
 
