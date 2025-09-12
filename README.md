@@ -106,12 +106,11 @@ cp .env.example .env
 - [.env 設定例（開発用）](#env-設定例開発用)
 - [.env 設定例（本番用）](#env-設定例本番用)
 3. PHPパッケージをインストール
-- 開発
 ```bash
+# 開発
 composer install
-```
-- 本番
-```bash
+
+# 本番
 composer install --no-dev --optimize-autoloader
 ```
 4. アプリケーションキーを生成
@@ -123,14 +122,13 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 6. フロントエンドビルド（Tailwind/Vite 使用時）
-- 開発
 ```bash
 npm install # 時間がかかります
+
+# 開発
 npm run dev
-```
-- 本番
-```bash
-npm install # 時間がかかります
+
+# 本番
 npm run build
 ```
 7. 初期画像作成（+ ストレージリンク作成）
@@ -138,7 +136,7 @@ npm run build
 chmod +x setup.sh
 ./setup.sh
 ```
-8. サーバー起動（ローカル開発用）
+8. サーバー起動（開発用のみ）
 ```bash
 php artisan serve
 ```
