@@ -63,7 +63,7 @@
                     </div>
                     <div class="text-[10px] text-right leading-[1.6]">
                         {{-- 日付 --}}
-                        <p><input type="date" name="issued_at" value="{{ old('issued_at') }}" id="date" class="text-xs w-[100px] px-1 py-[1px] border border-red-300 rounded cursor-pointer"></p>
+                        <p><input type="date" name="issued_at" value="{{ old('issued_at') }}" id="date" class="text-xs w-[110px] px-1 py-[1px] border border-red-300 rounded cursor-pointer"></p>
                         <p>〒{{ $receipt_setting->postal_code }}</p> {{-- 必須 --}}
                         <p>{{ $receipt_setting->address_line1 }}</p> {{-- 必須 --}}
                         @if($receipt_setting->address_line2 !== null && $receipt_setting->address_line2 !== '')<p>{{ $receipt_setting->address_line2 }}</p>@endif
