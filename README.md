@@ -15,9 +15,9 @@ ZIP 一括ダウンロードや印刷（単体・一括）機能も搭載し、*
 
 ## サイト
 
-🔗 アプリ  
+- アプリ  
   https://easy-doc-maker.akkun1114.com/  
-🔗 ゲストログイン（今すぐ試せます）  
+- ゲストログイン（今すぐ試せます）  
   https://easy-doc-maker.akkun1114.com/guest-login?token=guest123  
 
 ---
