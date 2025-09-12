@@ -89,10 +89,75 @@ ZIP 一括ダウンロードや印刷（単体・一括）機能も搭載し、*
 - Node.js（Tailwind をビルド）
 - Git（クローンする場合）
 
+---
+
+## クイックスタート
+
+1. リポジトリをクローン
+```bash
+git clone https://github.com/honaki-engineer/easy-doc-maker.git
+cd easy-doc-maker
+```
+2. 環境変数を設定
+```bash
+cp .env.example .env
+```
 .env の `DB_` 各項目などは、ConoHa VPS または開発の環境に応じて適宜変更してください。  
+[.env 設定例（開発用）](#env-設定例開発用)
+[.env 設定例（本番用）](#env-設定例本番用)
+3. PHPパッケージをインストール
+- 開発
+```bash
+composer install
+```
+- 本番
+```bash
+composer install --no-dev --optimize-autoloader
+```
+4. アプリケーションキーを生成
+```bash
+php artisan key:generate
+```
+5. DBマイグレーション & 初期データ投入
+```bash
+php artisan migrate --seed
+```
+6. フロントエンドビルド（Tailwind/Vite 使用時）
+- 開発
+```bash
+npm install # 時間がかかります
+npm run dev
+```
+- 本番
+```bash
+npm install # 時間がかかります
+npm run build
+```
+7. 初期画像作成（+ ストレージリンク作成）
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+8. サーバー起動（ローカル開発用）
+```bash
+php artisan serve
+```
+9. PDF ダウンロード機能の用意
+- 単体ダウンロード
+https://qiita.com/honaki/items/0bc4dddcc373a25a3f13
+- 一括ダウンドード
+https://qiita.com/honaki/items/84bcfea2eac48ce2e5b2
+10. 印刷機能の用意
+- 単体印刷
+https://qiita.com/honaki/items/c81086d5ce26865b0b94
+- 一括印刷
+https://qiita.com/honaki/items/09845c06bbb181cdfeb1
+11. PDF ダウンロード機能 ＆ 印刷機能の準備（本番のみ）
+https://qiita.com/honaki/items/6fc2285d7f1f476486d8
+
 
 ### .env 設定例（開発用）
-
+  
 ```env
 APP_NAME=領収書作成アプリ
 APP_ENV=local
@@ -118,9 +183,9 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 # Browsershot（PDF・印刷）
 # 各自の環境で実際のパスを確認して置き換えてください（↓確認方法あり）
-NODE_BINARY_PATH=/usr/local/bin/node                              # ← `which node`
-NODE_INCLUDE_PATH=/usr/local/bin                                  # ← `dirname $(which node)`
-CHROME_PATH="/Applications/Chromium.app/Contents/MacOS/Chromium"  # ← Chromium の実体パス
+NODE_BINARY_PATH=/opt/homebrew/bin/node                           # ← `which node`
+NODE_INCLUDE_PATH=/opt/homebrew/bin                               # ← `dirname $(which node)`
+CHROME_PATH="/Applications/Chromium.app/Contents/MacOS/Chromium"  # ← `ls /Applications/Chromium.app/Contents/MacOS/Chromium`
 
 # ゲストログイン
 GUEST_LOGIN_TOKEN=guest123 # ゲストログイントークン
@@ -155,9 +220,9 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 # Browsershot（PDF・印刷）
 # 各自の環境で実際のパスを確認して置き換えてください（↓確認方法あり）
-NODE_BINARY_PATH=/usr/local/bin/node     # ← `which node`
-NODE_INCLUDE_PATH=/usr/local/bin         # ← `dirname $(which node)`
-CHROME_PATH="/usr/bin/chromium-browser"  # ← `which chromium-browser`
+NODE_BINARY_PATH=/opt/homebrew/bin/node     # ← `which node`
+NODE_INCLUDE_PATH=/opt/homebrew/bin         # ← `dirname $(which node)`
+CHROME_PATH="/usr/bin/chromium-browser"     # ← `which chromium-browser`
 
 # 本番のみ：Browsershot が一時ファイルを置くディレクトリ
 BROWSERSHOT_HOME="/var/www/.browsershot"
@@ -167,67 +232,6 @@ GUEST_LOGIN_TOKEN=guest123 # ゲストログイントークン
 GUEST_PASSWORD=guestpassword # ゲストログインのパスワード
 GUEST_EMAIL=guest@example.com # ゲストログインのメールアドレス
 ```
-
----
-
-## クイックスタート
-
-1. リポジトリをクローン
-```bash
-git clone https://github.com/honaki-engineer/easy-doc-maker.git
-cd easy-doc-maker
-```
-2. 環境変数を設定
-```bash
-cp .env.example .env
-```
-3. PHPパッケージをインストール
-- 開発
-```bash
-composer install
-```
-- 本番
-```bash
-composer install --no-dev --optimize-autoloader
-```
-4. アプリケーションキーを生成
-```bash
-php artisan key:generate
-```
-5. DBマイグレーション & 初期データ投入
-```bash
-php artisan migrate --seed
-```
-6. フロントエンドビルド（Tailwind/Vite 使用時）
-- 開発
-```bash
-npm install
-npm run dev
-```
-- 本番
-```bash
-npm install
-npm run build
-```
-7. 初期画像作成（+ ストレージリンク作成）
-```bash
-chmod +x setup.sh
-./setup.sh
-```
-8. サーバー起動（ローカル開発用）
-```bash
-php artisan serve
-```
-9. PDFダウンロード機能の用意
-- 開発
-https://qiita.com/honaki/items/0bc4dddcc373a25a3f13
-- 本番
-https://qiita.com/honaki/items/6fc2285d7f1f476486d8
-10. 印刷機能の用意
-- 開発
-https://qiita.com/honaki/items/c81086d5ce26865b0b94
-- 本番
-https://qiita.com/honaki/items/09845c06bbb181cdfeb1
 
 ---
 
