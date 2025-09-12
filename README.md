@@ -143,17 +143,17 @@ chmod +x setup.sh
 php artisan serve
 ```
 9. PDF ダウンロード機能の用意
-- 単体ダウンロード
-https://qiita.com/honaki/items/0bc4dddcc373a25a3f13
-- 一括ダウンドード
-https://qiita.com/honaki/items/84bcfea2eac48ce2e5b2
+- 単体ダウンロード  
+  https://qiita.com/honaki/items/0bc4dddcc373a25a3f13
+- 一括ダウンドード  
+  https://qiita.com/honaki/items/84bcfea2eac48ce2e5b2
 10. 印刷機能の用意
-- 単体印刷
-https://qiita.com/honaki/items/c81086d5ce26865b0b94
-- 一括印刷
-https://qiita.com/honaki/items/09845c06bbb181cdfeb1
+- 単体印刷  
+  https://qiita.com/honaki/items/c81086d5ce26865b0b94
+- 一括印刷  
+  https://qiita.com/honaki/items/09845c06bbb181cdfeb1
 11. PDF ダウンロード機能 ＆ 印刷機能の準備（本番のみ）
-https://qiita.com/honaki/items/6fc2285d7f1f476486d8
+  https://qiita.com/honaki/items/6fc2285d7f1f476486d8
 
 
 ### .env 設定例（開発用）
