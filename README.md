@@ -103,8 +103,8 @@ cd easy-doc-maker
 cp .env.example .env
 ```
 .env の `DB_` 各項目などは、ConoHa VPS または開発の環境に応じて適宜変更してください。  
-[.env 設定例（開発用）](#env-設定例開発用)
-[.env 設定例（本番用）](#env-設定例本番用)
+- [.env 設定例（開発用）](#env-設定例開発用)
+- [.env 設定例（本番用）](#env-設定例本番用)
 3. PHPパッケージをインストール
 - 開発
 ```bash
