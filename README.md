@@ -153,6 +153,7 @@ php artisan serve
 11. PDF ダウンロード機能 ＆ 印刷機能の準備（本番のみ）
   https://qiita.com/honaki/items/6fc2285d7f1f476486d8
 
+---
 
 ### .env 設定例（開発用）
   
