@@ -46,7 +46,7 @@ ZIP 一括ダウンロードや印刷（単体・一括）機能も搭載し、*
 - **バックエンド**：PHP 8.x（開発: 8.2.27 / 本番: 8.2.29） / Laravel 9.52.20  
 - **データベース**：MySQL 8.0（開発） / MariaDB 10.5（本番・MySQL互換）  
 - **インフラ・環境**：MAMP / ConoHa VPS（AlmaLinux 9.5 / Apache） / macOS Sequoia 15.3.1  
-- **ビルド環境**：Node.js 22.17.0（開発） / Node.js 20.19.4（本番: ConoHa VPS / NodeSource導入） / Composer 2.8.x（開発: 2.8.4 / 本番: 2.8.10）  
+- **ビルド環境**：Node.js 24.4.0（開発） / Node.js 20.19.4（本番: ConoHa VPS / NodeSource導入） / Composer 2.8.x（開発: 2.8.4 / 本番: 2.8.10）  
 - **開発ツール**：VSCode / Git / GitHub / phpMyAdmin  
 
 ---
