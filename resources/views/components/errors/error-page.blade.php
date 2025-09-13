@@ -30,10 +30,10 @@
     <main class="flex-grow flex flex-col justify-center items-center text-center px-4">
         <h2 class="text-xl font-bold mb-2">{{ $code }} | {{ $title }}</h2>
         <p class="mb-6">{!! $message !!}</p>
-        <button type="submit"
+        <a href="{{ route('receipts.index') }}"
             class="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 transition text-lg">
-                <a href="{{ route('receipts.index') }}">トップページはこちら</a>
-        </button>
+            トップページはこちら
+        </a>
     </main>
 
     {{-- フッター --}}
