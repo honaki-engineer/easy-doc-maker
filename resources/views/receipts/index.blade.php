@@ -57,33 +57,44 @@
                                 </label>
                             </div>
 
-                            <table class="whitespace-nowrap table-auto w-full text-left whitespace-no-wrap">
+                            {{-- テーブル --}}
+                            <table class="table-fixed w-full text-left">
+                                {{-- テーブルの列の指定 --}}
+                                <colgroup>
+                                    <col class="w-[4ch]" />  <!-- '#' -->
+                                    <col class="w-[13ch]" /> <!-- 日付（YYYY-MM-DD） -->
+                                    <col />                  <!-- 取引先（残り幅ぜんぶ） -->
+                                    <col class="w-[5ch]" />  <!-- チェックボックス -->
+                                </colgroup>
+                                {{-- テーブルタイトル --}}
                                 <thead>
                                     <tr>
                                         <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl-lg"></th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                            日付</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
-                                            取引先</th>
-                                        <th
-                                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr-lg"></th>
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">日付</th>
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">取引先</th>
+                                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr-lg"></th>
                                     </tr>
                                 </thead>
+                                {{-- テーブル要素 --}}
                                 <tbody>
                                     @foreach($receipts as $receipt)
-                                        <tr>
-                                            <td class="border-t-2 border-gray-200 px-4 py-3 break-words whitespace-normal">
-                                                <a href="{{ route('receipts.show', ['receipt' => $receipt->id]) }}" class="text-blue-500 hover:text-blue-600">#</a>
-                                            </td>
-                                            <td class="border-t-2 border-gray-200 px-4 py-3">{{ $receipt->issued_at }}</td>
-                                            <td class="border-t-2 border-gray-200 px-4 py-3">{{ $receipt->customerName->name }}</td>
-                                            {{-- チェックボックス --}}
-                                            <td class="border-t-2 border-gray-200 px-4 py-3">
-                                                <input type="checkbox" name="receipt_ids[]" value="{{ $receipt->id }}" class="cursor-pointer">
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td class="border-t-2 border-gray-200 px-4 py-3">
+                                            <a href="{{ route('receipts.show', ['receipt' => $receipt->id]) }}" class="text-blue-500 hover:text-blue-600">#</a>
+                                        </td>
+                                        <td class="border-t-2 border-gray-200 px-4 py-3 whitespace-nowrap tabular-nums">
+                                            {{ $receipt->issued_at }}
+                                        </td>
+                                        <td class="border-t-2 border-gray-200 px-4 py-3 max-w-0 overflow-hidden">
+                                            <div class="block max-w-full overflow-x-auto whitespace-nowrap"
+                                                style="-webkit-overflow-scrolling:touch;">
+                                                {{ $receipt->customerName->name }}
+                                            </div>
+                                        </td>
+                                        <td class="border-t-2 border-gray-200 px-4 py-3 text-center">
+                                            <input type="checkbox" name="receipt_ids[]" value="{{ $receipt->id }}" class="cursor-pointer">
+                                        </td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
