@@ -44,7 +44,7 @@
                                         <div class="relative">
                                             <label for="address_line2" class="leading-7 text-sm text-gray-600">建物名</label>
                                             <div
-                                                class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out min-h-10">
                                             {{ $receipt_setting->address_line2 }}</div>
                                         </div>
                                     </div>
@@ -62,7 +62,7 @@
                                         <div class="relative">
                                             <label for="issuer_number" class="leading-7 text-sm text-gray-600">登録番号</label>
                                             <div
-                                                class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out min-h-10">
                                             {{ $receipt_setting->issuer_number }}</div>
                                         </div>
                                     </div>
@@ -71,7 +71,7 @@
                                         <div class="relative">
                                             <label for="tel_fixed" class="leading-7 text-sm text-gray-600">固定電話</label>
                                             <div
-                                                class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out min-h-10">
                                             {{ $receipt_setting->tel_fixed }}</div>
                                         </div>
                                     </div>
@@ -80,7 +80,7 @@
                                         <div class="relative">
                                             <label for="tel_mobile" class="leading-7 text-sm text-gray-600">携帯電話</label>
                                             <div
-                                                class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                                class="w-full rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out min-h-10">
                                             {{ $receipt_setting->tel_mobile }}</div>
                                         </div>
                                     </div>

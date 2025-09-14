@@ -48,8 +48,8 @@
                 <div class="text-[16px] font-bold border-b-[3px] border-gray-600 pb-1 w-full mb-8">領収書</div>
 
                 <!-- 上部情報 -->
-                <div class="flex justify-between mb-8">
-                    <div class="font-bold text-[12px] mt-20">
+                <div class="flex justify-between mb-8 items-center">
+                    <div class="font-bold text-[12px]">
                         <input list="customer_name_list"
                             name="customer_name"
                             value="{{ old('customer_name') }}"
