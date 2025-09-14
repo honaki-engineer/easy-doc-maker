@@ -53,7 +53,7 @@
                         <input list="customer_name_list"
                             name="customer_name"
                             value="{{ old('customer_name') }}"
-                            class="text-xs w-80 px-1 py-1 border border-red-300 rounded cursor-pointer"
+                            class="input_popup text-xs w-80 px-1 py-1 border border-red-300 rounded cursor-pointer"
                             autocomplete="off"> 様
                         <datalist id="customer_name_list">
                             @foreach($customer_names as $customer_name)
@@ -89,7 +89,7 @@
                         <div class="font-bold">
                             但し、お弁当代<span id="receipt_note"></span>分として、上記正に領収いたしました。<br>
                             <input type="hidden" name="receipt_note" value="{{ old('receipt_note') }}" id="receipt_note_input">
-                            <input list="payment_methods" name="payment_method" value="{{ old('payment_method') }}" class="text-xs w-48 px-1 py-[2px] border border-red-300 rounded cursor-pointer" autocomplete="off"> 支払い
+                            <input list="payment_methods" name="payment_method" value="{{ old('payment_method') }}" class="input_popup text-xs w-48 px-1 py-[2px] border border-red-300 rounded cursor-pointer" autocomplete="off"> 支払い
                             <datalist id="payment_methods">
                                 @foreach($payment_methods as $payment_method)
                                     <option value="{{ $payment_method->name }}">
@@ -128,7 +128,7 @@
                                     <input list="brand_list_{{ $i }}" 
                                         name="bento_brands[]" 
                                         value="{{ old('bento_brands.' . $i) }}"
-                                        class="brand_input text-xs w-full px-1 py-[2px] border border-red-300 rounded cursor-pointer {{ $i % 2 === 0 ? 'bg-orange-100' : 'bg-orange-200' }}" 
+                                        class="brand_input input_popup text-xs w-full px-1 py-[2px] border border-red-300 rounded cursor-pointer {{ $i % 2 === 0 ? 'bg-orange-100' : 'bg-orange-200' }}" 
                                         data-index="{{ $i }}"
                                         autocomplete="off">
                                     <datalist id="brand_list_{{ $i }}">
@@ -142,7 +142,7 @@
                                     <input list="bento_list_{{ $i }}" 
                                         name="bento_names[]" 
                                         value="{{ old('bento_names.' . $i) }}"
-                                        class="bento_input text-xs w-full px-1 py-[2px] border border-red-300 rounded cursor-pointer {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}" 
+                                        class="bento_input input_popup text-xs w-full px-1 py-[2px] border border-red-300 rounded cursor-pointer {{ $i % 2 === 0 ? 'bg-white' : 'bg-gray-100' }}" 
                                         data-index="{{ $i }}"
                                         autocomplete="off">
                                     <datalist id="bento_list_{{ $i }}">
@@ -273,6 +273,107 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+    // ⭐️ 顧客名、支払い方法、ブランド、品目
+        // ✅ 選択or新規入力後際クリック時に、全体の文章をポップアップ表示
+        document.querySelectorAll('.input_popup').forEach(input => {
+            input.addEventListener('focus', function () {
+                let popup = null;
+                const GAP = 6; // 入力欄とのすき間
+                const PAD = 8; // 画面端の余白
+
+                // 🔹 入力欄の上下どちらかに、画面からはみ出さないよう余白付きでポップアップを配置する関数
+                const place = () => {
+                    if(!popup) return;
+
+                    // 🔸 いったん不可視で文面サイズを確定→高さを取得
+                    popup.style.visibility = 'hidden';
+                    const rect = input.getBoundingClientRect(); // input 位置とサイズを取得
+
+                    // 🔸 input の上に pop を出す：rect.top から「ポップアップの高さ＋GAP」を引く + 最後にスクロールの位置を足す
+                    const ph = popup.offsetHeight; // ポップアップの高さ
+                    let top  = rect.top - ph - GAP + window.scrollY;
+
+                    // 🔸 画面外にはみ出す場合は input の下に出す
+                    if(top < PAD + window.scrollY) {
+                        top = rect.bottom + GAP + window.scrollY;
+                    }
+
+                    // 🔸 pop の左端を、基準要素（input）の左端にそろえる
+                    let left = rect.left + window.scrollX; // pop 位置を取得
+
+                    // 🔸 面端はみ出しNG処理
+                    const maxLeft = window.scrollX + window.innerWidth - popup.offsetWidth - PAD; // ポップアップを右端にはみ出させないための、left の右側の上限値=いまの水平スクロール位置+画面の見えている幅-ポップアップ自体の幅-画面端との余白ぶん
+                    left = Math.max(window.scrollX + PAD, Math.min(left, maxLeft));
+
+                    popup.style.top  = `${top}px`;
+                    popup.style.left = `${left}px`;
+                    popup.style.visibility = 'visible';
+                };
+
+                // 🔹 入力の文字列を表示する“非操作”ポップアップを、なければ作り、あれば中身だけ更新して位置を再計算する関数
+                const makeOrUpdate = () => {
+                    // 🔸 pop取得
+                    const value = input.value.trim();
+                    // 🔸 なければpop削除
+                    if(!value) { 
+                        removePopup(); return; 
+                    }
+
+                    // !pop なら css 付与 | pop なら中身の文字を差し替え
+                    if(!popup) {
+                        popup = document.createElement('div');
+                        popup.textContent = value;
+                        popup.style.position = 'absolute';
+                        popup.style.backgroundColor = 'white';
+                        popup.style.border = '1px solid gray';
+                        popup.style.padding = '4px 8px';
+                        popup.style.fontSize = '12px';
+                        popup.style.maxWidth = '550px';
+                        popup.style.zIndex = 1000;
+                        popup.style.whiteSpace = 'normal';   // 2行以上で折返しOK
+                        popup.style.wordBreak  = 'break-word';
+                        popup.style.pointerEvents = 'none';  // 入力操作の邪魔をしない
+                        popup.classList.add('popup');
+                        document.body.appendChild(popup);
+                    } else {
+                        popup.textContent = value;
+                    }
+
+                    // 🔸 文字量に応じて毎回再配置（高さが変わるため）
+                    place();
+                };
+
+                // 🔹 popを削除
+                const removePopup = () => {
+                    if(popup) { 
+                        popup.remove(); 
+                        popup = null; 
+                    }
+                };
+
+                // 🔹 初回表示
+                makeOrUpdate();
+
+                // 🔹 入力/選択のたびに更新＆再配置
+                input.addEventListener('input', makeOrUpdate); // 変更時
+                input.addEventListener('change', makeOrUpdate); // 確定時
+
+                // 🔹 スクロール/リサイズ時も位置を再計算
+                window.addEventListener('scroll', place, true);
+                window.addEventListener('resize', place, true);
+
+                // 🔹 フォーカスが外れたら掃除
+                input.addEventListener('blur', () => {
+                    removePopup(); // pop 削除
+                    input.removeEventListener('input',  makeOrUpdate);
+                    input.removeEventListener('change', makeOrUpdate);
+                    window.removeEventListener('scroll', place, true);
+                    window.removeEventListener('resize', place, true);
+                }, { once: true }); // 1回限定（積み上がりNG）
+            });
+        });
+
+
     // ⭐️ ブランド、品目
         // ✅ Laravelから受け取ったブランドごとの品目リスト
         const brandBentoMap = @json($bento_brands->mapWithKeys(function($brand) {
@@ -333,74 +434,6 @@
                 }
             });
         });
-
-
-
-    // ⭐️ ブランド
-        // ✅ 選択or新規入力後際クリック時に、全体の文章をポップアップ表示
-        document.querySelectorAll('.brand_input').forEach(input => {
-            // 🔹 フォーカス時に、入力済みテキストをポップアップで見やすく表示する
-            input.addEventListener('focus', function () { //  input要素がフォーカス(=クリックされたりタブキーで選択された)時
-                // 🔸 現在の入力欄に入力されている文字列から、前後の空白を取り除いたものを value に代入
-                const value = this.value.trim();
-
-                // 🔸 空欄でなければ、入力値をポップアップ表示し、フォーカスが外れたら自動で削除する
-                if(value !== '') {
-                    const popup = document.createElement('div');
-                    popup.textContent = value;
-                    popup.style.position = 'absolute';
-                    popup.style.backgroundColor = 'white';
-                    popup.style.border = '1px solid gray';
-                    popup.style.padding = '4px 8px';
-                    popup.style.fontSize = '12px';
-                    popup.style.zIndex = 1000;
-
-                    // 🔹🔹 入力欄の位置を取得して、ポップアップの表示位置を決める
-                    const rect = this.getBoundingClientRect(); // getBoundingClientRect = 入力欄(this)の画面上での位置やサイズ(top, left, width, heightなど)を取得する
-                    popup.style.top = `${rect.top - 30 + window.scrollY}px`;
-                    popup.style.left = `${rect.left + window.scrollX}px`;
-
-                    popup.classList.add('brand_popup');
-                    document.body.appendChild(popup);
-
-                    // 🔹🔹 入力欄からフォーカスが外れたときにポップアップを削除する
-                    this.addEventListener('blur', () => { // blur = 「フォーカスが外れた時」(例：他の場所をクリックした時)に発生するイベント
-                        popup.remove();
-                    }, { once: true });
-                }
-            });
-        });
-
-        
-    // ⭐️ 品目
-        // ✅ 選択or新規入力後、クリック時に全文ポップアップ表示
-        document.querySelectorAll('.bento_input').forEach(input => {
-            input.addEventListener('focus', function () {
-                const value = this.value.trim();
-                if (value !== '') {
-                    const popup = document.createElement('div');
-                    popup.textContent = value;
-                    popup.style.position = 'absolute';
-                    popup.style.backgroundColor = 'white';
-                    popup.style.border = '1px solid gray';
-                    popup.style.padding = '4px 8px';
-                    popup.style.fontSize = '12px';
-                    popup.style.zIndex = 1000;
-
-                    const rect = this.getBoundingClientRect();
-                    popup.style.top = `${rect.top - 30 + window.scrollY}px`;
-                    popup.style.left = `${rect.left + window.scrollX}px`;
-
-                    popup.classList.add('bento_popup');
-                    document.body.appendChild(popup);
-
-                    this.addEventListener('blur', () => {
-                        popup.remove();
-                    }, { once: true });
-                }
-            });
-        });
-
 
     // ⭐️ 税込
         // ✅ 数字にカンマをつける
