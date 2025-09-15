@@ -317,12 +317,22 @@ class ReceiptController extends Controller
             ->with(['paymentMethod', 'bentoDetails'])
             ->findOrFail($id);
 
-        // ✅ PDF生成
+        // ✅ BladeテンプレートをHTML文字列に変換して、PDF生成に使うための処理
         $html = view('pdf.receipt', compact('receipt'))->render();
-        $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customerName->name);
-        $filename = "receipt_{$customerName}_{$id}.pdf";
-        $pdfPath = storage_path("app/public/tmp/{$filename}");
 
+        // ✅ 保存用ファイル名
+        if(class_exists('Normalizer')) { // 正規化して“が/ぱ などの結合文字問題”を解消
+            $normalizeCustomerName = Normalizer::normalize($receipt->customerName->name, Normalizer::FORM_C);
+        }
+        $customerName = preg_replace('/[^\p{L}\p{N}\-_.]+/u', '_', $normalizeCustomerName); // ファイル名
+        $shortCustomerName = mb_substr($customerName, 0, 50, 'UTF-8'); // 保存用ファイル名：先頭から“文字数ベース”で50文字だけ切り出す
+        
+        // ✅ ファイル名 / PDFファイルの保存先のフルパス
+        $filename = "{$receipt->issued_at}_receipt_{$id}_{$customerName}.pdf";
+        $shortFilename = "{$receipt->issued_at}_receipt_{$id}_{$shortCustomerName}.pdf";
+        $savePdfPath = storage_path("app/public/tmp/{$shortFilename}");
+
+        // ✅ HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$savePdfPath`の場所に一時保存
         Browsershot::html($html)
             ->setNodeBinary(config('browsershot.node_binary'))
             ->setIncludePath(config('browsershot.include_path'))
@@ -330,7 +340,7 @@ class ReceiptController extends Controller
             ->noSandbox() // 本番環境のみ
             ->format('A4')
             ->showBackground()
-            ->save($pdfPath);
+            ->save($savePdfPath);
 
         // ✅ PDF作成完了後、中継ビューへリダイレクト
         return redirect()->route('receipts.print.show', ['filename' => $filename]);
