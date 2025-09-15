@@ -320,17 +320,10 @@ class ReceiptController extends Controller
         // ✅ BladeテンプレートをHTML文字列に変換して、PDF生成に使うための処理
         $html = view('pdf.receipt', compact('receipt'))->render();
 
-        // ✅ 保存用ファイル名
-        if(class_exists('Normalizer')) { // 正規化して“が/ぱ などの結合文字問題”を解消
-            $normalizeCustomerName = Normalizer::normalize($receipt->customerName->name, Normalizer::FORM_C);
-        }
-        $customerName = preg_replace('/[^\p{L}\p{N}\-_.]+/u', '_', $normalizeCustomerName); // ファイル名
-        $shortCustomerName = mb_substr($customerName, 0, 50, 'UTF-8'); // 保存用ファイル名：先頭から“文字数ベース”で50文字だけ切り出す
-        
         // ✅ ファイル名 / PDFファイルの保存先のフルパス
-        $filename = "{$receipt->issued_at}_receipt_{$id}_{$customerName}.pdf";
-        $shortFilename = "{$receipt->issued_at}_receipt_{$id}_{$shortCustomerName}.pdf";
-        $savePdfPath = storage_path("app/public/tmp/{$shortFilename}");
+        $timestamp = now()->format('YmdHis'); // ユニークのため
+        $fileName = "receipt_{$id}_{$timestamp}.pdf";
+        $savePdfPath = storage_path("app/public/tmp/{$fileName}");
 
         // ✅ HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$savePdfPath`の場所に一時保存
         Browsershot::html($html)
@@ -343,13 +336,13 @@ class ReceiptController extends Controller
             ->save($savePdfPath);
 
         // ✅ PDF作成完了後、中継ビューへリダイレクト
-        return redirect()->route('receipts.print.show', ['filename' => $filename]);
+        return redirect()->route('receipts.print.show', ['filename' => $fileName]);
     }
 
     // ⭐️ 中間ビュー
-    public function showPrintView($filename)
+    public function showPrintView($fileName)
     {
-        $pdfUrl = asset("storage/tmp/{$filename}");
+        $pdfUrl = asset("storage/tmp/{$fileName}");
         return view('pdf.print_redirect', compact('pdfUrl'));
     }
 
