@@ -207,15 +207,15 @@ class ReceiptController extends Controller
         // ✅ BladeテンプレートをHTML文字列に変換して、PDF生成に使うための処理
         $html = view('pdf.receipt', compact('receipt'))->render();
     
-        // ✅ 保存用ファイル名
+        // ✅ `$receipt->customerName->name`のサニタイズ
         if(class_exists('Normalizer')) { // 正規化して“が/ぱ などの結合文字問題”を解消
             $normalizeCustomerName = Normalizer::normalize($receipt->customerName->name, Normalizer::FORM_C);
         }
-        $customerName = preg_replace('/[^\p{L}\p{N}\-_.]+/u', '_', $normalizeCustomerName); // ファイル名
-        $shortCustomerName = mb_substr($customerName, 0, 50, 'UTF-8'); // 保存用ファイル名：先頭から“文字数ベース”で50文字だけ切り出す
+        $customerName = preg_replace('/[^\p{L}\p{N}\-_.]+/u', '_', $normalizeCustomerName);
         
-        // ✅ PDFファイルの保存先のフルパス / DLファイル名
-        $savePdfPath = storage_path("app/public/receipt_{$shortCustomerName}_{$id}.pdf");
+        // ✅ Browsershot保存のフルパス / DL時のファイル名
+        $timestamp = now()->format('YmdHis'); // ユニークのため
+        $savePdfPath = storage_path("app/public/tmp/receipt_{$id}_{$timestamp}.pdf");
         $downloadPdfName = "{$receipt->issued_at}_receipt_{$id}_{$customerName}.pdf";
 
         // ✅ Tailwind対応のPDF（背景・影も含む）としてA4で保存
