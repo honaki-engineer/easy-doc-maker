@@ -247,7 +247,7 @@ class ReceiptController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // ✅ 複数の領収書をPDFに変換し、一時保存してパスを配列にまとめる
+        // ✅ 複数の領収書をPDFに変換し、一時保存してパス&DLファイル名を配列にまとめる
         $pdfPaths = [];
         foreach($ids as $id) {
             // 🔹 領収書情報の取得
@@ -255,12 +255,21 @@ class ReceiptController extends Controller
                 ->with(['paymentMethod', 'bentoDetails'])
                 ->findOrFail($id);
 
-            // 🔹 領収書のHTMLを生成し、そのPDFの保存先パスを設定
+            // 🔹 BladeテンプレートをHTML文字列に変換して、PDF生成に使うための処理
             $html = view('pdf.receipt', compact('receipt'))->render();
-            $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customerName->name);
-            $pdfPath = storage_path("app/public/receipt_{$customerName}_{$id}.pdf");
 
-            // 🔹 HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$pdfPath`の場所に保存
+            // 🔹 保存用の「短くした」ファイル名を作成
+            if(class_exists('Normalizer')) { // 正規化して“が/ぱ などの結合文字問題”を解消
+                $normalizeCustomerName = Normalizer::normalize($receipt->customerName->name, Normalizer::FORM_C);
+            }
+            $customerName = preg_replace('/[^\p{L}\p{N}\-_.]+/u', '_', $normalizeCustomerName); // ファイル名
+            $shortCustomerName = mb_substr($customerName, 0, 50, 'UTF-8'); // 保存用ファイル名：先頭から“文字数ベース”で50文字だけ切り出す
+            
+            // 🔹 PDFファイルの保存先のフルパス / DLファイル名
+            $savePdfPath = storage_path("app/public/receipt_{$shortCustomerName}_{$id}.pdf");
+            $downloadPdfName = "{$receipt->issued_at}_receipt_{$id}_{$customerName}.pdf";
+
+            // 🔹 HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$savePdfPath`の場所に一時保存
             Browsershot::html($html)
                 ->setNodeBinary(config('browsershot.node_binary'))
                 ->setIncludePath(config('browsershot.include_path'))
@@ -268,9 +277,10 @@ class ReceiptController extends Controller
                 ->noSandbox() // 本番環境のみ
                 ->format('A4')
                 ->showBackground()
-                ->save($pdfPath);
+                ->save($savePdfPath);
 
-            $pdfPaths[] = $pdfPath;
+            // 🔹 foreach で回すための.  $savePdfPat と downloadPdfName をセット
+            $pdfPaths[] = ['path' => $savePdfPath, 'fileName' => $downloadPdfName];
         }
 
         // ✅ ZIP作成
@@ -283,7 +293,7 @@ class ReceiptController extends Controller
         // ✅ PDFをまとめてZIPファイルに詰めて保存
         if($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
             foreach($pdfPaths as $pdf) {
-                $zip->addFile($pdf, basename($pdf));
+                $zip->addFile($pdf['path'], $pdf['fileName']);
             }
             $zip->close();
         }
