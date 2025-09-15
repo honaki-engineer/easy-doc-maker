@@ -9,9 +9,10 @@ use App\Services\ReceiptService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Normalizer;
+use setasign\Fpdi\Fpdi;
 use Spatie\Browsershot\Browsershot;
 use ZipArchive;
-use setasign\Fpdi\Fpdi;
 
 class ReceiptController extends Controller
 {
@@ -200,16 +201,22 @@ class ReceiptController extends Controller
         // ✅ 領収書の取得
         $receipt = $user
             ->receipts()
-            ->with('paymentMethod') // リレーション
-            ->with('bentoDetails') // リレーション
+            ->with(['paymentMethod', 'bentoDetails'])
             ->findOrFail($id);
 
         // ✅ BladeテンプレートをHTML文字列に変換して、PDF生成に使うための処理
         $html = view('pdf.receipt', compact('receipt'))->render();
-
-        // ✅ PDFファイルの保存先のフルパスを生成
-        $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customerName->name);
-        $pdfPath = storage_path("app/public/receipt_{$customerName}_{$id}.pdf");
+    
+        // ✅ 保存用ファイル名
+        if(class_exists('Normalizer')) { // 正規化して“が/ぱ などの結合文字問題”を解消
+            $normalizeCustomerName = Normalizer::normalize($receipt->customerName->name, Normalizer::FORM_C);
+        }
+        $customerName = preg_replace('/[^\p{L}\p{N}\-_.]+/u', '_', $normalizeCustomerName); // ファイル名
+        $shortCustomerName = mb_substr($customerName, 0, 50, 'UTF-8'); // 保存用ファイル名：先頭から“文字数ベース”で50文字だけ切り出す
+        
+        // ✅ PDFファイルの保存先のフルパス / DLファイル名
+        $savePdfPath = storage_path("app/public/receipt_{$shortCustomerName}_{$id}.pdf");
+        $downloadPdfName = "{$receipt->issued_at}_receipt_{$id}_{$customerName}.pdf";
 
         // ✅ Tailwind対応のPDF（背景・影も含む）としてA4で保存
         Browsershot::html($html) // `$html`でPDFを作る準備
@@ -219,10 +226,10 @@ class ReceiptController extends Controller
             ->noSandbox() // 本番環境のみ
             ->format('A4')
             ->showBackground() // Tailwindのbg色やshadowが表示されるように
-            ->save($pdfPath);
+            ->save($savePdfPath);
 
         // ✅ ダウンロード後に削除
-        return response()->download($pdfPath)->deleteFileAfterSend();
+        return response()->download($savePdfPath, $downloadPdfName)->deleteFileAfterSend();
     }
 
     // ⭐️ PDF一括ダウンロード
