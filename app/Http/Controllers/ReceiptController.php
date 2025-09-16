@@ -358,16 +358,30 @@ class ReceiptController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        $receipts = $user->receipts()
+            ->with(['paymentMethod', 'bentoDetails'])
+            ->whereIn('id', $ids) // 選択されたID配列 $ids に含まれるレコードだけ
+            ->orderBy('issued_at', 'desc') // 発行日が新しい順
+            ->orderBy('id', 'desc') // 同じ発行日の行の並びをIDの大きい順
+            ->get();
+
+        if($receipts->count() !== count($ids)) {
+            abort(404, '一部の領収書が見つかりませんでした。');
+        }
+
         // ✅ 選択された各領収書を`HTML`から`PDF`に変換して一時保存し、ファイル名を配列にまとめている
-        $filenames = [];
-        foreach($ids as $id) {
-            $receipt = $user->receipts()->with(['paymentMethod', 'bentoDetails'])->findOrFail($id);
+        $fileNames = [];
+
+        foreach($receipts as $receipt) {
+            // 🔹 BladeテンプレートをHTML文字列に変換して、PDF生成に使うための処理
             $html = view('pdf.receipt', compact('receipt'))->render();
 
-            $customerName = preg_replace('/[^\w\-]/u', '_', $receipt->customerName->name);
-            $filename = "receipt_{$customerName}_{$id}.pdf";
-            $pdfPath = storage_path("app/public/tmp/{$filename}");
+            // 🔹 ファイル名 / PDFファイルの保存先のフルパス
+            $timestamp = now()->format('YmdHis'); // ユニークのため
+            $fileName = "receipt_{$receipt->id}_{$timestamp}.pdf";
+            $savePdfPath = storage_path("app/public/tmp/{$fileName}");
 
+            // 🔹 HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$savePdfPath`の場所に一時保存
             Browsershot::html($html)
                 ->setNodeBinary(config('browsershot.node_binary'))
                 ->setIncludePath(config('browsershot.include_path'))
@@ -375,22 +389,25 @@ class ReceiptController extends Controller
                 ->noSandbox() // 本番環境のみ
                 ->format('A4')
                 ->showBackground()
-                ->save($pdfPath);
+                ->save($savePdfPath);
 
-            $filenames[] = $filename;
+            $fileNames[] = $fileName;
         }
 
         // ✅ PDFファイルの絶対パス(結合用に必要)
-        $pdfPaths = array_map(function ($filename) {
-            return storage_path("app/public/tmp/{$filename}");
-        }, $filenames);
+        $pdfPaths = array_map(function ($fileName) {
+            return storage_path("app/public/tmp/{$fileName}");
+        }, $fileNames);
 
         // ✅ 結合後のPDF保存先
-        $mergedFilename = 'merged_receipt.pdf';
+        $mergedFilename = 'merged_receipt_' . now()->format('YmdHis'). '.pdf';
         $mergedPath = storage_path("app/public/tmp/{$mergedFilename}");
 
         // ✅ 結合処理
         $this->mergePdfs($pdfPaths, $mergedPath); // $this = `generateAndPrintMultiple()メソッド`が定義されているクラス
+        foreach($pdfPaths as $pdfPath) {
+            @unlink($pdfPath); // 個別PDF削除
+        }
 
         // ✅ 中継ビューへリダイレクト（iframe + 印刷）
         return redirect()->route('receipts.print.show', ['filename' => $mergedFilename]);
