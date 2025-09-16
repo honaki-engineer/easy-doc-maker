@@ -235,26 +235,26 @@ class ReceiptController extends Controller
     // ⭐️ PDF一括ダウンロード
     public function bulkDownload(Request $request)
     {
-        // ✅ request情報の取得
+        // ✅ 情報の取得
         $ids = $request->input('receipt_ids', []);
-
-        // ✅ エラー時のメッセージ
         if(empty($ids)) {
             return back()->with('error', 'PDFを出力する領収書を選択してください。');
         }
 
-        // ✅ ユーザー情報の取得
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        $receipts = $user->receipts()
+            ->with(['paymentMethod', 'bentoDetails'])
+            ->whereIn('id', $ids) // 選択されたID配列 $ids に含まれるレコードだけ
+            ->orderBy('issued_at', 'desc') // 発行日が新しい順
+            ->orderBy('id', 'desc') // 同じ発行日の行の並びをIDの大きい順
+            ->get();
+
         // ✅ 複数の領収書をPDFに変換し、一時保存してパス&DLファイル名を配列にまとめる
         $pdfPaths = [];
-        foreach($ids as $id) {
-            // 🔹 領収書情報の取得
-            $receipt = $user->receipts()
-                ->with(['paymentMethod', 'bentoDetails'])
-                ->findOrFail($id);
 
+        foreach($receipts as $receipt) {
             // 🔹 BladeテンプレートをHTML文字列に変換して、PDF生成に使うための処理
             $html = view('pdf.receipt', compact('receipt'))->render();
 
@@ -266,8 +266,8 @@ class ReceiptController extends Controller
 
             // 🔹 Browsershot保存のフルパス / DL時のファイル名
             $timestamp = now()->format('YmdHis'); // ユニークのため
-            $savePdfPath = storage_path("app/public/tmp/receipt_{$id}_{$timestamp}.pdf");
-            $downloadPdfName = "{$receipt->issued_at}_receipt_{$id}_{$customerName}.pdf";
+            $savePdfPath = storage_path("app/public/tmp/receipt_{$receipt->id}_{$timestamp}.pdf");
+            $downloadPdfName = "{$receipt->issued_at}_receipt_{$receipt->id}_{$customerName}.pdf";
 
             // 🔹 HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$savePdfPath`の場所に一時保存
             Browsershot::html($html)
