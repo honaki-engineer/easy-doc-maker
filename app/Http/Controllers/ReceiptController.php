@@ -219,14 +219,18 @@ class ReceiptController extends Controller
         $downloadPdfName = "{$receipt->issued_at}_receipt_{$id}_{$customerName}.pdf";
 
         // ✅ Tailwind対応のPDF（背景・影も含む）としてA4で保存
-        Browsershot::html($html) // `$html`でPDFを作る準備
+        $shot = Browsershot::html($html) // `$html`でPDFを作る準備
             ->setNodeBinary(config('browsershot.node_binary')) // MAMPなどNodeパス必要
             ->setIncludePath(config('browsershot.include_path')) // Puppeteer(画面なしブラウザ)パス
-            ->setChromePath(config('browsershot.chrome_path'))
-            ->noSandbox() // 本番環境のみ
-            ->format('A4')
-            ->showBackground() // Tailwindのbg色やshadowが表示されるように
-            ->save($savePdfPath);
+            ->setChromePath(config('browsershot.chrome_path'));
+            
+            if(app()->environment('production')) {
+                $shot->noSandbox(); // 本番環境のみ
+            }
+            
+            $shot->format('A4')
+                ->showBackground() // Tailwindのbg色やshadowが表示されるように
+                ->save($savePdfPath);
 
         // ✅ ダウンロード後に削除
         return response()->download($savePdfPath, $downloadPdfName)->deleteFileAfterSend();
@@ -270,14 +274,19 @@ class ReceiptController extends Controller
             $downloadPdfName = "{$receipt->issued_at}_receipt_{$receipt->id}_{$customerName}.pdf";
 
             // 🔹 HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$savePdfPath`の場所に一時保存
-            Browsershot::html($html)
-                ->setNodeBinary(config('browsershot.node_binary'))
-                ->setIncludePath(config('browsershot.include_path'))
-                ->setChromePath(config('browsershot.chrome_path'))
-                ->noSandbox() // 本番環境のみ
-                ->format('A4')
-                ->showBackground()
-                ->save($savePdfPath);
+            $shot = Browsershot::html($html) // `$html`でPDFを作る準備
+                ->setNodeBinary(config('browsershot.node_binary')) // MAMPなどNodeパス必要
+                ->setIncludePath(config('browsershot.include_path')) // Puppeteer(画面なしブラウザ)パス
+                ->setChromePath(config('browsershot.chrome_path'));
+                
+                if(app()->environment('production')) {
+                    $shot->noSandbox(); // 本番環境のみ
+                }
+                
+                $shot->format('A4')
+                    ->showBackground() // Tailwindのbg色やshadowが表示されるように
+                    ->save($savePdfPath);
+            
 
             // 🔹 foreach で回すための.  $savePdfPat と downloadPdfName をセット
             $pdfPaths[] = ['path' => $savePdfPath, 'fileName' => $downloadPdfName];
@@ -326,14 +335,18 @@ class ReceiptController extends Controller
         $savePdfPath = storage_path("app/public/tmp/{$fileName}");
 
         // ✅ HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$savePdfPath`の場所に一時保存
-        Browsershot::html($html)
-            ->setNodeBinary(config('browsershot.node_binary'))
-            ->setIncludePath(config('browsershot.include_path'))
-            ->setChromePath(config('browsershot.chrome_path'))
-            ->noSandbox() // 本番環境のみ
-            ->format('A4')
-            ->showBackground()
-            ->save($savePdfPath);
+        $shot = Browsershot::html($html) // `$html`でPDFを作る準備
+            ->setNodeBinary(config('browsershot.node_binary')) // MAMPなどNodeパス必要
+            ->setIncludePath(config('browsershot.include_path')) // Puppeteer(画面なしブラウザ)パス
+            ->setChromePath(config('browsershot.chrome_path'));
+            
+            if(app()->environment('production')) {
+                $shot->noSandbox(); // 本番環境のみ
+            }
+            
+            $shot->format('A4')
+                ->showBackground() // Tailwindのbg色やshadowが表示されるように
+                ->save($savePdfPath);
 
         // ✅ PDF作成完了後、中継ビューへリダイレクト
         return redirect()->route('receipts.print.show', ['filename' => $fileName]);
@@ -382,14 +395,18 @@ class ReceiptController extends Controller
             $savePdfPath = storage_path("app/public/tmp/{$fileName}");
 
             // 🔹 HTML文字列`$html`を「A4サイズ・背景付き」のPDFに変換し、`$savePdfPath`の場所に一時保存
-            Browsershot::html($html)
-                ->setNodeBinary(config('browsershot.node_binary'))
-                ->setIncludePath(config('browsershot.include_path'))
-                ->setChromePath(config('browsershot.chrome_path'))
-                ->noSandbox() // 本番環境のみ
-                ->format('A4')
-                ->showBackground()
-                ->save($savePdfPath);
+            $shot = Browsershot::html($html) // `$html`でPDFを作る準備
+                ->setNodeBinary(config('browsershot.node_binary')) // MAMPなどNodeパス必要
+                ->setIncludePath(config('browsershot.include_path')) // Puppeteer(画面なしブラウザ)パス
+                ->setChromePath(config('browsershot.chrome_path'));
+                
+                if(app()->environment('production')) {
+                    $shot->noSandbox(); // 本番環境のみ
+                }
+                
+                $shot->format('A4')
+                    ->showBackground() // Tailwindのbg色やshadowが表示されるように
+                    ->save($savePdfPath);
 
             $fileNames[] = $fileName;
         }
