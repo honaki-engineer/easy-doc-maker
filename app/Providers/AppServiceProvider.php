@@ -23,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // 本番のみ BROWSERSHOT_HOME=/var/www/.browsershot を実行
+        if(app()->environment('production')) {
+            if($home = env('BROWSERSHOT_HOME')) {
+                putenv("HOME={$home}");
+            }
+        }
     }
 }

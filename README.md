@@ -34,7 +34,7 @@ ZIP 一括ダウンロードや印刷（単体・一括）機能も搭載し、*
 - [サイト](#サイト)
 - [使用技術](#使用技術)
 - [主な機能](#主な機能)
-- [セットアップ手順](#セットアップ手順)
+- [セットアップ手順(開発環境)](#セットアップ手順開発環境)
 - [ディレクトリ構成](#ディレクトリ構成)
 - [本番環境の注意点](#本番環境の注意点)
   
@@ -87,7 +87,7 @@ ZIP 一括ダウンロードや印刷（単体・一括）機能も搭載し、*
 
 ---
 
-## セットアップ手順
+## セットアップ手順（開発環境）
 
 1. リポジトリをクローン
 ```bash
@@ -98,16 +98,11 @@ cd easy-doc-maker
 ```bash
 cp .env.example .env
 ```
-.env の `DB_` 各項目などは、ConoHa VPS または開発の環境に応じて適宜変更してください。  
-- [.env 設定例（開発用）](#env-設定例開発用)
-- [.env 設定例（本番用）](#env-設定例本番用)
+.env の `DB_` 各項目などは、開発環境に応じて適宜変更してください。  
+- [.env 設定例（開発環境）](#env-設定例開発環境)
 3. PHPパッケージをインストール
 ```bash
-# 開発
 composer install
-
-# 本番
-composer install --no-dev --optimize-autoloader
 ```
 4. アプリケーションキーを生成
 ```bash
@@ -120,19 +115,14 @@ php artisan migrate --seed
 6. フロントエンドビルド（Tailwind/Vite 使用時）
 ```bash
 npm install # 時間がかかります
-
-# 開発
 npm run dev
-
-# 本番
-npm run build
 ```
 7. 初期画像作成（+ ストレージリンク作成）
 ```bash
 chmod +x setup.sh
 ./setup.sh
 ```
-8. サーバー起動（開発用のみ）
+8. サーバー起動
 ```bash
 php artisan serve
 ```
@@ -146,12 +136,10 @@ php artisan serve
   https://qiita.com/honaki/items/c81086d5ce26865b0b94
 - 一括印刷  
   https://qiita.com/honaki/items/09845c06bbb181cdfeb1
-11. PDF ダウンロード機能 ＆ 印刷機能の準備（本番のみ）  
-  https://qiita.com/honaki/items/6fc2285d7f1f476486d8
 
 ---
 
-### .env 設定例（開発用）
+### .env 設定例（開発環境）
   
 ```env
 APP_NAME=領収書作成アプリ
@@ -162,13 +150,13 @@ APP_URL=http://localhost
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=easy_doc_maker
-DB_USERNAME=root
-DB_PASSWORD=root
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
 
 # Mailpit を使う場合
 MAIL_MAILER=smtp
-MAIL_HOST=localhost
+MAIL_HOST=localhost # MAMP の場合
 MAIL_PORT=1025
 MAIL_USERNAME=null
 MAIL_PASSWORD=null
@@ -177,54 +165,14 @@ MAIL_FROM_ADDRESS="hello@example.com"
 MAIL_FROM_NAME="${APP_NAME}"
 
 # Browsershot（PDF・印刷）
-# 各自の環境で実際のパスを確認して置き換えてください（↓確認方法あり）
-NODE_BINARY_PATH=/opt/homebrew/bin/node                           # ← `which node`
-NODE_INCLUDE_PATH=/opt/homebrew/bin                               # ← `dirname $(which node)`
-CHROME_PATH="/Applications/Chromium.app/Contents/MacOS/Chromium"  # ← `ls /Applications/Chromium.app/Contents/MacOS/Chromium`
+# 各自の環境で実際のパスを確認して置き換えてください（README のセットアップ手順 9 参照）
+NODE_BINARY_PATH=/path/to/node            # ← `which node`
+NODE_INCLUDE_PATH=/path/to/node/include   # ← `dirname $(which node)`
+CHROME_PATH="/path/to/chrome-or-chromium" # ← `ls /Applications/Chromium.app/Contents/MacOS/Chromium`
 
 # ゲストログイン
-GUEST_LOGIN_TOKEN=guest123 # ゲストログイントークン
-GUEST_PASSWORD=guestpassword # ゲストログインのパスワード
-GUEST_EMAIL=guest@example.com # ゲストログインのメールアドレス
-```
-
-### .env 設定例（本番用）
-
-```env
-APP_NAME=領収書作成アプリ
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://example.com
-
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=（本番用 データベース）
-DB_USERNAME=（本番用 ユーザー）
-DB_PASSWORD=（本番用 DBuser パスワード）
-
-# Gmail の場合
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=（使用するメールアドレス）
-MAIL_PASSWORD=（16桁のアプリパスワード）
-MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=（使用するメールアドレス）
-MAIL_FROM_NAME="${APP_NAME}"
-
-# Browsershot（PDF・印刷）
-# 各自の環境で実際のパスを確認して置き換えてください（↓確認方法あり）
-NODE_BINARY_PATH=/opt/homebrew/bin/node     # ← `which node`
-NODE_INCLUDE_PATH=/opt/homebrew/bin         # ← `dirname $(which node)`
-CHROME_PATH="/usr/bin/chromium-browser"     # ← `which chromium-browser`
-
-# 本番のみ：Browsershot が一時ファイルを置くディレクトリ
-BROWSERSHOT_HOME="/var/www/.browsershot"
-
-# ゲストログイン
-GUEST_LOGIN_TOKEN=guest123 # ゲストログイントークン
-GUEST_PASSWORD=guestpassword # ゲストログインのパスワード
+GUEST_LOGIN_TOKEN=guest123    # ゲストログイントークン
+GUEST_PASSWORD=guestpassword  # ゲストログインのパスワード
 GUEST_EMAIL=guest@example.com # ゲストログインのメールアドレス
 ```
 
@@ -289,3 +237,9 @@ ConoHa VPS 上で Laravel アプリを本番公開する際の詳細な手順は
 
 - ③ 【DNSレコード後】ConoHa VPSでLaravel + Apache + phpMyAdminを公開する手順（2025年版）  
   https://qiita.com/honaki/items/834b4fe730441db2d2fa
+
+---
+
+### PDF ダウンロード / 印刷機能 の本番対応
+README の[セットアップ手順 9・10](#セットアップ手順開発環境) の本番対応については、以下の記事にまとめています：  
+  https://qiita.com/honaki/items/6fc2285d7f1f476486d8
