@@ -184,17 +184,17 @@ GUEST_EMAIL=guest@example.com # ゲストログインのメールアドレス
 easy-doc-maker/
 ├── app/
 │   ├── Console/
-│   │   ├── Commands/DeleteOldPdfs.php  # 一時ファイルの自動削除        
-│   │   └── Kernel.php                  # Artisanコマンドの登録＆スケジュール定義
+│   │   ├── Commands/DeleteOldPdfs.php    # 一時ファイルの自動削除        
+│   │   └── Kernel.php                    # Artisanコマンドの登録＆スケジュール定義
 │   ├── Http/
-│   │   ├── Controllers/                # 各種コントローラ
-│   │   └── Requests/                   # フォームリクエスト
-│   ├── Models/                         # Eloquent モデル
-│   ├── Notifications/                  # カスタム通知（パスワード再設定メールのカスタム）
-│   └── Services/                       # サービスクラス
+│   │   ├── Controllers/                  # 各種コントローラ
+│   │   └── Requests/                     # フォームリクエスト
+│   ├── Models/                           # Eloquent モデル
+│   ├── Notifications/                    # カスタム通知（パスワード再設定メールのカスタム）
+│   └── Services/                         # サービスクラス
 ├── config/
-│   ├── app.php                         # アプリ全体設定 + ゲストログインENV（guest_token 等）
-│   └── browsershot.php                 # browsershotENV（chrome_path 等）
+│   ├── app.php                           # アプリ全体設定 + ゲストログインENV（guest_token 等）
+│   └── browsershot.php                   # browsershotENV（chrome_path 等）
 ├── database/
 │   ├── migrations/                       # マイグレーションファイル
 │   └── seeders/                          # 初期データ投入用
@@ -242,5 +242,5 @@ ConoHa VPS 上で Laravel アプリを本番公開する際の詳細な手順は
 
 ### PDF ダウンロード / 印刷機能 の本番対応
 README の[セットアップ手順 9・10](#セットアップ手順開発環境) の本番対応については、以下の記事にまとめています：  
-- 【conohaVPS環境】->setChromePath()を使ったBrowsershot
+- 【conohaVPS環境】Browsershot 本番運用
   https://qiita.com/honaki/items/6fc2285d7f1f476486d8
