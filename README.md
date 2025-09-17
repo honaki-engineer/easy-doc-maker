@@ -242,4 +242,5 @@ ConoHa VPS 上で Laravel アプリを本番公開する際の詳細な手順は
 
 ### PDF ダウンロード / 印刷機能 の本番対応
 README の[セットアップ手順 9・10](#セットアップ手順開発環境) の本番対応については、以下の記事にまとめています：  
+- 【conohaVPS環境】->setChromePath()を使ったBrowsershot
   https://qiita.com/honaki/items/6fc2285d7f1f476486d8
